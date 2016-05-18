@@ -1,0 +1,443 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="TeamDb3Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="AspNetRoles">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="256" Nullable="false" />
+  </EntityType>
+  <EntityType Name="AspNetUserClaims">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="ClaimType" Type="nvarchar(max)" />
+    <Property Name="ClaimValue" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="AspNetUserLogins">
+    <Key>
+      <PropertyRef Name="LoginProvider" />
+      <PropertyRef Name="ProviderKey" />
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="LoginProvider" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="ProviderKey" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+  </EntityType>
+  <EntityType Name="AspNetUserRoles">
+    <Key>
+      <PropertyRef Name="UserId" />
+      <PropertyRef Name="RoleId" />
+    </Key>
+    <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="RoleId" Type="nvarchar" MaxLength="128" Nullable="false" />
+  </EntityType>
+  <EntityType Name="AspNetUsers">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="Email" Type="nvarchar" MaxLength="256" />
+    <Property Name="EmailConfirmed" Type="bit" Nullable="false" />
+    <Property Name="PasswordHash" Type="nvarchar(max)" />
+    <Property Name="SecurityStamp" Type="nvarchar(max)" />
+    <Property Name="PhoneNumber" Type="nvarchar(max)" />
+    <Property Name="PhoneNumberConfirmed" Type="bit" Nullable="false" />
+    <Property Name="TwoFactorEnabled" Type="bit" Nullable="false" />
+    <Property Name="LockoutEndDateUtc" Type="datetime" />
+    <Property Name="LockoutEnabled" Type="bit" Nullable="false" />
+    <Property Name="AccessFailedCount" Type="int" Nullable="false" />
+    <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Description" Type="nvarchar" MaxLength="250" />
+    <Property Name="ParentId" Type="int" />
+  </EntityType>
+  <EntityType Name="Correlation">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Value" Type="decimal" Precision="7" Scale="2" />
+    <Property Name="Subject1_Id" Type="int" Nullable="false" />
+    <Property Name="Subject2_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Event">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Fullname" Type="nvarchar(max)" />
+    <Property Name="Description" Type="nvarchar(max)" />
+    <Property Name="Start" Type="datetime" />
+    <Property Name="Finish" Type="datetime" />
+    <Property Name="NumberOfTeams" Type="int" Nullable="false" />
+    <Property Name="PoolId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Pool">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="Description" Type="nvarchar" MaxLength="150" />
+    <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="CategoryId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Score">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Value" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="SubjectInPoolId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ScoreHistory">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Timestamp" Type="datetime" />
+    <Property Name="Value" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="ScoreId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Subject">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="250" Nullable="false" />
+    <Property Name="Email" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="SubjectInPool">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PoolId" Type="int" Nullable="false" />
+    <Property Name="SubjectId" Type="int" Nullable="false" />
+    <Property Name="Weight" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="SubjectTeamEvent">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SubjectInPoolId" Type="int" Nullable="false" />
+    <Property Name="EventId" Type="int" Nullable="false" />
+    <Property Name="TeamId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Team">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="100" />
+    <Property Name="TeamScore" Type="decimal" Precision="10" Scale="2" />
+  </EntityType>
+  <Association Name="FK_Category_Category">
+    <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
+    <End Role="Category1" Type="Self.Category" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Category">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Category1">
+        <PropertyRef Name="ParentId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Correlation_SubjectInPool">
+    <End Role="SubjectInPool" Type="Self.SubjectInPool" Multiplicity="1" />
+    <End Role="Correlation" Type="Self.Correlation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SubjectInPool">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Correlation">
+        <PropertyRef Name="Subject1_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Correlation_SubjectInPool1">
+    <End Role="SubjectInPool" Type="Self.SubjectInPool" Multiplicity="1" />
+    <End Role="Correlation" Type="Self.Correlation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SubjectInPool">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Correlation">
+        <PropertyRef Name="Subject2_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="AspNetUserClaims" Type="Self.AspNetUserClaims" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AspNetUserClaims">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="AspNetUserLogins" Type="Self.AspNetUserLogins" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AspNetUserLogins">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+    <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetRoles">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AspNetUserRoles">
+        <PropertyRef Name="RoleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AspNetUserRoles">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Event_Pool">
+    <End Role="Pool" Type="Self.Pool" Multiplicity="1" />
+    <End Role="Event" Type="Self.Event" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Pool">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Event">
+        <PropertyRef Name="PoolId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Pool_Category">
+    <End Role="Category" Type="Self.Category" Multiplicity="1" />
+    <End Role="Pool" Type="Self.Pool" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Category">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Pool">
+        <PropertyRef Name="CategoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Pool_Pool">
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+    <End Role="Pool" Type="Self.Pool" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Pool">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Score_SubjectInPool">
+    <End Role="SubjectInPool" Type="Self.SubjectInPool" Multiplicity="1" />
+    <End Role="Score" Type="Self.Score" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SubjectInPool">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Score">
+        <PropertyRef Name="SubjectInPoolId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ScoreHistory_Score">
+    <End Role="Score" Type="Self.Score" Multiplicity="1" />
+    <End Role="ScoreHistory" Type="Self.ScoreHistory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Score">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ScoreHistory">
+        <PropertyRef Name="ScoreId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SubjectInPool_Pool">
+    <End Role="Pool" Type="Self.Pool" Multiplicity="1" />
+    <End Role="SubjectInPool" Type="Self.SubjectInPool" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Pool">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="SubjectInPool">
+        <PropertyRef Name="PoolId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SubjectInPool_Subject">
+    <End Role="Subject" Type="Self.Subject" Multiplicity="1" />
+    <End Role="SubjectInPool" Type="Self.SubjectInPool" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Subject">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="SubjectInPool">
+        <PropertyRef Name="SubjectId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SubjectTeamEvent_Event">
+    <End Role="Event" Type="Self.Event" Multiplicity="1" />
+    <End Role="SubjectTeamEvent" Type="Self.SubjectTeamEvent" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Event">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="SubjectTeamEvent">
+        <PropertyRef Name="EventId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SubjectTeamEvent_SubjectInPool">
+    <End Role="SubjectInPool" Type="Self.SubjectInPool" Multiplicity="1" />
+    <End Role="SubjectTeamEvent" Type="Self.SubjectTeamEvent" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SubjectInPool">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="SubjectTeamEvent">
+        <PropertyRef Name="SubjectInPoolId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SubjectTeamEvent_Team">
+    <End Role="Team" Type="Self.Team" Multiplicity="1" />
+    <End Role="SubjectTeamEvent" Type="Self.SubjectTeamEvent" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Team">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="SubjectTeamEvent">
+        <PropertyRef Name="TeamId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="TeamDb3ModelStoreContainer">
+    <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Correlation" EntityType="Self.Correlation" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Event" EntityType="Self.Event" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Pool" EntityType="Self.Pool" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Score" EntityType="Self.Score" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ScoreHistory" EntityType="Self.ScoreHistory" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Subject" EntityType="Self.Subject" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SubjectInPool" EntityType="Self.SubjectInPool" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SubjectTeamEvent" EntityType="Self.SubjectTeamEvent" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Team" EntityType="Self.Team" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Category_Category" Association="Self.FK_Category_Category">
+      <End Role="Category" EntitySet="Category" />
+      <End Role="Category1" EntitySet="Category" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Correlation_SubjectInPool" Association="Self.FK_Correlation_SubjectInPool">
+      <End Role="SubjectInPool" EntitySet="SubjectInPool" />
+      <End Role="Correlation" EntitySet="Correlation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Correlation_SubjectInPool1" Association="Self.FK_Correlation_SubjectInPool1">
+      <End Role="SubjectInPool" EntitySet="SubjectInPool" />
+      <End Role="Correlation" EntitySet="Correlation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+      <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+      <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Event_Pool" Association="Self.FK_Event_Pool">
+      <End Role="Pool" EntitySet="Pool" />
+      <End Role="Event" EntitySet="Event" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Pool_Category" Association="Self.FK_Pool_Category">
+      <End Role="Category" EntitySet="Category" />
+      <End Role="Pool" EntitySet="Pool" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Pool_Pool" Association="Self.FK_Pool_Pool">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="Pool" EntitySet="Pool" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Score_SubjectInPool" Association="Self.FK_Score_SubjectInPool">
+      <End Role="SubjectInPool" EntitySet="SubjectInPool" />
+      <End Role="Score" EntitySet="Score" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ScoreHistory_Score" Association="Self.FK_ScoreHistory_Score">
+      <End Role="Score" EntitySet="Score" />
+      <End Role="ScoreHistory" EntitySet="ScoreHistory" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SubjectInPool_Pool" Association="Self.FK_SubjectInPool_Pool">
+      <End Role="Pool" EntitySet="Pool" />
+      <End Role="SubjectInPool" EntitySet="SubjectInPool" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SubjectInPool_Subject" Association="Self.FK_SubjectInPool_Subject">
+      <End Role="Subject" EntitySet="Subject" />
+      <End Role="SubjectInPool" EntitySet="SubjectInPool" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SubjectTeamEvent_Event" Association="Self.FK_SubjectTeamEvent_Event">
+      <End Role="Event" EntitySet="Event" />
+      <End Role="SubjectTeamEvent" EntitySet="SubjectTeamEvent" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SubjectTeamEvent_SubjectInPool" Association="Self.FK_SubjectTeamEvent_SubjectInPool">
+      <End Role="SubjectInPool" EntitySet="SubjectInPool" />
+      <End Role="SubjectTeamEvent" EntitySet="SubjectTeamEvent" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SubjectTeamEvent_Team" Association="Self.FK_SubjectTeamEvent_Team">
+      <End Role="Team" EntitySet="Team" />
+      <End Role="SubjectTeamEvent" EntitySet="SubjectTeamEvent" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

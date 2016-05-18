@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="922659ce127a4069b1ec7b4cc2c0181d" Name="Diagram1">
+        <EntityTypeShape EntityType="TeamDb3Model.AspNetRoles" Width="1.5" PointX="0.75" PointY="7.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb3Model.AspNetUserClaims" Width="1.5" PointX="5.25" PointY="6.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb3Model.AspNetUserLogins" Width="1.5" PointX="5.25" PointY="8.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb3Model.AspNetUsers" Width="1.5" PointX="3" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb3Model.Category" Width="1.5" PointX="6" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb3Model.Correlation" Width="1.5" PointX="12.75" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb3Model.Event" Width="1.5" PointX="10.5" PointY="7" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb3Model.Pool" Width="1.5" PointX="8.25" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb3Model.Score" Width="1.5" PointX="12.75" PointY="10.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb3Model.ScoreHistory" Width="1.5" PointX="15" PointY="10.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb3Model.Subject" Width="1.5" PointX="8.25" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb3Model.SubjectInPool" Width="1.5" PointX="10.5" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb3Model.SubjectTeamEvent" Width="1.5" PointX="12.75" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb3Model.Team" Width="1.5" PointX="10.5" PointY="11.5" IsExpanded="true" />
+        <AssociationConnector Association="TeamDb3Model.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb3Model.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb3Model.FK_Pool_Pool" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb3Model.FK_Category_Category" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb3Model.FK_Pool_Category" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb3Model.FK_Correlation_SubjectInPool" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb3Model.FK_Correlation_SubjectInPool1" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb3Model.FK_Event_Pool" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb3Model.FK_SubjectTeamEvent_Event" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb3Model.FK_SubjectInPool_Pool" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb3Model.FK_Score_SubjectInPool" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb3Model.FK_ScoreHistory_Score" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb3Model.FK_SubjectInPool_Subject" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb3Model.FK_SubjectTeamEvent_SubjectInPool" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb3Model.FK_SubjectTeamEvent_Team" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb3Model.AspNetUserRoles" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
