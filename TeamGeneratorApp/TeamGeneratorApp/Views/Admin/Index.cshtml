@@ -1,0 +1,26 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "Admin panel";
+}
+
+<h2>Admin panel</h2>
+<br />
+
+<table class="table">
+   
+    <tr>
+        <td>@Html.ActionLink("Users", "Index", "AdminUsers")</td>
+    </tr>
+    @*<tr>
+        <td>@Html.ActionLink("Roles", "Index", "AdminRoles")</td>
+    </tr>*@
+    <tr>
+        <td>@Html.ActionLink("Categories", "Index", "AdminCategories")</td>
+    </tr>
+    <tr>
+        <td>@Html.ActionLink("Pools", "Index", "AdminPools")</td>
+    </tr>
+    
+
+</table>

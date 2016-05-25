@@ -1,0 +1,35 @@
+﻿@model IEnumerable<TeamGeneratorApp.Models.AspNetRoles>
+
+@{
+    ViewBag.Title = "Roles";
+}
+
+<h2>Roles</h2>
+<hr />
+<p>
+    @Html.ActionLink("Back", "Index", "Admin")
+</p>
+<p>
+    @Html.ActionLink("Create new", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm})
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

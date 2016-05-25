@@ -21,7 +21,7 @@ namespace TeamGeneratorApp.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+            : base("TeamDbContext", throwIfV1Schema: false)
         {
         }
 
@@ -29,5 +29,7 @@ namespace TeamGeneratorApp.Models
         {
             return new ApplicationDbContext();
         }
+
+     
     }
 }

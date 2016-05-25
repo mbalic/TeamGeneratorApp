@@ -67,3 +67,7 @@ E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\Mic
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\obj\Debug\TeamGeneratorApp.csprojResolveAssemblyReference.cache
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\obj\Debug\TeamGeneratorApp.dll
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\obj\Debug\TeamGeneratorApp.pdb
+E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\PagedList.dll
+E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\PagedList.Mvc.dll
+E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\PagedList.xml
+E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\PagedList.Mvc.xml
