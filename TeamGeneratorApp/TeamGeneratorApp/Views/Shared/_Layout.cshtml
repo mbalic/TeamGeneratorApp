@@ -24,7 +24,8 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     @*<li>@Html.ActionLink("About", "About", "Home")</li>*@
-                    @if (MenuSecurity.AdminTabVisible){<li id="AdminTab">@Html.ActionLink("Admin", "Index", "Admin")</li>}
+                    @if (MenuSecurity.AdminTabVisible){<li id="AdminTab">@Html.ActionLink("Admin panel", "Index", "Admin")</li>}
+                    @if (MenuSecurity.UserTabVisible){<li id="UserTab">@Html.ActionLink("My pools", "Index", "Pools")</li>}
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

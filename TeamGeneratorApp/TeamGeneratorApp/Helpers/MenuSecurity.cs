@@ -18,5 +18,15 @@ namespace TeamGeneratorApp.Helpers
                     HttpContext.Current.User.IsInRole("Admin");
             }
         }
+
+        public static bool UserTabVisible
+        {
+            get
+            {
+                return
+                    HttpContext.Current.User != null &&
+                    HttpContext.Current.User.Identity.IsAuthenticated;
+            }
+        }
     }
 }

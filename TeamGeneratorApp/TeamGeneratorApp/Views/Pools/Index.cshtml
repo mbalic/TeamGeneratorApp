@@ -1,0 +1,54 @@
+﻿@model IEnumerable<TeamGeneratorApp.Models.Pool>
+
+@{
+    ViewBag.Title = "My pools";
+}
+
+<h2>My pools</h2>
+<hr />
+<p>
+    @Html.ActionLink("Create new", "Create")
+</p>
+
+@using (Html.BeginForm("Index", "Pools", FormMethod.Get))
+{
+    <p>
+        Find by @Html.DropDownList("ddlFilter") : @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        <input type="submit" value="Search" />
+    </p>
+}
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter, ddlFilter = Request.QueryString["ddlFilter"] })
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.ActionLink("Category", "Index", new { sortOrder = ViewBag.CategorySortParm, currentFilter = ViewBag.CurrentFilter, ddlFilter = Request.QueryString["ddlFilter"] })
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Category.Name)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>
