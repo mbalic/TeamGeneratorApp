@@ -16,10 +16,10 @@ namespace TeamGeneratorApp.Models
     {
         public int Id { get; set; }
         public Nullable<decimal> Value { get; set; }
-        public int Subject1_Id { get; set; }
-        public int Subject2_Id { get; set; }
+        public int UserInPool1_Id { get; set; }
+        public int UserInPool2_Id { get; set; }
     
-        public virtual SubjectInPool SubjectInPool { get; set; }
-        public virtual SubjectInPool SubjectInPool1 { get; set; }
+        public virtual UserInPool UserInPool { get; set; }
+        public virtual UserInPool UserInPool1 { get; set; }
     }
 }

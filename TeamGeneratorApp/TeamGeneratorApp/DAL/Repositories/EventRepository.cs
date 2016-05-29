@@ -13,6 +13,11 @@ namespace TeamGeneratorApp.DAL.Repositories
         {
         }
 
+        public IEnumerable<Event> GetByPoolId(int poolId)
+        {
+            return context.Event.Where(e => e.PoolId == poolId);
+        } 
+
 
     }
 }

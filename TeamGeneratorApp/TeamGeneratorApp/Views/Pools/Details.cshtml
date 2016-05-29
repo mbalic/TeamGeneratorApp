@@ -6,9 +6,14 @@
 
 <h2>Details</h2>
 
+<p>
+    @Html.ActionLink("Edit", "Edit", new {id = Model.Id}) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+<br/>
 <div>
     <h4>Pool</h4>
-    <hr />
+    <hr/>
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.Name)
@@ -36,7 +41,27 @@
 
     </dl>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+
+<div id="tabs">
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a href="#Events" data-toggle="tab">Events</a>
+        </li>
+        <li>
+            <a href="#Users" data-toggle="tab">Users</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane active" id="Events">
+            @Html.Action("PoolEvents", "Pools", new { poolId = Model.Id})
+        </div>
+        <div class="tab-pane" id="Users">
+            @Html.Action("PoolUsers", "Pools", new {poolId = Model.Id})
+        </div>
+    </div>
+
+</div>
+
+
+

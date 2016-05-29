@@ -12,19 +12,15 @@ namespace TeamGeneratorApp.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Subject
+    public partial class UserTeamEvent
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Subject()
-        {
-            this.SubjectInPool = new HashSet<SubjectInPool>();
-        }
-    
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
+        public int UserInPoolId { get; set; }
+        public int EventId { get; set; }
+        public int TeamId { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SubjectInPool> SubjectInPool { get; set; }
+        public virtual Event Event { get; set; }
+        public virtual Team Team { get; set; }
+        public virtual UserInPool UserInPool { get; set; }
     }
 }

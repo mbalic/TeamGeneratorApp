@@ -1,0 +1,72 @@
+﻿@model IEnumerable<TeamGeneratorApp.Models.Event>
+
+@{
+    ViewBag.Title = "Events";
+}
+
+@using (Html.BeginForm("Index", "Subjects", FormMethod.Get))
+{
+    <p>
+        Find by name : @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        <input type="submit" value="Search" />
+    </p>
+}
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter, poolId = ViewBag.PoolId })
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Fullname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.ActionLink("Start", "Index", new { sortOrder = ViewBag.StartSortParm, currentFilter = ViewBag.CurrentFilter, poolId = ViewBag.PoolId })
+        </th>
+        <th>
+            @Html.ActionLink("Finish", "Index", new { sortOrder = ViewBag.FinishSortParm, currentFilter = ViewBag.CurrentFilter, poolId = ViewBag.PoolId })
+        </th>
+        <th>
+            @Html.ActionLink("Number of teams", "Index", new { sortOrder = ViewBag.TeamsSortParm, currentFilter = ViewBag.CurrentFilter, poolId = ViewBag.PoolId })
+        </th>
+        
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Fullname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Start)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Finish)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NumberOfTeams)
+        </td>
+        
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>
+
+@*<p>
+    @Html.ActionLink("Create New", "Create")
+</p>*@

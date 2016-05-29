@@ -248,5 +248,24 @@ namespace TeamGeneratorApp.Controllers
             var items = unitOfWork.CategoryRepository.Get().ToList();
             ViewBag.CategoryId = new SelectList(items, "Id", "Name", selectedItem);
         }
+
+        public PartialViewResult PoolEvents(int poolId = 0)
+        {
+            var events = unitOfWork.EventRepository.GetByPoolId(poolId);
+
+            return PartialView("_PoolEvents", events.ToList());
+        }
+
+        public PartialViewResult PoolUsers(int poolId = 0)
+        {
+            var users = unitOfWork.UserRepository.GetFromPool(poolId);
+
+            return PartialView("_PoolUsers", users.ToList());
+        }
+
+        //public ActionResult RedirectToDetails(int id)
+        //{
+        //   return RedirectToAction("Details", "Subjects", new {id = id});
+        //}
     }
 }

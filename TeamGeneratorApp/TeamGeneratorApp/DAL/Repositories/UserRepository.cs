@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Security.AccessControl;
 using System.Text;
@@ -91,6 +92,25 @@ namespace TeamGeneratorApp.DAL.Repositories
             {
                 user.AspNetRoles.Clear();
             }
+        }
+
+        public IEnumerable<UserInPoolVM> GetFromPool(int poolId)
+        {
+            var users =  context.UserInPool.Where(e => e.PoolId == poolId).Include("AspNetUsers");
+            
+            List<UserInPoolVM> list = new List<UserInPoolVM>();
+            foreach (var u in users)
+            {
+                UserInPoolVM result = new UserInPoolVM();
+                result.Id = u.Id;
+                result.UserId = u.UserId;
+                result.PoolId = u.PoolId;
+                result.Weight = u.Weight;
+                result.User = u.AspNetUsers;
+
+                list.Add(result);
+            }
+            return list;
         }
     }
 }

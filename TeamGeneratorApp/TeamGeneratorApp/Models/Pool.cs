@@ -18,7 +18,7 @@ namespace TeamGeneratorApp.Models
         public Pool()
         {
             this.Event = new HashSet<Event>();
-            this.SubjectInPool = new HashSet<SubjectInPool>();
+            this.UserInPool = new HashSet<UserInPool>();
         }
     
         public int Id { get; set; }
@@ -32,6 +32,6 @@ namespace TeamGeneratorApp.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Event> Event { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SubjectInPool> SubjectInPool { get; set; }
+        public virtual ICollection<UserInPool> UserInPool { get; set; }
     }
 }

@@ -18,21 +18,18 @@
 @using (Html.BeginForm("Index", "AdminCategories", FormMethod.Get))
 {
     <p>
-        Find by @Html.DropDownList("ddlFilter") : @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        Find by name : @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
         <input type="submit" value="Search" />
     </p>
 }
 <table class="table">
     <tr>
         <th>
-            @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter, ddlFilter = Request.QueryString["ddlFilter"] })
+            @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter})
         </th>
         <th>
             Description
-        </th>
-        <th>
-           @Html.ActionLink("Parent category", "Index", new { sortOrder = ViewBag.ParentSortParm, currentFilter = ViewBag.CurrentFilter, ddlFilter = Request.QueryString["ddlFilter"] })
-        </th>
+        </th>     
         <th></th>
     </tr>
 
@@ -43,9 +40,6 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Category2.Name)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
@@ -60,4 +54,4 @@
 Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
 @Html.PagedListPager(Model, page => Url.Action("Index",
-    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, ddlFilter = Request.QueryString["ddlFilter"] }))
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter}))

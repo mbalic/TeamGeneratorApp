@@ -22,9 +22,9 @@ namespace TeamGeneratorApp.Models
     
         public int Id { get; set; }
         public Nullable<decimal> Value { get; set; }
-        public int SubjectInPoolId { get; set; }
+        public int UserInPoolId { get; set; }
     
-        public virtual SubjectInPool SubjectInPool { get; set; }
+        public virtual UserInPool UserInPool { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ScoreHistory> ScoreHistory { get; set; }
     }

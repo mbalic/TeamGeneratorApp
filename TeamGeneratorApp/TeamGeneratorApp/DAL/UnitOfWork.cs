@@ -22,7 +22,6 @@ namespace TeamGeneratorApp.DAL
         private PoolRepository poolRepository;
         private ScoreHistoryRepository scoreHistoryRepository;
         private ScoreRepository scoreRepository;
-        private SubjectRepository subjectRepository;
         private TeamRepository teamRepository;
 
         public UserRepository UserRepository
@@ -121,17 +120,7 @@ namespace TeamGeneratorApp.DAL
             }
         }
 
-        public SubjectRepository SubjectRepository
-        {
-            get
-            {
-                if (this.subjectRepository == null)
-                {
-                    this.subjectRepository = new SubjectRepository(context);
-                }
-                return subjectRepository;
-            }
-        }
+     
 
         public TeamRepository TeamRepository
         {

@@ -35,9 +35,8 @@ namespace TeamGeneratorApp.Models
         public virtual DbSet<Pool> Pool { get; set; }
         public virtual DbSet<Score> Score { get; set; }
         public virtual DbSet<ScoreHistory> ScoreHistory { get; set; }
-        public virtual DbSet<Subject> Subject { get; set; }
-        public virtual DbSet<SubjectInPool> SubjectInPool { get; set; }
-        public virtual DbSet<SubjectTeamEvent> SubjectTeamEvent { get; set; }
         public virtual DbSet<Team> Team { get; set; }
+        public virtual DbSet<UserInPool> UserInPool { get; set; }
+        public virtual DbSet<UserTeamEvent> UserTeamEvent { get; set; }
     }
 }

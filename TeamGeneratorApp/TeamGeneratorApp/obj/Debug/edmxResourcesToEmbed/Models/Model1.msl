@@ -52,7 +52,6 @@
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="Description" ColumnName="Description" />
-          <ScalarProperty Name="ParentId" ColumnName="ParentId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -61,8 +60,8 @@
         <MappingFragment StoreEntitySet="Correlation">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Value" ColumnName="Value" />
-          <ScalarProperty Name="Subject1_Id" ColumnName="Subject1_Id" />
-          <ScalarProperty Name="Subject2_Id" ColumnName="Subject2_Id" />
+          <ScalarProperty Name="UserInPool1_Id" ColumnName="UserInPool1_Id" />
+          <ScalarProperty Name="UserInPool2_Id" ColumnName="UserInPool2_Id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -96,7 +95,7 @@
         <MappingFragment StoreEntitySet="Score">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Value" ColumnName="Value" />
-          <ScalarProperty Name="SubjectInPoolId" ColumnName="SubjectInPoolId" />
+          <ScalarProperty Name="UserInPoolId" ColumnName="UserInPoolId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -110,41 +109,32 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Subject">
-      <EntityTypeMapping TypeName="TeamDb3Model.Subject">
-        <MappingFragment StoreEntitySet="Subject">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="Name" ColumnName="Name" />
-          <ScalarProperty Name="Email" ColumnName="Email" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="SubjectInPool">
-      <EntityTypeMapping TypeName="TeamDb3Model.SubjectInPool">
-        <MappingFragment StoreEntitySet="SubjectInPool">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="PoolId" ColumnName="PoolId" />
-          <ScalarProperty Name="SubjectId" ColumnName="SubjectId" />
-          <ScalarProperty Name="Weight" ColumnName="Weight" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="SubjectTeamEvent">
-      <EntityTypeMapping TypeName="TeamDb3Model.SubjectTeamEvent">
-        <MappingFragment StoreEntitySet="SubjectTeamEvent">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="SubjectInPoolId" ColumnName="SubjectInPoolId" />
-          <ScalarProperty Name="EventId" ColumnName="EventId" />
-          <ScalarProperty Name="TeamId" ColumnName="TeamId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Team">
       <EntityTypeMapping TypeName="TeamDb3Model.Team">
         <MappingFragment StoreEntitySet="Team">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="TeamScore" ColumnName="TeamScore" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserInPool">
+      <EntityTypeMapping TypeName="TeamDb3Model.UserInPool">
+        <MappingFragment StoreEntitySet="UserInPool">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="PoolId" ColumnName="PoolId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Weight" ColumnName="Weight" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserTeamEvent">
+      <EntityTypeMapping TypeName="TeamDb3Model.UserTeamEvent">
+        <MappingFragment StoreEntitySet="UserTeamEvent">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="UserInPoolId" ColumnName="UserInPoolId" />
+          <ScalarProperty Name="EventId" ColumnName="EventId" />
+          <ScalarProperty Name="TeamId" ColumnName="TeamId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

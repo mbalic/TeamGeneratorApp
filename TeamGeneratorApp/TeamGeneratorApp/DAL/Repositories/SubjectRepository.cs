@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,12 @@ namespace TeamGeneratorApp.DAL.Repositories
         {
         }
 
+        public IEnumerable<Subject> GetByPoolId(int poolId)
+        {
+            var result =
+                context.SubjectInPool.Where(s => s.PoolId == poolId).Include("Subject").Select(s => s.Subject);
+            return result;
+        }
 
     }
 }

@@ -1,0 +1,38 @@
+﻿@model IEnumerable<TeamGeneratorApp.Models.ViewModels.UserInPoolVM>
+
+@{
+    Layout = null;
+}
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.User.UserName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Weight)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.User.UserName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Weight)
+        </td>
+        <td>
+            @*@Html.ActionLink("Edit", "Edit", "Subjects", new { id=item.Id }) |*@
+            @*@Html.ActionLink("Details", "RedirectToDetails",  new { id = item.Id }) |
+            @Html.ActionLink("Delete", "Delete", "Subjects")*@
+        </td>
+    </tr>
+}
+
+</table>
+<p>
+    @*@Html.ActionLink("Create new subject", "Create", "Subjects")*@
+</p>

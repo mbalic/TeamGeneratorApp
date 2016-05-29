@@ -6,25 +6,28 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
+using PagedList;
 using TeamGeneratorApp.DAL;
 using TeamGeneratorApp.Models;
-using PagedList;
 
-
-namespace TeamGeneratorApp.Controllers.Admin
+namespace TeamGeneratorApp.Controllers
 {
-    [Authorize(Roles = "Admin")]
-    public class AdminCategoriesController : Controller
+    [Authorize]
+    public class EventsController : Controller
     {
-        
         private UnitOfWork unitOfWork = new UnitOfWork();
+        private string userId;
 
-        // GET: AdminCategories
-        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page, string ddlFilter = "Name")
+        // GET: Events
+        public ActionResult Index(int poolId, string sortOrder, string currentFilter, string searchString, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "Name_desc" : "";
-            
+            ViewBag.StartSortParm = sortOrder == "Start" ? "Start_desc" : "Start";
+            ViewBag.FinishSortParm = sortOrder == "Finish" ? "Finish_desc" : "Finish";
+            ViewBag.TeamsSortParm = sortOrder == "Teams" ? "Teams_desc" : "Teams";
+
 
             if (searchString != null)
             {
@@ -37,73 +40,79 @@ namespace TeamGeneratorApp.Controllers.Admin
 
             ViewBag.CurrentFilter = searchString;
 
-            var category = unitOfWork.CategoryRepository.Get();
+            var events = unitOfWork.EventRepository.GetByPoolId(poolId);
 
             if (!String.IsNullOrEmpty(searchString))
-            {
-                switch (ddlFilter)
-                {
-                    case "Name":
-                        category = category.Where(s => s.Name != null);
-                        category = category.Where(s => s.Name.Contains(searchString));
-                        break;
-                    default:
-                        category = category.Where(s => s.Name != null);
-                        category = category.Where(s => s.Name.Contains(searchString));
-                        break;
-                }
+            {            
+                events = events.Where(s => s.Name != null);
+                events = events.Where(s => s.Name.Contains(searchString));
             }
-
 
             switch (sortOrder)
             {
                 case "Name_desc":
-                    category = category.OrderByDescending(s => s.Name);
+                    events = events.OrderByDescending(s => s.Name);
+                    break;
+                case "Start":
+                    events = events.OrderBy(s => s.Start);
+                    break;
+                case "Start_desc":
+                    events = events.OrderByDescending(s => s.Start);
+                    break;
+                case "Finish":
+                    events = events.OrderBy(s => s.Finish);
+                    break;
+                case "Finish_desc":
+                    events = events.OrderByDescending(s => s.Finish);
                     break;
                 default:
-                    category = category.OrderBy(s => s.Name);
+                    events = events.OrderBy(s => s.Name);
                     break;
             }
 
+            ViewBag.PoolId = poolId;
             int pageSize = 10;
             int pageNumber = (page ?? 1);
 
-            return View(category.ToPagedList(pageNumber, pageSize));
+            return View(events.ToPagedList(pageNumber, pageSize));
         }
 
-        // GET: AdminCategories/Details/5
+        // GET: Events/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Category category = unitOfWork.CategoryRepository.GetByID(id);
-            if (category == null)
+            Event @event = unitOfWork.EventRepository.GetByID(id);
+
+            if (@event == null)
             {
                 return HttpNotFound();
             }
-            return View(category);
+
+            return View(@event);
         }
 
-        //// GET: AdminCategories/Create
+        //// GET: Events/Create
         public ActionResult Create()
         {
+            PopulatePoolDropDown();
             return View();
         }
 
-        //// POST: AdminCategories/Create
+        //// POST: Events/Create
         //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Description")] Category category)
+        public ActionResult Create([Bind(Include = "Id,Name,Fullname,Description,Start,Finish,NumberOfTeams,PoolId")] Event @event)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    unitOfWork.CategoryRepository.Insert(category);
+                    unitOfWork.EventRepository.Insert(@event);
                     unitOfWork.Commit();
                     return RedirectToAction("Index");
                 }
@@ -113,38 +122,41 @@ namespace TeamGeneratorApp.Controllers.Admin
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
 
-            return View(category);
+            PopulatePoolDropDown(@event.PoolId);
+
+            return View(@event);
         }
 
-        //// GET: AdminCategories/Edit/5
+        //// GET: Events/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Category category = unitOfWork.CategoryRepository.GetByID(id);
-
-            if (category == null)
+            Event @event = unitOfWork.EventRepository.GetByID(id);
+            if (@event == null)
             {
                 return HttpNotFound();
             }
 
-            return View(category);
+            PopulatePoolDropDown(@event.PoolId);
+
+            return View(@event);
         }
 
-        //// POST: AdminCategories/Edit/5
+        //// POST: Events/Edit/5
         //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Description")] Category category)
+        public ActionResult Edit([Bind(Include = "Id,Name,Fullname,Description,Start,Finish,NumberOfTeams,PoolId")] Event @event)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    unitOfWork.CategoryRepository.Update(category);
+                    unitOfWork.EventRepository.Update(@event);
                     unitOfWork.Commit();
                     return RedirectToAction("Index");
                 }
@@ -154,46 +166,48 @@ namespace TeamGeneratorApp.Controllers.Admin
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
 
-            return View(category);
+            PopulatePoolDropDown(@event.PoolId);
+
+            return View(@event);
         }
 
-        //// GET: AdminCategories/Delete/5
+        //// GET: Events/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Category category = unitOfWork.CategoryRepository.GetByID(id);
 
-            if (category == null)
+            Event @event = unitOfWork.EventRepository.GetByID(id);
+
+            if (@event == null)
             {
                 return HttpNotFound();
             }
-            return View(category);
+            return View(@event);
         }
 
-        //// POST: AdminCategories/Delete/5
+        //// POST: Events/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Category category = unitOfWork.CategoryRepository.GetByID(id);
+            Event @event = unitOfWork.EventRepository.GetByID(id);
 
             try
             {
-                unitOfWork.CategoryRepository.Delete(category);
+                unitOfWork.EventRepository.Delete(@event);
                 unitOfWork.Commit();
                 return RedirectToAction("Index");
             }
             catch (Exception)
             {
                 ViewBag.ConstraintError = "Unable to delete this item because it is used in other entities as foreign key.";
-                return View("Delete", category);
+                return View("Delete", @event);
             }
         }
 
-     
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -201,6 +215,13 @@ namespace TeamGeneratorApp.Controllers.Admin
                 unitOfWork.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        private void PopulatePoolDropDown(object selectedItem = null)
+        {
+            userId = User.Identity.GetUserId();
+            var items = unitOfWork.PoolRepository.GetByUserId(userId).ToList();
+            ViewBag.PoolId = new SelectList(items, "Id", "Name", selectedItem);
         }
     }
 }

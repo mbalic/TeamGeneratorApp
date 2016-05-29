@@ -1,0 +1,66 @@
+﻿@model IEnumerable<TeamGeneratorApp.Models.Event>
+
+@{
+    Layout = null;
+}
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Fullname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+           @Html.DisplayNameFor(model => model.Start)
+        </th>
+        <th>
+           @Html.DisplayNameFor(model => model.Finish)
+        </th>
+        <th>
+           @Html.DisplayNameFor(model => model.NumberOfTeams)
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fullname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Start)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Finish)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumberOfTeams)
+            </td>
+
+            <td>
+                @Html.ActionLink("Edit",  "Edit", "Events", new { id=item.Id }) |
+                @Html.ActionLink("Details", "Details", "Events", new { id=item.Id }) |
+                @Html.ActionLink("Delete", "Delete", "Events", new { id=item.Id })
+            </td>
+        </tr>
+    }
+
+</table>
+
+<p>
+        @Html.ActionLink("Create new event", "Create", "Events")
+    </p>

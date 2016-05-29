@@ -12,22 +12,23 @@ namespace TeamGeneratorApp.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class SubjectInPool
+    public partial class UserInPool
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public SubjectInPool()
+        public UserInPool()
         {
             this.Correlation = new HashSet<Correlation>();
             this.Correlation1 = new HashSet<Correlation>();
             this.Score = new HashSet<Score>();
-            this.SubjectTeamEvent = new HashSet<SubjectTeamEvent>();
+            this.UserTeamEvent = new HashSet<UserTeamEvent>();
         }
     
         public int Id { get; set; }
         public int PoolId { get; set; }
-        public int SubjectId { get; set; }
+        public string UserId { get; set; }
         public string Weight { get; set; }
     
+        public virtual AspNetUsers AspNetUsers { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Correlation> Correlation { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -35,8 +36,7 @@ namespace TeamGeneratorApp.Models
         public virtual Pool Pool { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Score> Score { get; set; }
-        public virtual Subject Subject { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SubjectTeamEvent> SubjectTeamEvent { get; set; }
+        public virtual ICollection<UserTeamEvent> UserTeamEvent { get; set; }
     }
 }
