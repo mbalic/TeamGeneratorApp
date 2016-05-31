@@ -12,7 +12,7 @@ namespace TeamGeneratorApp.DAL.Repositories
 {
     public class UserRepository : GenericRepository<AspNetUsers>
     {
-        public UserRepository(TeamDb3Entities context) : base(context)
+        public UserRepository(TeamDb4Entities context) : base(context)
         {
         }
 
@@ -94,23 +94,10 @@ namespace TeamGeneratorApp.DAL.Repositories
             }
         }
 
-        public IEnumerable<UserInPoolVM> GetFromPool(int poolId)
-        {
-            var users =  context.UserInPool.Where(e => e.PoolId == poolId).Include("AspNetUsers");
-            
-            List<UserInPoolVM> list = new List<UserInPoolVM>();
-            foreach (var u in users)
-            {
-                UserInPoolVM result = new UserInPoolVM();
-                result.Id = u.Id;
-                result.UserId = u.UserId;
-                result.PoolId = u.PoolId;
-                result.Weight = u.Weight;
-                result.User = u.AspNetUsers;
+        //public IEnumerable<UserPoolCategory> GetFromPool(int poolId)
+        //{
+        //    return context.UserInPool.Where(e => e.PoolId == poolId);
 
-                list.Add(result);
-            }
-            return list;
-        }
+        //}
     }
 }

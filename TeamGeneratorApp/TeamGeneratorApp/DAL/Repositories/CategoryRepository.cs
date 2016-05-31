@@ -10,9 +10,14 @@ namespace TeamGeneratorApp.DAL.Repositories
 {
     public class CategoryRepository : GenericRepository<Category>
     {
-        public CategoryRepository(TeamDb3Entities context) : base(context)
+        public CategoryRepository(TeamDb4Entities context) : base(context)
         {
         }
+
+        public IEnumerable<Category> GetByPoolId(int poolId)
+        {
+            return context.Category.Where(c => c.PoolId == poolId);
+        } 
 
 
     }

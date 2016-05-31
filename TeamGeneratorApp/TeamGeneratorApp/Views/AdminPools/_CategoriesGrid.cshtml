@@ -1,5 +1,4 @@
-﻿
-@*@using Kendo.Mvc.UI
+﻿@using Kendo.Mvc.UI
 @{
     Layout = null;
 }
@@ -11,20 +10,28 @@
 @Scripts.Render("~/bundles/modernizr")
 @Scripts.Render("~/bundles/kendo")
 
+<script type="text/javascript">
+    function viewCategory(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var categoryId = dataItem.Id
 
-@(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.UserInPoolVM>()
+        window.location.href = "@Url.Action("Details","AdminCategories")?id=" + categoryId;
+
+    }    
+</script>
+
+
+@(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.CategoryVM>()
     .Name("grid")
     .Columns(columns =>
     {
-        columns.Bound(p => p.User.UserName);
-        columns.Bound(p => p.Weight);
-        columns.Bound(p => p.Score);
-        columns.Bound(p => p.NumberOfTeams);
-        columns.Bound(p => p.Start);
-        columns.Bound(p => p.Finish);
-        //columns.Command(command => { command.Edit(); command.Destroy(); }).Width(250);
+        columns.Bound(p => p.Name);
+        columns.Bound(p => p.Description);
+        columns.Command(command => { command.Edit(); command.Destroy(); }).Width(200);
+        columns.Command(command => command.Custom("Details").Click("viewCategory"));
     })
-    //.ToolBar(toolbar => toolbar.Create())
+    .ToolBar(toolbar => toolbar.Create())
     .Editable(editable => editable.Mode(GridEditMode.InLine))
     .Pageable()
     .Sortable()
@@ -37,10 +44,10 @@
         .PageSize(20)
         .Events(events => events.Error("error_handler"))
         .Model(model => model.Id(p => p.Id))
-        //.Create(update => update.Action("PoolEvents_Create", "Pools", new { poolId = ViewBag.PoolId }))
-        .Read(read => read.Action("PoolEvents_Read", "Pools", new { poolId = ViewBag.PoolId }))
-    //.Update(update => update.Action("PoolEvents_Update", "Pools"))
-    //.Destroy(update => update.Action("PoolEvents_Destroy", "Pools"))
+        .Create(update => update.Action("CategoriesGrid_Create", "AdminPools", new { poolId = ViewBag.PoolId }))
+        .Read(read => read.Action("CategoriesGrid_Read", "AdminPools", new { poolId = ViewBag.PoolId }))
+        .Update(update => update.Action("CategoriesGrid_Update", "AdminPools"))
+        .Destroy(update => update.Action("CategoriesGrid_Destroy", "AdminPools"))
     )
 
 )
@@ -58,5 +65,5 @@
             alert(message);
         }
     }
-</script>*@
+</script>
 

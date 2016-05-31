@@ -13,10 +13,10 @@ namespace TeamGeneratorApp.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class TeamDb3Entities : DbContext
+    public partial class TeamDb4Entities : DbContext
     {
-        public TeamDb3Entities()
-            : base("name=TeamDb3Entities")
+        public TeamDb4Entities()
+            : base("name=TeamDb4Entities")
         {
         }
     
@@ -30,13 +30,10 @@ namespace TeamGeneratorApp.Models
         public virtual DbSet<AspNetUserLogins> AspNetUserLogins { get; set; }
         public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<Category> Category { get; set; }
-        public virtual DbSet<Correlation> Correlation { get; set; }
         public virtual DbSet<Event> Event { get; set; }
         public virtual DbSet<Pool> Pool { get; set; }
-        public virtual DbSet<Score> Score { get; set; }
-        public virtual DbSet<ScoreHistory> ScoreHistory { get; set; }
         public virtual DbSet<Team> Team { get; set; }
-        public virtual DbSet<UserInPool> UserInPool { get; set; }
-        public virtual DbSet<UserTeamEvent> UserTeamEvent { get; set; }
+        public virtual DbSet<UserCategory> UserCategory { get; set; }
+        public virtual DbSet<UserOnEvent> UserOnEvent { get; set; }
     }
 }

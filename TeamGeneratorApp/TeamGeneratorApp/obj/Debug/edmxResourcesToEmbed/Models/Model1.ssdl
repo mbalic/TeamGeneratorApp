@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Schema Namespace="TeamDb3Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+<Schema Namespace="TeamDb4Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
   <EntityType Name="AspNetRoles">
     <Key>
       <PropertyRef Name="Id" />
@@ -57,104 +57,67 @@
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
-    <Property Name="Description" Type="nvarchar" MaxLength="250" />
-  </EntityType>
-  <EntityType Name="Correlation">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Value" Type="decimal" Precision="7" Scale="2" />
-    <Property Name="UserInPool1_Id" Type="int" Nullable="false" />
-    <Property Name="UserInPool2_Id" Type="int" Nullable="false" />
+    <Property Name="Description" Type="nvarchar" MaxLength="128" />
+    <Property Name="PoolId" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Event">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
-    <Property Name="Fullname" Type="nvarchar(max)" />
-    <Property Name="Description" Type="nvarchar(max)" />
+    <Property Name="PoolId" Type="int" Nullable="false" />
+    <Property Name="CategoryId" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="Description" Type="nvarchar" MaxLength="128" />
     <Property Name="Start" Type="datetime" />
     <Property Name="Finish" Type="datetime" />
     <Property Name="NumberOfTeams" Type="int" Nullable="false" />
-    <Property Name="PoolId" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Pool">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Name" Type="nvarchar" MaxLength="50" />
-    <Property Name="Description" Type="nvarchar" MaxLength="150" />
-    <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
-    <Property Name="CategoryId" Type="int" Nullable="false" />
-  </EntityType>
-  <EntityType Name="Score">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Value" Type="decimal" Precision="10" Scale="2" />
-    <Property Name="UserInPoolId" Type="int" Nullable="false" />
-  </EntityType>
-  <EntityType Name="ScoreHistory">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Timestamp" Type="datetime" />
-    <Property Name="Value" Type="decimal" Precision="10" Scale="2" />
-    <Property Name="ScoreId" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="Description" Type="nchar" MaxLength="128" />
+    <Property Name="OwnerId" Type="nvarchar" MaxLength="128" Nullable="false" />
   </EntityType>
   <EntityType Name="Team">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Name" Type="nvarchar" MaxLength="100" />
-    <Property Name="TeamScore" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="EventId" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="128" />
+    <Property Name="TeamScore" Type="int" />
   </EntityType>
-  <EntityType Name="UserInPool">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="int" Nullable="false" />
-    <Property Name="PoolId" Type="int" Nullable="false" />
-    <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
-    <Property Name="Weight" Type="nvarchar" MaxLength="50" />
-  </EntityType>
-  <EntityType Name="UserTeamEvent">
+  <EntityType Name="UserCategory">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="UserInPoolId" Type="int" Nullable="false" />
-    <Property Name="EventId" Type="int" Nullable="false" />
-    <Property Name="TeamId" Type="int" Nullable="false" />
+    <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="CategoryId" Type="int" Nullable="false" />
+    <Property Name="Score" Type="int" />
   </EntityType>
-  <Association Name="FK_Correlation_UserInPool">
-    <End Role="UserInPool" Type="Self.UserInPool" Multiplicity="1" />
-    <End Role="Correlation" Type="Self.Correlation" Multiplicity="*" />
+  <EntityType Name="UserOnEvent">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="EventId" Type="int" Nullable="false" />
+    <Property Name="TeamId" Type="int" />
+    <Property Name="UserCategoryId" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Category_Pool">
+    <End Role="Pool" Type="Self.Pool" Multiplicity="1" />
+    <End Role="Category" Type="Self.Category" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="UserInPool">
+      <Principal Role="Pool">
         <PropertyRef Name="Id" />
       </Principal>
-      <Dependent Role="Correlation">
-        <PropertyRef Name="UserInPool1_Id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Correlation_UserInPool1">
-    <End Role="UserInPool" Type="Self.UserInPool" Multiplicity="1" />
-    <End Role="Correlation" Type="Self.Correlation" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="UserInPool">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Correlation">
-        <PropertyRef Name="UserInPool2_Id" />
+      <Dependent Role="Category">
+        <PropertyRef Name="PoolId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -214,31 +177,19 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_Event_Pool">
-    <End Role="Pool" Type="Self.Pool" Multiplicity="1" />
-    <End Role="Event" Type="Self.Event" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Pool">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Event">
-        <PropertyRef Name="PoolId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Pool_Category">
+  <Association Name="FK_Event_Category">
     <End Role="Category" Type="Self.Category" Multiplicity="1" />
-    <End Role="Pool" Type="Self.Pool" Multiplicity="*" />
+    <End Role="Event" Type="Self.Event" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Category">
         <PropertyRef Name="Id" />
       </Principal>
-      <Dependent Role="Pool">
+      <Dependent Role="Event">
         <PropertyRef Name="CategoryId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_Pool_Pool">
+  <Association Name="FK_Pool_AspNetUsers">
     <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
     <End Role="Pool" Type="Self.Pool" Multiplicity="*" />
     <ReferentialConstraint>
@@ -246,116 +197,97 @@
         <PropertyRef Name="Id" />
       </Principal>
       <Dependent Role="Pool">
-        <PropertyRef Name="UserId" />
+        <PropertyRef Name="OwnerId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_Score_UserInPool">
-    <End Role="UserInPool" Type="Self.UserInPool" Multiplicity="1" />
-    <End Role="Score" Type="Self.Score" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="UserInPool">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Score">
-        <PropertyRef Name="UserInPoolId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_ScoreHistory_Score">
-    <End Role="Score" Type="Self.Score" Multiplicity="1" />
-    <End Role="ScoreHistory" Type="Self.ScoreHistory" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Score">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="ScoreHistory">
-        <PropertyRef Name="ScoreId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_SubjectTeamEvent_Event">
+  <Association Name="FK_Team_Event">
     <End Role="Event" Type="Self.Event" Multiplicity="1" />
-    <End Role="UserTeamEvent" Type="Self.UserTeamEvent" Multiplicity="*" />
+    <End Role="Team" Type="Self.Team" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Event">
         <PropertyRef Name="Id" />
       </Principal>
-      <Dependent Role="UserTeamEvent">
+      <Dependent Role="Team">
         <PropertyRef Name="EventId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_SubjectTeamEvent_Team">
-    <End Role="Team" Type="Self.Team" Multiplicity="1" />
-    <End Role="UserTeamEvent" Type="Self.UserTeamEvent" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Team">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="UserTeamEvent">
-        <PropertyRef Name="TeamId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_UserInPool_AspNetUsers">
+  <Association Name="FK_UserCategory_AspNetUsers">
     <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
-    <End Role="UserInPool" Type="Self.UserInPool" Multiplicity="*" />
+    <End Role="UserCategory" Type="Self.UserCategory" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="AspNetUsers">
         <PropertyRef Name="Id" />
       </Principal>
-      <Dependent Role="UserInPool">
+      <Dependent Role="UserCategory">
         <PropertyRef Name="UserId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_UserInPool_Pool">
-    <End Role="Pool" Type="Self.Pool" Multiplicity="1" />
-    <End Role="UserInPool" Type="Self.UserInPool" Multiplicity="*" />
+  <Association Name="FK_UserCategory_Category">
+    <End Role="Category" Type="Self.Category" Multiplicity="1" />
+    <End Role="UserCategory" Type="Self.UserCategory" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="Pool">
+      <Principal Role="Category">
         <PropertyRef Name="Id" />
       </Principal>
-      <Dependent Role="UserInPool">
-        <PropertyRef Name="PoolId" />
+      <Dependent Role="UserCategory">
+        <PropertyRef Name="CategoryId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_UserTeamEvent_UserInPool">
-    <End Role="UserInPool" Type="Self.UserInPool" Multiplicity="1" />
-    <End Role="UserTeamEvent" Type="Self.UserTeamEvent" Multiplicity="*" />
+  <Association Name="FK_UserOnEvent_Event">
+    <End Role="Event" Type="Self.Event" Multiplicity="1" />
+    <End Role="UserOnEvent" Type="Self.UserOnEvent" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="UserInPool">
+      <Principal Role="Event">
         <PropertyRef Name="Id" />
       </Principal>
-      <Dependent Role="UserTeamEvent">
-        <PropertyRef Name="UserInPoolId" />
+      <Dependent Role="UserOnEvent">
+        <PropertyRef Name="EventId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityContainer Name="TeamDb3ModelStoreContainer">
+  <Association Name="FK_UserOnEvent_Team">
+    <End Role="Team" Type="Self.Team" Multiplicity="0..1" />
+    <End Role="UserOnEvent" Type="Self.UserOnEvent" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Team">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserOnEvent">
+        <PropertyRef Name="TeamId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserOnEvent_UserCategory">
+    <End Role="UserCategory" Type="Self.UserCategory" Multiplicity="1" />
+    <End Role="UserOnEvent" Type="Self.UserOnEvent" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserCategory">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserOnEvent">
+        <PropertyRef Name="UserCategoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="TeamDb4ModelStoreContainer">
     <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="Correlation" EntityType="Self.Correlation" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Event" EntityType="Self.Event" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Pool" EntityType="Self.Pool" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="Score" EntityType="Self.Score" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="ScoreHistory" EntityType="Self.ScoreHistory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Team" EntityType="Self.Team" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="UserInPool" EntityType="Self.UserInPool" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="UserTeamEvent" EntityType="Self.UserTeamEvent" Schema="dbo" store:Type="Tables" />
-    <AssociationSet Name="FK_Correlation_UserInPool" Association="Self.FK_Correlation_UserInPool">
-      <End Role="UserInPool" EntitySet="UserInPool" />
-      <End Role="Correlation" EntitySet="Correlation" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Correlation_UserInPool1" Association="Self.FK_Correlation_UserInPool1">
-      <End Role="UserInPool" EntitySet="UserInPool" />
-      <End Role="Correlation" EntitySet="Correlation" />
+    <EntitySet Name="UserCategory" EntityType="Self.UserCategory" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserOnEvent" EntityType="Self.UserOnEvent" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Category_Pool" Association="Self.FK_Category_Pool">
+      <End Role="Pool" EntitySet="Pool" />
+      <End Role="Category" EntitySet="Category" />
     </AssociationSet>
     <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
@@ -373,45 +305,37 @@
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
       <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
     </AssociationSet>
-    <AssociationSet Name="FK_Event_Pool" Association="Self.FK_Event_Pool">
-      <End Role="Pool" EntitySet="Pool" />
-      <End Role="Event" EntitySet="Event" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Pool_Category" Association="Self.FK_Pool_Category">
+    <AssociationSet Name="FK_Event_Category" Association="Self.FK_Event_Category">
       <End Role="Category" EntitySet="Category" />
-      <End Role="Pool" EntitySet="Pool" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Pool_Pool" Association="Self.FK_Pool_Pool">
-      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-      <End Role="Pool" EntitySet="Pool" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Score_UserInPool" Association="Self.FK_Score_UserInPool">
-      <End Role="UserInPool" EntitySet="UserInPool" />
-      <End Role="Score" EntitySet="Score" />
-    </AssociationSet>
-    <AssociationSet Name="FK_ScoreHistory_Score" Association="Self.FK_ScoreHistory_Score">
-      <End Role="Score" EntitySet="Score" />
-      <End Role="ScoreHistory" EntitySet="ScoreHistory" />
-    </AssociationSet>
-    <AssociationSet Name="FK_SubjectTeamEvent_Event" Association="Self.FK_SubjectTeamEvent_Event">
       <End Role="Event" EntitySet="Event" />
-      <End Role="UserTeamEvent" EntitySet="UserTeamEvent" />
     </AssociationSet>
-    <AssociationSet Name="FK_SubjectTeamEvent_Team" Association="Self.FK_SubjectTeamEvent_Team">
-      <End Role="Team" EntitySet="Team" />
-      <End Role="UserTeamEvent" EntitySet="UserTeamEvent" />
-    </AssociationSet>
-    <AssociationSet Name="FK_UserInPool_AspNetUsers" Association="Self.FK_UserInPool_AspNetUsers">
+    <AssociationSet Name="FK_Pool_AspNetUsers" Association="Self.FK_Pool_AspNetUsers">
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-      <End Role="UserInPool" EntitySet="UserInPool" />
-    </AssociationSet>
-    <AssociationSet Name="FK_UserInPool_Pool" Association="Self.FK_UserInPool_Pool">
       <End Role="Pool" EntitySet="Pool" />
-      <End Role="UserInPool" EntitySet="UserInPool" />
     </AssociationSet>
-    <AssociationSet Name="FK_UserTeamEvent_UserInPool" Association="Self.FK_UserTeamEvent_UserInPool">
-      <End Role="UserInPool" EntitySet="UserInPool" />
-      <End Role="UserTeamEvent" EntitySet="UserTeamEvent" />
+    <AssociationSet Name="FK_Team_Event" Association="Self.FK_Team_Event">
+      <End Role="Event" EntitySet="Event" />
+      <End Role="Team" EntitySet="Team" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserCategory_AspNetUsers" Association="Self.FK_UserCategory_AspNetUsers">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="UserCategory" EntitySet="UserCategory" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserCategory_Category" Association="Self.FK_UserCategory_Category">
+      <End Role="Category" EntitySet="Category" />
+      <End Role="UserCategory" EntitySet="UserCategory" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserOnEvent_Event" Association="Self.FK_UserOnEvent_Event">
+      <End Role="Event" EntitySet="Event" />
+      <End Role="UserOnEvent" EntitySet="UserOnEvent" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserOnEvent_Team" Association="Self.FK_UserOnEvent_Team">
+      <End Role="Team" EntitySet="Team" />
+      <End Role="UserOnEvent" EntitySet="UserOnEvent" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserOnEvent_UserCategory" Association="Self.FK_UserOnEvent_UserCategory">
+      <End Role="UserCategory" EntitySet="UserCategory" />
+      <End Role="UserOnEvent" EntitySet="UserOnEvent" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

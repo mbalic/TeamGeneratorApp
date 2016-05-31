@@ -13,15 +13,12 @@ namespace TeamGeneratorApp.DAL
 {
     public class UnitOfWork : IDisposable
     {
-        private TeamDb3Entities context = new TeamDb3Entities();
+        private TeamDb4Entities context = new TeamDb4Entities();
         private UserRepository userRepository;
         private RoleRepository roleRepository;
-        private CategoryRepository categoryRepository;
-        private CorrelationRepository correlationRepository;
+        private CategoryRepository categoryRepository;       
         private EventRepository eventRepository;
         private PoolRepository poolRepository;
-        private ScoreHistoryRepository scoreHistoryRepository;
-        private ScoreRepository scoreRepository;
         private TeamRepository teamRepository;
 
         public UserRepository UserRepository
@@ -60,18 +57,7 @@ namespace TeamGeneratorApp.DAL
             }
         }
 
-        public CorrelationRepository CorrelationRepository
-        {
-            get
-            {
-                if (this.correlationRepository == null)
-                {
-                    this.correlationRepository = new CorrelationRepository(context);
-                }
-                return correlationRepository;
-            }
-        }
-
+      
         public EventRepository EventRepository
         {
             get
@@ -96,29 +82,7 @@ namespace TeamGeneratorApp.DAL
             }
         }
 
-        public ScoreHistoryRepository ScoreHistoryRepository
-        {
-            get
-            {
-                if (this.scoreHistoryRepository == null)
-                {
-                    this.scoreHistoryRepository = new ScoreHistoryRepository(context);
-                }
-                return scoreHistoryRepository;
-            }
-        }
-
-        public ScoreRepository ScoreRepository
-        {
-            get
-            {
-                if (this.scoreRepository == null)
-                {
-                    this.scoreRepository = new ScoreRepository(context);
-                }
-                return scoreRepository;
-            }
-        }
+     
 
      
 

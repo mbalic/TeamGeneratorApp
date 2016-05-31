@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="TeamDb3ModelStoreContainer" CdmEntityContainer="TeamDb3Entities">
+  <EntityContainerMapping StorageEntityContainer="TeamDb4ModelStoreContainer" CdmEntityContainer="Entities">
     <EntitySetMapping Name="AspNetRoles">
-      <EntityTypeMapping TypeName="TeamDb3Model.AspNetRoles">
+      <EntityTypeMapping TypeName="TeamDb4Model.AspNetRoles">
         <MappingFragment StoreEntitySet="AspNetRoles">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
@@ -10,7 +10,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="AspNetUserClaims">
-      <EntityTypeMapping TypeName="TeamDb3Model.AspNetUserClaims">
+      <EntityTypeMapping TypeName="TeamDb4Model.AspNetUserClaims">
         <MappingFragment StoreEntitySet="AspNetUserClaims">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="UserId" ColumnName="UserId" />
@@ -20,7 +20,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="AspNetUserLogins">
-      <EntityTypeMapping TypeName="TeamDb3Model.AspNetUserLogins">
+      <EntityTypeMapping TypeName="TeamDb4Model.AspNetUserLogins">
         <MappingFragment StoreEntitySet="AspNetUserLogins">
           <ScalarProperty Name="LoginProvider" ColumnName="LoginProvider" />
           <ScalarProperty Name="ProviderKey" ColumnName="ProviderKey" />
@@ -29,7 +29,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="AspNetUsers">
-      <EntityTypeMapping TypeName="TeamDb3Model.AspNetUsers">
+      <EntityTypeMapping TypeName="TeamDb4Model.AspNetUsers">
         <MappingFragment StoreEntitySet="AspNetUsers">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Email" ColumnName="Email" />
@@ -47,98 +47,70 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Category">
-      <EntityTypeMapping TypeName="TeamDb3Model.Category">
+      <EntityTypeMapping TypeName="TeamDb4Model.Category">
         <MappingFragment StoreEntitySet="Category">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="Description" ColumnName="Description" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Correlation">
-      <EntityTypeMapping TypeName="TeamDb3Model.Correlation">
-        <MappingFragment StoreEntitySet="Correlation">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="Value" ColumnName="Value" />
-          <ScalarProperty Name="UserInPool1_Id" ColumnName="UserInPool1_Id" />
-          <ScalarProperty Name="UserInPool2_Id" ColumnName="UserInPool2_Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Event">
-      <EntityTypeMapping TypeName="TeamDb3Model.Event">
-        <MappingFragment StoreEntitySet="Event">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="Name" ColumnName="Name" />
-          <ScalarProperty Name="Fullname" ColumnName="Fullname" />
-          <ScalarProperty Name="Description" ColumnName="Description" />
-          <ScalarProperty Name="Start" ColumnName="Start" />
-          <ScalarProperty Name="Finish" ColumnName="Finish" />
-          <ScalarProperty Name="NumberOfTeams" ColumnName="NumberOfTeams" />
           <ScalarProperty Name="PoolId" ColumnName="PoolId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Event">
+      <EntityTypeMapping TypeName="TeamDb4Model.Event">
+        <MappingFragment StoreEntitySet="Event">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="PoolId" ColumnName="PoolId" />
+          <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Start" ColumnName="Start" />
+          <ScalarProperty Name="Finish" ColumnName="Finish" />
+          <ScalarProperty Name="NumberOfTeams" ColumnName="NumberOfTeams" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="Pool">
-      <EntityTypeMapping TypeName="TeamDb3Model.Pool">
+      <EntityTypeMapping TypeName="TeamDb4Model.Pool">
         <MappingFragment StoreEntitySet="Pool">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="Description" ColumnName="Description" />
-          <ScalarProperty Name="UserId" ColumnName="UserId" />
-          <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Score">
-      <EntityTypeMapping TypeName="TeamDb3Model.Score">
-        <MappingFragment StoreEntitySet="Score">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="Value" ColumnName="Value" />
-          <ScalarProperty Name="UserInPoolId" ColumnName="UserInPoolId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="ScoreHistory">
-      <EntityTypeMapping TypeName="TeamDb3Model.ScoreHistory">
-        <MappingFragment StoreEntitySet="ScoreHistory">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
-          <ScalarProperty Name="Value" ColumnName="Value" />
-          <ScalarProperty Name="ScoreId" ColumnName="ScoreId" />
+          <ScalarProperty Name="OwnerId" ColumnName="OwnerId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Team">
-      <EntityTypeMapping TypeName="TeamDb3Model.Team">
+      <EntityTypeMapping TypeName="TeamDb4Model.Team">
         <MappingFragment StoreEntitySet="Team">
           <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="EventId" ColumnName="EventId" />
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="TeamScore" ColumnName="TeamScore" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="UserInPool">
-      <EntityTypeMapping TypeName="TeamDb3Model.UserInPool">
-        <MappingFragment StoreEntitySet="UserInPool">
+    <EntitySetMapping Name="UserCategory">
+      <EntityTypeMapping TypeName="TeamDb4Model.UserCategory">
+        <MappingFragment StoreEntitySet="UserCategory">
           <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="PoolId" ColumnName="PoolId" />
           <ScalarProperty Name="UserId" ColumnName="UserId" />
-          <ScalarProperty Name="Weight" ColumnName="Weight" />
+          <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+          <ScalarProperty Name="Score" ColumnName="Score" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="UserTeamEvent">
-      <EntityTypeMapping TypeName="TeamDb3Model.UserTeamEvent">
-        <MappingFragment StoreEntitySet="UserTeamEvent">
+    <EntitySetMapping Name="UserOnEvent">
+      <EntityTypeMapping TypeName="TeamDb4Model.UserOnEvent">
+        <MappingFragment StoreEntitySet="UserOnEvent">
           <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="UserInPoolId" ColumnName="UserInPoolId" />
           <ScalarProperty Name="EventId" ColumnName="EventId" />
           <ScalarProperty Name="TeamId" ColumnName="TeamId" />
+          <ScalarProperty Name="UserCategoryId" ColumnName="UserCategoryId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <AssociationSetMapping Name="AspNetUserRoles" TypeName="TeamDb3Model.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
+    <AssociationSetMapping Name="AspNetUserRoles" TypeName="TeamDb4Model.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
       <EndProperty Name="AspNetRoles">
         <ScalarProperty Name="Id" ColumnName="RoleId" />
       </EndProperty>

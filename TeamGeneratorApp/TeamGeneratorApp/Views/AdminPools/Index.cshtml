@@ -29,10 +29,6 @@
         <th>
             @Html.DisplayNameFor(model => model.Description)
         </th>
-
-        <th>
-            @Html.ActionLink("Category", "Index", new {sortOrder = ViewBag.CategorySortParm, currentFilter = ViewBag.CurrentFilter, ddlFilter = Request.QueryString["ddlFilter"]})
-        </th>
         <th>
             @Html.ActionLink("Owner", "Index", new { sortOrder = ViewBag.OwnerSortParm, currentFilter = ViewBag.CurrentFilter, ddlFilter = Request.QueryString["ddlFilter"] })
         </th>
@@ -46,10 +42,6 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Description)
-        </td>
-
-        <td>
-            @Html.DisplayFor(modelItem => item.Category.Name)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.AspNetUsers.UserName)

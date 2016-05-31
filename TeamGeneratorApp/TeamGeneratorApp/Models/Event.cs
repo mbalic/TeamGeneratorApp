@@ -17,20 +17,23 @@ namespace TeamGeneratorApp.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Event()
         {
-            this.UserTeamEvent = new HashSet<UserTeamEvent>();
+            this.Team = new HashSet<Team>();
+            this.UserOnEvent = new HashSet<UserOnEvent>();
         }
     
         public int Id { get; set; }
+        public int PoolId { get; set; }
+        public int CategoryId { get; set; }
         public string Name { get; set; }
-        public string Fullname { get; set; }
         public string Description { get; set; }
         public Nullable<System.DateTime> Start { get; set; }
         public Nullable<System.DateTime> Finish { get; set; }
         public int NumberOfTeams { get; set; }
-        public int PoolId { get; set; }
     
-        public virtual Pool Pool { get; set; }
+        public virtual Category Category { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserTeamEvent> UserTeamEvent { get; set; }
+        public virtual ICollection<Team> Team { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserOnEvent> UserOnEvent { get; set; }
     }
 }

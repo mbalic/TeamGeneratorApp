@@ -31,13 +31,13 @@
             @Html.DisplayFor(model => model.Description)
         </dd>
 
-        <dt>
+        @*<dt>
             Category
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.Category.Name)
-        </dd>
+        </dd>*@
 
     </dl>
 </div>
@@ -54,10 +54,10 @@
 
     <div class="tab-content">
         <div class="tab-pane active" id="Events">
-            @Html.Action("PoolEvents", "Pools", new { poolId = Model.Id})
+            @*@Html.Action("PoolEvents", "Pools", new { poolId = Model.Id})*@
         </div>
         <div class="tab-pane" id="Users">
-            @Html.Action("PoolUsers", "Pools", new {poolId = Model.Id})
+            @*@Html.Action("PoolUsers", "Pools", new {poolId = Model.Id})*@
         </div>
     </div>
 

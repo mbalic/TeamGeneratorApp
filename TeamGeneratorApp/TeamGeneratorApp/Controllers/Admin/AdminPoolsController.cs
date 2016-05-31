@@ -6,9 +6,12 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Kendo.Mvc.Extensions;
+using Kendo.Mvc.UI;
 using PagedList;
 using TeamGeneratorApp.DAL;
 using TeamGeneratorApp.Models;
+using TeamGeneratorApp.Models.ViewModels;
 
 namespace TeamGeneratorApp.Controllers.Admin
 {
@@ -23,11 +26,9 @@ namespace TeamGeneratorApp.Controllers.Admin
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "Name_desc" : "";
             ViewBag.OwnerSortParm = sortOrder == "Owner" ? "Owner_desc" : "Owner";
-            ViewBag.CategorySortParm = sortOrder == "Category" ? "Category_desc" : "Category";
 
             var columnList = new List<string>();
             columnList.Add("Name");
-            columnList.Add("Category");
             columnList.Add("Owner");            
 
             ViewBag.ddlFilter = new SelectList(columnList, ddlFilter);
@@ -54,10 +55,6 @@ namespace TeamGeneratorApp.Controllers.Admin
                         pools = pools.Where(s => s.Name != null);
                         pools = pools.Where(s => s.Name.Contains(searchString));
                         break;
-                    case "Category":
-                        pools = pools.Where(s => s.Category != null);
-                        pools = pools.Where(s => s.Category.Name.Contains(searchString));
-                        break;
                     case "Owner":
                         pools = pools.Where(s => s.AspNetUsers != null);
                         pools = pools.Where(s => s.AspNetUsers.UserName.Contains(searchString));
@@ -74,12 +71,6 @@ namespace TeamGeneratorApp.Controllers.Admin
             {
                 case "Name_desc":
                     pools = pools.OrderByDescending(s => s.Name);
-                    break;
-                case "Category":
-                    pools = pools.OrderBy(s => s.Category.Name);
-                    break;
-                case "Category_desc":
-                    pools = pools.OrderByDescending(s => s.Category.Name);
                     break;
                 case "Owner":
                     pools = pools.OrderBy(s => s.AspNetUsers.UserName);
@@ -98,14 +89,15 @@ namespace TeamGeneratorApp.Controllers.Admin
             return View(pools.ToPagedList(pageNumber, pageSize));
         }
 
-        // GET: AdminPools/Details/5
+        //GET: AdminPools/Details/5
         //public ActionResult Details(int? id)
         //{
         //    if (id == null)
         //    {
         //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         //    }
-        //    Pool pool = db.Pool.Find(id);
+        //    Pool pool = unitOfWork.PoolRepository.GetByID(id);
+
         //    if (pool == null)
         //    {
         //        return HttpNotFound();
@@ -117,7 +109,6 @@ namespace TeamGeneratorApp.Controllers.Admin
         public ActionResult Create()
         {
             PopulateOwnerDropDown();
-            PopulateCategoryDropDown();
             return View();
         }
 
@@ -126,7 +117,7 @@ namespace TeamGeneratorApp.Controllers.Admin
         //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Description,UserId,CategoryId")] Pool pool)
+        public ActionResult Create([Bind(Include = "Id,Name,Description,OwnerId")] Pool pool)
         {
             try
             {
@@ -142,8 +133,7 @@ namespace TeamGeneratorApp.Controllers.Admin
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
 
-            PopulateOwnerDropDown(pool.UserId);
-            PopulateCategoryDropDown(pool.CategoryId);
+            PopulateOwnerDropDown(pool.OwnerId);
 
             return View(pool);
         }
@@ -163,8 +153,7 @@ namespace TeamGeneratorApp.Controllers.Admin
                 return HttpNotFound();
             }
 
-            PopulateOwnerDropDown(pool.UserId);
-            PopulateCategoryDropDown(pool.CategoryId);
+            PopulateOwnerDropDown(pool.OwnerId);
 
             return View(pool);
         }
@@ -174,7 +163,7 @@ namespace TeamGeneratorApp.Controllers.Admin
         //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Description,UserId,CategoryId")] Pool pool)
+        public ActionResult Edit([Bind(Include = "Id,Name,Description,OwnerId")] Pool pool)
         {
             try
             {
@@ -190,8 +179,7 @@ namespace TeamGeneratorApp.Controllers.Admin
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
 
-            PopulateOwnerDropDown(pool.UserId);
-            PopulateCategoryDropDown(pool.CategoryId);
+            PopulateOwnerDropDown(pool.OwnerId);
 
             return View(pool);
         }
@@ -244,13 +232,129 @@ namespace TeamGeneratorApp.Controllers.Admin
         private void PopulateOwnerDropDown(object selectedItem = null)
         {
             var items = unitOfWork.UserRepository.Get().ToList();
-            ViewBag.UserId = new SelectList(items, "Id", "Username", selectedItem);
+            ViewBag.OwnerId = new SelectList(items, "Id", "Username", selectedItem);
         }
 
-        private void PopulateCategoryDropDown(object selectedItem = null)
+        public PartialViewResult CategoriesGrid(int poolId = 0)
         {
-            var items = unitOfWork.CategoryRepository.Get().ToList();
-            ViewBag.CategoryId = new SelectList(items, "Id", "Name", selectedItem);
+
+            ViewBag.PoolId = poolId;
+            return PartialView("_CategoriesGrid");
+        }
+
+        public ActionResult CategoriesGrid_Read([DataSourceRequest] DataSourceRequest request, int poolId)
+        {
+            var res = unitOfWork.CategoryRepository.GetByPoolId(poolId).ToList();
+
+            var list = new List<CategoryVM>();
+            foreach (var e in res)
+            {
+                var categoryVm = new CategoryVM
+                {
+                    Id = e.Id,
+                    Name = e.Name,
+                    PoolId = e.PoolId,
+                    Description = e.Description,
+                };
+                list.Add(categoryVm);
+            }
+
+            return Json(list.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult CategoriesGrid_Create([DataSourceRequest] DataSourceRequest request,
+           [Bind(Prefix = "models")]IEnumerable<CategoryVM> list, int poolId)
+        {
+            var results = new List<CategoryVM>();
+            if (list != null && ModelState.IsValid)
+            {
+                foreach (var e in list)
+                {
+                    var newCategory = new Category
+                    {
+                        Name = e.Name,
+                        PoolId = poolId,
+                        Description = e.Description
+                    };
+                    try
+                    {
+                        unitOfWork.CategoryRepository.Insert(newCategory);
+                        unitOfWork.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        ViewBag.ConstraintError = "There was an error while adding rows in grid.";
+                    }
+                    results.Add(e);
+                }
+            }
+
+            return Json(results.ToDataSourceResult(request, ModelState));
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult CategoriesGrid_Update([DataSourceRequest] DataSourceRequest request,
+           [Bind(Prefix = "models")]IEnumerable<CategoryVM> list)
+        {
+            var results = new List<CategoryVM>();
+            if (list != null && ModelState.IsValid)
+            {
+                foreach (var e in list)
+                {
+                    var newCategory = new Category
+                    {
+                        Id = e.Id,
+                        PoolId = e.PoolId,
+                        Name = e.Name,
+                        Description = e.Description
+                    };
+                    try
+                    {
+                        unitOfWork.CategoryRepository.Update(newCategory);
+                        unitOfWork.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        ViewBag.ConstraintError = "There was an error while updating rows in grid.";
+                    }
+                    results.Add(e);
+                }
+            }
+
+            return Json(results.ToDataSourceResult(request, ModelState));
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult CategoriesGrid_Destroy([DataSourceRequest] DataSourceRequest request,
+          [Bind(Prefix = "models")]IEnumerable<CategoryVM> list)
+        {
+            var results = new List<CategoryVM>();
+            if (list != null && ModelState.IsValid)
+            {
+                foreach (var e in list)
+                {
+                    var newCategory = new Category
+                    {
+                        Id = e.Id,
+                        PoolId = e.PoolId,
+                        Name = e.Name,
+                        Description = e.Description                       
+                    };
+                    try
+                    {
+                        unitOfWork.CategoryRepository.Delete(newCategory.Id);
+                        unitOfWork.Commit();
+                        results.Add(e);
+                    }
+                    catch (Exception)
+                    {
+                        ViewBag.ConstraintError = "There was an error while deleting rows in grid.";
+                    }
+                }
+            }
+
+            return Json(results.ToDataSourceResult(request, ModelState));
         }
     }
 }

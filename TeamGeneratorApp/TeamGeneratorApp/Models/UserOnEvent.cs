@@ -12,14 +12,15 @@ namespace TeamGeneratorApp.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Correlation
+    public partial class UserOnEvent
     {
         public int Id { get; set; }
-        public Nullable<decimal> Value { get; set; }
-        public int UserInPool1_Id { get; set; }
-        public int UserInPool2_Id { get; set; }
+        public int EventId { get; set; }
+        public Nullable<int> TeamId { get; set; }
+        public int UserCategoryId { get; set; }
     
-        public virtual UserInPool UserInPool { get; set; }
-        public virtual UserInPool UserInPool1 { get; set; }
+        public virtual Event Event { get; set; }
+        public virtual Team Team { get; set; }
+        public virtual UserCategory UserCategory { get; set; }
     }
 }

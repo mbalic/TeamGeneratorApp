@@ -9,13 +9,13 @@ namespace TeamGeneratorApp.DAL.Repositories
 {
     public class PoolRepository : GenericRepository<Pool>
     {
-        public PoolRepository(TeamDb3Entities context) : base(context)
+        public PoolRepository(TeamDb4Entities context) : base(context)
         {
         }
 
         public IEnumerable<Pool> GetByUserId(string id)
         {
-            return context.Pool.Where(p => p.UserId == id);
+            return context.Pool.Where(p => p.OwnerId == id);
         }  
 
 

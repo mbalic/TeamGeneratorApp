@@ -4,35 +4,29 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="9f4781941edb40b0920cba474ff2ee5c" Name="Diagram1">
-        <EntityTypeShape EntityType="TeamDb3Model.AspNetRoles" Width="1.5" PointX="0.75" PointY="7.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb3Model.AspNetUserClaims" Width="1.5" PointX="5.25" PointY="6.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb3Model.AspNetUserLogins" Width="1.5" PointX="5.25" PointY="8.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb3Model.AspNetUsers" Width="1.5" PointX="3" PointY="6.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb3Model.Category" Width="1.5" PointX="6" PointY="3.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb3Model.Correlation" Width="1.5" PointX="12.75" PointY="2" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb3Model.Event" Width="1.5" PointX="10.5" PointY="7" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb3Model.Pool" Width="1.5" PointX="8.25" PointY="7.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb3Model.Score" Width="1.5" PointX="12.75" PointY="10.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb3Model.ScoreHistory" Width="1.5" PointX="15" PointY="10.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb3Model.Team" Width="1.5" PointX="10.5" PointY="11.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb3Model.UserInPool" Width="1.5" PointX="10.5" PointY="3" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb3Model.UserTeamEvent" Width="1.5" PointX="12.75" PointY="7.25" IsExpanded="true" />
-        <AssociationConnector Association="TeamDb3Model.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
-        <AssociationConnector Association="TeamDb3Model.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
-        <AssociationConnector Association="TeamDb3Model.FK_Pool_Pool" ManuallyRouted="false" />
-        <AssociationConnector Association="TeamDb3Model.FK_UserInPool_AspNetUsers" ManuallyRouted="false" />
-        <AssociationConnector Association="TeamDb3Model.FK_Pool_Category" ManuallyRouted="false" />
-        <AssociationConnector Association="TeamDb3Model.FK_Correlation_UserInPool" ManuallyRouted="false" />
-        <AssociationConnector Association="TeamDb3Model.FK_Correlation_UserInPool1" ManuallyRouted="false" />
-        <AssociationConnector Association="TeamDb3Model.FK_Event_Pool" ManuallyRouted="false" />
-        <AssociationConnector Association="TeamDb3Model.FK_SubjectTeamEvent_Event" ManuallyRouted="false" />
-        <AssociationConnector Association="TeamDb3Model.FK_UserInPool_Pool" ManuallyRouted="false" />
-        <AssociationConnector Association="TeamDb3Model.FK_Score_UserInPool" ManuallyRouted="false" />
-        <AssociationConnector Association="TeamDb3Model.FK_ScoreHistory_Score" ManuallyRouted="false" />
-        <AssociationConnector Association="TeamDb3Model.FK_SubjectTeamEvent_Team" ManuallyRouted="false" />
-        <AssociationConnector Association="TeamDb3Model.FK_UserTeamEvent_UserInPool" ManuallyRouted="false" />
-        <AssociationConnector Association="TeamDb3Model.AspNetUserRoles" ManuallyRouted="false" />
+      <Diagram DiagramId="8a214e5051f9408eaf22774359da99eb" Name="Diagram1">
+        <EntityTypeShape EntityType="TeamDb4Model.AspNetRoles" Width="1.5" PointX="0.75" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb4Model.AspNetUserClaims" Width="1.5" PointX="5.25" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb4Model.AspNetUserLogins" Width="1.5" PointX="5.25" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb4Model.AspNetUsers" Width="1.5" PointX="3" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb4Model.Category" Width="1.5" PointX="7.5" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb4Model.Event" Width="1.5" PointX="9.75" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb4Model.Pool" Width="1.5" PointX="5.25" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb4Model.Team" Width="1.5" PointX="12" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb4Model.UserCategory" Width="1.5" PointX="9.75" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb4Model.UserOnEvent" Width="1.5" PointX="14.25" PointY="8.625" IsExpanded="true" />
+        <AssociationConnector Association="TeamDb4Model.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb4Model.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb4Model.FK_Pool_AspNetUsers" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb4Model.FK_UserCategory_AspNetUsers" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb4Model.FK_Category_Pool" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb4Model.FK_Event_Category" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb4Model.FK_UserCategory_Category" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb4Model.FK_Team_Event" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb4Model.FK_UserOnEvent_Event" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb4Model.FK_UserOnEvent_Team" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb4Model.FK_UserOnEvent_UserCategory" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb4Model.AspNetUserRoles" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

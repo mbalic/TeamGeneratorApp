@@ -28,15 +28,20 @@
 
        
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Category.Name)
+        @*<dt>
+            @Html.DisplayNameFor(model => model.Category)
         </dt>
+       @foreach (var item in Model.Category)
+       {
 
         <dd>
-            @Html.DisplayFor(model => model.Category.Name)
+            <@item.Name>
         </dd>
+
+        @}*@
+        
         <dt>
-            @Html.DisplayNameFor(model => model.AspNetUsers.UserName)
+            Owner
         </dt>
 
         <dd>

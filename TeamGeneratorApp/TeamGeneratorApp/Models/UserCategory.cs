@@ -12,20 +12,22 @@ namespace TeamGeneratorApp.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Score
+    public partial class UserCategory
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Score()
+        public UserCategory()
         {
-            this.ScoreHistory = new HashSet<ScoreHistory>();
+            this.UserOnEvent = new HashSet<UserOnEvent>();
         }
     
         public int Id { get; set; }
-        public Nullable<decimal> Value { get; set; }
-        public int UserInPoolId { get; set; }
+        public string UserId { get; set; }
+        public int CategoryId { get; set; }
+        public Nullable<int> Score { get; set; }
     
-        public virtual UserInPool UserInPool { get; set; }
+        public virtual AspNetUsers AspNetUsers { get; set; }
+        public virtual Category Category { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ScoreHistory> ScoreHistory { get; set; }
+        public virtual ICollection<UserOnEvent> UserOnEvent { get; set; }
     }
 }
