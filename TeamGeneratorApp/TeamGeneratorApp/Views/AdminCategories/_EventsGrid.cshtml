@@ -1,0 +1,75 @@
+﻿@using Kendo.Mvc.UI
+@{
+    Layout = null;
+}
+
+@Styles.Render("~/Content/css")
+@Styles.Render("~/Content/kendo/css")
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+@Scripts.Render("~/bundles/modernizr")
+@Scripts.Render("~/bundles/kendo")
+
+<script type="text/javascript">
+    function viewEvent(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var eventId = dataItem.Id;
+
+        @*window.location.href = "@Url.Action("Details","AdminEvents")?id=" + eventId;*@
+
+    }
+</script>
+
+
+@(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.EventVM>()
+    .Name("grid1")
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.Name);
+        columns.Bound(p => p.Description);
+        columns.Bound(p => p.Start);
+        columns.Bound(p => p.Finish);
+        columns.Bound(p => p.NumberOfTeams);
+        columns.Command(command => { command.Edit(); command.Destroy(); }).Width(200);
+        columns.Command(command => command.Custom("Details").Click("viewEvent"));
+    })
+    .ToolBar(toolbar => toolbar.Create())
+    .Editable(editable => editable.Mode(GridEditMode.InLine))
+    .Pageable()
+    .Sortable()
+    .Scrollable()
+    .HtmlAttributes(new { style = "height:550px;" })
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Batch(true)
+        .ServerOperation(false)
+        .PageSize(20)
+        .Events(events => events.Error("error_handler"))
+        .Model(model =>
+        {
+            model.Id(p => p.Id);
+            model.Field(p => p.CategoryId).DefaultValue(ViewBag.CategoryId);
+        })
+        .Create(update => update.Action("EventsGrid_Create", "AdminCategories"))
+        .Read(read => read.Action("EventsGrid_Read", "AdminCategories", new { categoryId = ViewBag.CategoryId }))
+        .Update(update => update.Action("EventsGrid_Update", "AdminCategories"))
+        .Destroy(update => update.Action("EventsGrid_Destroy", "AdminCategories"))
+    )
+
+)
+<script type="text/javascript">
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function() {
+                        message += this + "\n";
+                    });
+                }
+            });
+            alert(message);
+        }
+    }
+</script>

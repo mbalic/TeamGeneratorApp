@@ -13,10 +13,12 @@ namespace TeamGeneratorApp.DAL.Repositories
         {
         }
 
-        public IEnumerable<Event> GetByPoolId(int poolId)
+        public IEnumerable<Event> GetByCategoryId(int categoryId)
         {
-            return context.Event.Where(e => e.PoolId == poolId);
-        } 
+            return context.Event.Where(c => c.CategoryId == categoryId);
+        }
+
+
 
 
     }

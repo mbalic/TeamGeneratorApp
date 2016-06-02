@@ -63,14 +63,13 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Description" Type="nvarchar" MaxLength="128" />
-          <Property Name="PoolId" Type="int" Nullable="false" />
+          <Property Name="GroupId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Event">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="PoolId" Type="int" Nullable="false" />
           <Property Name="CategoryId" Type="int" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="Description" Type="nvarchar" MaxLength="128" />
@@ -78,7 +77,7 @@
           <Property Name="Finish" Type="datetime" />
           <Property Name="NumberOfTeams" Type="int" Nullable="false" />
         </EntityType>
-        <EntityType Name="Pool">
+        <EntityType Name="Group">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -92,18 +91,37 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="EventId" Type="int" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="128" />
           <Property Name="TeamScore" Type="int" />
+          <Property Name="EventId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="UserCategory">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="UserInGroupId" Type="int" Nullable="false" />
           <Property Name="CategoryId" Type="int" Nullable="false" />
           <Property Name="Score" Type="int" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserInGroup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="GroupId" Type="int" Nullable="false" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserInGroupInvitation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="GroupId" Type="int" Nullable="false" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="UserOnEvent">
           <Key>
@@ -113,16 +131,28 @@
           <Property Name="EventId" Type="int" Nullable="false" />
           <Property Name="TeamId" Type="int" />
           <Property Name="UserCategoryId" Type="int" Nullable="false" />
+          <Property Name="VoteCounter" Type="int" />
         </EntityType>
-        <Association Name="FK_Category_Pool">
-          <End Role="Pool" Type="Self.Pool" Multiplicity="1" />
+        <EntityType Name="Voting">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="EventId" Type="int" Nullable="false" />
+          <Property Name="StartVoting" Type="datetime" />
+          <Property Name="FinishVoting" Type="datetime" />
+          <Property Name="Active" Type="tinyint" />
+        </EntityType>
+        <Association Name="FK_Category_Group">
+          <End Role="Group" Type="Self.Group" Multiplicity="1" />
           <End Role="Category" Type="Self.Category" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Pool">
+            <Principal Role="Group">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Category">
-              <PropertyRef Name="PoolId" />
+              <PropertyRef Name="GroupId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -194,14 +224,14 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Pool_AspNetUsers">
+        <Association Name="FK_Group_AspNetUsers">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
-          <End Role="Pool" Type="Self.Pool" Multiplicity="*" />
+          <End Role="Group" Type="Self.Group" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AspNetUsers">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Pool">
+            <Dependent Role="Group">
               <PropertyRef Name="OwnerId" />
             </Dependent>
           </ReferentialConstraint>
@@ -218,18 +248,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_UserCategory_AspNetUsers">
-          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
-          <End Role="UserCategory" Type="Self.UserCategory" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AspNetUsers">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="UserCategory">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_UserCategory_Category">
           <End Role="Category" Type="Self.Category" Multiplicity="1" />
           <End Role="UserCategory" Type="Self.UserCategory" Multiplicity="*" />
@@ -239,6 +257,66 @@
             </Principal>
             <Dependent Role="UserCategory">
               <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserCategory_UserInGroup">
+          <End Role="UserInGroup" Type="Self.UserInGroup" Multiplicity="1" />
+          <End Role="UserCategory" Type="Self.UserCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInGroup">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserCategory">
+              <PropertyRef Name="UserInGroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserInGroup_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="UserInGroup" Type="Self.UserInGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserInGroup">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserInGroup_Group">
+          <End Role="Group" Type="Self.Group" Multiplicity="1" />
+          <End Role="UserInGroup" Type="Self.UserInGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Group">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserInGroup">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserInGroupInvitation_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="UserInGroupInvitation" Type="Self.UserInGroupInvitation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserInGroupInvitation">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserInGroupInvitation_Group">
+          <End Role="Group" Type="Self.Group" Multiplicity="1" />
+          <End Role="UserInGroupInvitation" Type="Self.UserInGroupInvitation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Group">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserInGroupInvitation">
+              <PropertyRef Name="GroupId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -278,6 +356,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Voting_Event">
+          <End Role="Event" Type="Self.Event" Multiplicity="1" />
+          <End Role="Voting" Type="Self.Voting" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Event">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Voting">
+              <PropertyRef Name="EventId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="TeamDb4ModelStoreContainer">
           <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" Schema="dbo" store:Type="Tables" />
@@ -286,12 +376,15 @@
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Event" EntityType="Self.Event" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Pool" EntityType="Self.Pool" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Group" EntityType="Self.Group" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Team" EntityType="Self.Team" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserCategory" EntityType="Self.UserCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserInGroup" EntityType="Self.UserInGroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserInGroupInvitation" EntityType="Self.UserInGroupInvitation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserOnEvent" EntityType="Self.UserOnEvent" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_Category_Pool" Association="Self.FK_Category_Pool">
-            <End Role="Pool" EntitySet="Pool" />
+          <EntitySet Name="Voting" EntityType="Self.Voting" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Category_Group" Association="Self.FK_Category_Group">
+            <End Role="Group" EntitySet="Group" />
             <End Role="Category" EntitySet="Category" />
           </AssociationSet>
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
@@ -314,21 +407,37 @@
             <End Role="Category" EntitySet="Category" />
             <End Role="Event" EntitySet="Event" />
           </AssociationSet>
-          <AssociationSet Name="FK_Pool_AspNetUsers" Association="Self.FK_Pool_AspNetUsers">
+          <AssociationSet Name="FK_Group_AspNetUsers" Association="Self.FK_Group_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="Pool" EntitySet="Pool" />
+            <End Role="Group" EntitySet="Group" />
           </AssociationSet>
           <AssociationSet Name="FK_Team_Event" Association="Self.FK_Team_Event">
             <End Role="Event" EntitySet="Event" />
             <End Role="Team" EntitySet="Team" />
           </AssociationSet>
-          <AssociationSet Name="FK_UserCategory_AspNetUsers" Association="Self.FK_UserCategory_AspNetUsers">
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="UserCategory" EntitySet="UserCategory" />
-          </AssociationSet>
           <AssociationSet Name="FK_UserCategory_Category" Association="Self.FK_UserCategory_Category">
             <End Role="Category" EntitySet="Category" />
             <End Role="UserCategory" EntitySet="UserCategory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserCategory_UserInGroup" Association="Self.FK_UserCategory_UserInGroup">
+            <End Role="UserInGroup" EntitySet="UserInGroup" />
+            <End Role="UserCategory" EntitySet="UserCategory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserInGroup_AspNetUsers" Association="Self.FK_UserInGroup_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="UserInGroup" EntitySet="UserInGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserInGroup_Group" Association="Self.FK_UserInGroup_Group">
+            <End Role="Group" EntitySet="Group" />
+            <End Role="UserInGroup" EntitySet="UserInGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserInGroupInvitation_AspNetUsers" Association="Self.FK_UserInGroupInvitation_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="UserInGroupInvitation" EntitySet="UserInGroupInvitation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserInGroupInvitation_Group" Association="Self.FK_UserInGroupInvitation_Group">
+            <End Role="Group" EntitySet="Group" />
+            <End Role="UserInGroupInvitation" EntitySet="UserInGroupInvitation" />
           </AssociationSet>
           <AssociationSet Name="FK_UserOnEvent_Event" Association="Self.FK_UserOnEvent_Event">
             <End Role="Event" EntitySet="Event" />
@@ -341,6 +450,10 @@
           <AssociationSet Name="FK_UserOnEvent_UserCategory" Association="Self.FK_UserOnEvent_UserCategory">
             <End Role="UserCategory" EntitySet="UserCategory" />
             <End Role="UserOnEvent" EntitySet="UserOnEvent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Voting_Event" Association="Self.FK_Voting_Event">
+            <End Role="Event" EntitySet="Event" />
+            <End Role="Voting" EntitySet="Voting" />
           </AssociationSet>
         </EntityContainer>
       </Schema>
@@ -395,8 +508,9 @@
           <Property Name="UserName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="AspNetUserClaims" Relationship="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserClaims" />
           <NavigationProperty Name="AspNetUserLogins" Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserLogins" />
-          <NavigationProperty Name="Pool" Relationship="Self.FK_Pool_AspNetUsers" FromRole="AspNetUsers" ToRole="Pool" />
-          <NavigationProperty Name="UserCategory" Relationship="Self.FK_UserCategory_AspNetUsers" FromRole="AspNetUsers" ToRole="UserCategory" />
+          <NavigationProperty Name="Group" Relationship="Self.FK_Group_AspNetUsers" FromRole="AspNetUsers" ToRole="Group" />
+          <NavigationProperty Name="UserInGroup" Relationship="Self.FK_UserInGroup_AspNetUsers" FromRole="AspNetUsers" ToRole="UserInGroup" />
+          <NavigationProperty Name="UserInGroupInvitation" Relationship="Self.FK_UserInGroupInvitation_AspNetUsers" FromRole="AspNetUsers" ToRole="UserInGroupInvitation" />
           <NavigationProperty Name="AspNetRoles" Relationship="Self.AspNetUserRoles" FromRole="AspNetUsers" ToRole="AspNetRoles" />
         </EntityType>
         <EntityType Name="Category">
@@ -406,8 +520,8 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="PoolId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Pool" Relationship="Self.FK_Category_Pool" FromRole="Category" ToRole="Pool" />
+          <Property Name="GroupId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Group" Relationship="Self.FK_Category_Group" FromRole="Category" ToRole="Group" />
           <NavigationProperty Name="Event" Relationship="Self.FK_Event_Category" FromRole="Category" ToRole="Event" />
           <NavigationProperty Name="UserCategory" Relationship="Self.FK_UserCategory_Category" FromRole="Category" ToRole="UserCategory" />
         </EntityType>
@@ -416,7 +530,6 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PoolId" Type="Int32" Nullable="false" />
           <Property Name="CategoryId" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
@@ -426,8 +539,9 @@
           <NavigationProperty Name="Category" Relationship="Self.FK_Event_Category" FromRole="Event" ToRole="Category" />
           <NavigationProperty Name="Team" Relationship="Self.FK_Team_Event" FromRole="Event" ToRole="Team" />
           <NavigationProperty Name="UserOnEvent" Relationship="Self.FK_UserOnEvent_Event" FromRole="Event" ToRole="UserOnEvent" />
+          <NavigationProperty Name="Voting" Relationship="Self.FK_Voting_Event" FromRole="Event" ToRole="Voting" />
         </EntityType>
-        <EntityType Name="Pool">
+        <EntityType Name="Group">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -435,17 +549,19 @@
           <Property Name="Name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="128" FixedLength="true" Unicode="true" />
           <Property Name="OwnerId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_Pool_AspNetUsers" FromRole="Pool" ToRole="AspNetUsers" />
-          <NavigationProperty Name="Category" Relationship="Self.FK_Category_Pool" FromRole="Pool" ToRole="Category" />
+          <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_Group_AspNetUsers" FromRole="Group" ToRole="AspNetUsers" />
+          <NavigationProperty Name="Category" Relationship="Self.FK_Category_Group" FromRole="Group" ToRole="Category" />
+          <NavigationProperty Name="UserInGroup" Relationship="Self.FK_UserInGroup_Group" FromRole="Group" ToRole="UserInGroup" />
+          <NavigationProperty Name="UserInGroupInvitation" Relationship="Self.FK_UserInGroupInvitation_Group" FromRole="Group" ToRole="UserInGroupInvitation" />
         </EntityType>
         <EntityType Name="Team">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="EventId" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="TeamScore" Type="Int32" />
+          <Property Name="EventId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Event" Relationship="Self.FK_Team_Event" FromRole="Team" ToRole="Event" />
           <NavigationProperty Name="UserOnEvent" Relationship="Self.FK_UserOnEvent_Team" FromRole="Team" ToRole="UserOnEvent" />
         </EntityType>
@@ -454,12 +570,36 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UserInGroupId" Type="Int32" Nullable="false" />
           <Property Name="CategoryId" Type="Int32" Nullable="false" />
           <Property Name="Score" Type="Int32" />
-          <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_UserCategory_AspNetUsers" FromRole="UserCategory" ToRole="AspNetUsers" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Category" Relationship="Self.FK_UserCategory_Category" FromRole="UserCategory" ToRole="Category" />
+          <NavigationProperty Name="UserInGroup" Relationship="Self.FK_UserCategory_UserInGroup" FromRole="UserCategory" ToRole="UserInGroup" />
           <NavigationProperty Name="UserOnEvent" Relationship="Self.FK_UserOnEvent_UserCategory" FromRole="UserCategory" ToRole="UserOnEvent" />
+        </EntityType>
+        <EntityType Name="UserInGroup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="GroupId" Type="Int32" Nullable="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_UserInGroup_AspNetUsers" FromRole="UserInGroup" ToRole="AspNetUsers" />
+          <NavigationProperty Name="Group" Relationship="Self.FK_UserInGroup_Group" FromRole="UserInGroup" ToRole="Group" />
+          <NavigationProperty Name="UserCategory" Relationship="Self.FK_UserCategory_UserInGroup" FromRole="UserInGroup" ToRole="UserCategory" />
+        </EntityType>
+        <EntityType Name="UserInGroupInvitation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="GroupId" Type="Int32" Nullable="false" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_UserInGroupInvitation_AspNetUsers" FromRole="UserInGroupInvitation" ToRole="AspNetUsers" />
+          <NavigationProperty Name="Group" Relationship="Self.FK_UserInGroupInvitation_Group" FromRole="UserInGroupInvitation" ToRole="Group" />
         </EntityType>
         <EntityType Name="UserOnEvent">
           <Key>
@@ -469,9 +609,22 @@
           <Property Name="EventId" Type="Int32" Nullable="false" />
           <Property Name="TeamId" Type="Int32" />
           <Property Name="UserCategoryId" Type="Int32" Nullable="false" />
+          <Property Name="VoteCounter" Type="Int32" />
           <NavigationProperty Name="Event" Relationship="Self.FK_UserOnEvent_Event" FromRole="UserOnEvent" ToRole="Event" />
           <NavigationProperty Name="Team" Relationship="Self.FK_UserOnEvent_Team" FromRole="UserOnEvent" ToRole="Team" />
           <NavigationProperty Name="UserCategory" Relationship="Self.FK_UserOnEvent_UserCategory" FromRole="UserOnEvent" ToRole="UserCategory" />
+        </EntityType>
+        <EntityType Name="Voting">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="EventId" Type="Int32" Nullable="false" />
+          <Property Name="StartVoting" Type="DateTime" Precision="3" />
+          <Property Name="FinishVoting" Type="DateTime" Precision="3" />
+          <Property Name="Active" Type="Byte" />
+          <NavigationProperty Name="Event" Relationship="Self.FK_Voting_Event" FromRole="Voting" ToRole="Event" />
         </EntityType>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
@@ -501,39 +654,51 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Pool_AspNetUsers">
+        <Association Name="FK_Group_AspNetUsers">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
-          <End Role="Pool" Type="Self.Pool" Multiplicity="*" />
+          <End Role="Group" Type="Self.Group" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AspNetUsers">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Pool">
+            <Dependent Role="Group">
               <PropertyRef Name="OwnerId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_UserCategory_AspNetUsers">
+        <Association Name="FK_UserInGroup_AspNetUsers">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
-          <End Role="UserCategory" Type="Self.UserCategory" Multiplicity="*" />
+          <End Role="UserInGroup" Type="Self.UserInGroup" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AspNetUsers">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="UserCategory">
+            <Dependent Role="UserInGroup">
               <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Category_Pool">
-          <End Role="Pool" Type="Self.Pool" Multiplicity="1" />
+        <Association Name="FK_UserInGroupInvitation_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="UserInGroupInvitation" Type="Self.UserInGroupInvitation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserInGroupInvitation">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Category_Group">
+          <End Role="Group" Type="Self.Group" Multiplicity="1" />
           <End Role="Category" Type="Self.Category" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Pool">
+            <Principal Role="Group">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Category">
-              <PropertyRef Name="PoolId" />
+              <PropertyRef Name="GroupId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -585,6 +750,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Voting_Event">
+          <End Role="Event" Type="Self.Event" Multiplicity="1" />
+          <End Role="Voting" Type="Self.Voting" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Event">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Voting">
+              <PropertyRef Name="EventId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserInGroup_Group">
+          <End Role="Group" Type="Self.Group" Multiplicity="1" />
+          <End Role="UserInGroup" Type="Self.UserInGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Group">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserInGroup">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserInGroupInvitation_Group">
+          <End Role="Group" Type="Self.Group" Multiplicity="1" />
+          <End Role="UserInGroupInvitation" Type="Self.UserInGroupInvitation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Group">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserInGroupInvitation">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_UserOnEvent_Team">
           <End Role="Team" Type="Self.Team" Multiplicity="0..1" />
           <End Role="UserOnEvent" Type="Self.UserOnEvent" Multiplicity="*" />
@@ -594,6 +795,18 @@
             </Principal>
             <Dependent Role="UserOnEvent">
               <PropertyRef Name="TeamId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserCategory_UserInGroup">
+          <End Role="UserInGroup" Type="Self.UserInGroup" Multiplicity="1" />
+          <End Role="UserCategory" Type="Self.UserCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInGroup">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserCategory">
+              <PropertyRef Name="UserInGroupId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -620,10 +833,13 @@
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" />
           <EntitySet Name="Category" EntityType="Self.Category" />
           <EntitySet Name="Event" EntityType="Self.Event" />
-          <EntitySet Name="Pool" EntityType="Self.Pool" />
+          <EntitySet Name="Group" EntityType="Self.Group" />
           <EntitySet Name="Team" EntityType="Self.Team" />
           <EntitySet Name="UserCategory" EntityType="Self.UserCategory" />
+          <EntitySet Name="UserInGroup" EntityType="Self.UserInGroup" />
+          <EntitySet Name="UserInGroupInvitation" EntityType="Self.UserInGroupInvitation" />
           <EntitySet Name="UserOnEvent" EntityType="Self.UserOnEvent" />
+          <EntitySet Name="Voting" EntityType="Self.Voting" />
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
@@ -632,16 +848,20 @@
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
           </AssociationSet>
-          <AssociationSet Name="FK_Pool_AspNetUsers" Association="Self.FK_Pool_AspNetUsers">
+          <AssociationSet Name="FK_Group_AspNetUsers" Association="Self.FK_Group_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="Pool" EntitySet="Pool" />
+            <End Role="Group" EntitySet="Group" />
           </AssociationSet>
-          <AssociationSet Name="FK_UserCategory_AspNetUsers" Association="Self.FK_UserCategory_AspNetUsers">
+          <AssociationSet Name="FK_UserInGroup_AspNetUsers" Association="Self.FK_UserInGroup_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="UserCategory" EntitySet="UserCategory" />
+            <End Role="UserInGroup" EntitySet="UserInGroup" />
           </AssociationSet>
-          <AssociationSet Name="FK_Category_Pool" Association="Self.FK_Category_Pool">
-            <End Role="Pool" EntitySet="Pool" />
+          <AssociationSet Name="FK_UserInGroupInvitation_AspNetUsers" Association="Self.FK_UserInGroupInvitation_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="UserInGroupInvitation" EntitySet="UserInGroupInvitation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Category_Group" Association="Self.FK_Category_Group">
+            <End Role="Group" EntitySet="Group" />
             <End Role="Category" EntitySet="Category" />
           </AssociationSet>
           <AssociationSet Name="FK_Event_Category" Association="Self.FK_Event_Category">
@@ -660,9 +880,25 @@
             <End Role="Event" EntitySet="Event" />
             <End Role="UserOnEvent" EntitySet="UserOnEvent" />
           </AssociationSet>
+          <AssociationSet Name="FK_Voting_Event" Association="Self.FK_Voting_Event">
+            <End Role="Event" EntitySet="Event" />
+            <End Role="Voting" EntitySet="Voting" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserInGroup_Group" Association="Self.FK_UserInGroup_Group">
+            <End Role="Group" EntitySet="Group" />
+            <End Role="UserInGroup" EntitySet="UserInGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserInGroupInvitation_Group" Association="Self.FK_UserInGroupInvitation_Group">
+            <End Role="Group" EntitySet="Group" />
+            <End Role="UserInGroupInvitation" EntitySet="UserInGroupInvitation" />
+          </AssociationSet>
           <AssociationSet Name="FK_UserOnEvent_Team" Association="Self.FK_UserOnEvent_Team">
             <End Role="Team" EntitySet="Team" />
             <End Role="UserOnEvent" EntitySet="UserOnEvent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserCategory_UserInGroup" Association="Self.FK_UserCategory_UserInGroup">
+            <End Role="UserInGroup" EntitySet="UserInGroup" />
+            <End Role="UserCategory" EntitySet="UserCategory" />
           </AssociationSet>
           <AssociationSet Name="FK_UserOnEvent_UserCategory" Association="Self.FK_UserOnEvent_UserCategory">
             <End Role="UserCategory" EntitySet="UserCategory" />
@@ -730,7 +966,7 @@
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="PoolId" ColumnName="PoolId" />
+                <ScalarProperty Name="GroupId" ColumnName="GroupId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -738,7 +974,6 @@
             <EntityTypeMapping TypeName="TeamDb4Model.Event">
               <MappingFragment StoreEntitySet="Event">
                 <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="PoolId" ColumnName="PoolId" />
                 <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
@@ -748,9 +983,9 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Pool">
-            <EntityTypeMapping TypeName="TeamDb4Model.Pool">
-              <MappingFragment StoreEntitySet="Pool">
+          <EntitySetMapping Name="Group">
+            <EntityTypeMapping TypeName="TeamDb4Model.Group">
+              <MappingFragment StoreEntitySet="Group">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
@@ -762,9 +997,9 @@
             <EntityTypeMapping TypeName="TeamDb4Model.Team">
               <MappingFragment StoreEntitySet="Team">
                 <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="EventId" ColumnName="EventId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="TeamScore" ColumnName="TeamScore" />
+                <ScalarProperty Name="EventId" ColumnName="EventId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -772,9 +1007,30 @@
             <EntityTypeMapping TypeName="TeamDb4Model.UserCategory">
               <MappingFragment StoreEntitySet="UserCategory">
                 <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="UserInGroupId" ColumnName="UserInGroupId" />
                 <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
                 <ScalarProperty Name="Score" ColumnName="Score" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserInGroup">
+            <EntityTypeMapping TypeName="TeamDb4Model.UserInGroup">
+              <MappingFragment StoreEntitySet="UserInGroup">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserInGroupInvitation">
+            <EntityTypeMapping TypeName="TeamDb4Model.UserInGroupInvitation">
+              <MappingFragment StoreEntitySet="UserInGroupInvitation">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -785,6 +1041,19 @@
                 <ScalarProperty Name="EventId" ColumnName="EventId" />
                 <ScalarProperty Name="TeamId" ColumnName="TeamId" />
                 <ScalarProperty Name="UserCategoryId" ColumnName="UserCategoryId" />
+                <ScalarProperty Name="VoteCounter" ColumnName="VoteCounter" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Voting">
+            <EntityTypeMapping TypeName="TeamDb4Model.Voting">
+              <MappingFragment StoreEntitySet="Voting">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="EventId" ColumnName="EventId" />
+                <ScalarProperty Name="StartVoting" ColumnName="StartVoting" />
+                <ScalarProperty Name="FinishVoting" ColumnName="FinishVoting" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -1,11 +1,14 @@
-﻿@model TeamGeneratorApp.Models.Pool
+﻿@model TeamGeneratorApp.Models.Group
 
 @{
     ViewBag.Title = "Edit";
 }
 
-<h2>Edit</h2>
-
+<h2>Group</h2>
+<p>
+    @Html.ActionLink("Details", "Details", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
 
 @using (Html.BeginForm())
 {
@@ -42,13 +45,6 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Category, "Categories", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.Action("CategoriesGrid", "AdminPools", new { poolId = Model.Id })
-            </div>
-        </div>
-
-        <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Save" class="btn btn-default" />
             </div>
@@ -56,9 +52,7 @@
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

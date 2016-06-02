@@ -21,12 +21,13 @@ namespace TeamGeneratorApp.Models
         }
     
         public int Id { get; set; }
-        public string UserId { get; set; }
+        public int UserInGroupId { get; set; }
         public int CategoryId { get; set; }
         public Nullable<int> Score { get; set; }
+        public bool Active { get; set; }
     
-        public virtual AspNetUsers AspNetUsers { get; set; }
         public virtual Category Category { get; set; }
+        public virtual UserInGroup UserInGroup { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserOnEvent> UserOnEvent { get; set; }
     }

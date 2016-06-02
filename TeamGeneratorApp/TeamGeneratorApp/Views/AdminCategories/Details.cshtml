@@ -5,10 +5,13 @@
 }
 
 <h2>Details</h2>
-
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to Pools", "Index", "AdminPools")
+</p>
 <div>
     <h4>Category</h4>
-    <hr />
+    <hr/>
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.Name)
@@ -26,10 +29,26 @@
             @Html.DisplayFor(model => model.Description)
         </dd>
 
-
     </dl>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+<div id="tabs">
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a href="#Users" data-toggle="tab">Users</a>
+        </li>
+        <li>
+            <a href="#Events" data-toggle="tab">Events</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane active" id="Users">
+            @Html.Action("UsersGrid", "AdminCategories", new { categoryId = Model.Id})
+        </div>
+        <div class="tab-pane" id="Events">
+            @Html.Action("EventsGrid", "AdminCategories", new { categoryId = Model.Id})
+        </div>
+    </div>
+
+</div>
+

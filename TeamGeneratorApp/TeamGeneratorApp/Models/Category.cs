@@ -24,9 +24,9 @@ namespace TeamGeneratorApp.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public int PoolId { get; set; }
+        public int GroupId { get; set; }
     
-        public virtual Pool Pool { get; set; }
+        public virtual Group Group { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Event> Event { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

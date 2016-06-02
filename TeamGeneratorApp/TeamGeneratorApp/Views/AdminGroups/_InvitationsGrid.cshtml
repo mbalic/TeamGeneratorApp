@@ -1,0 +1,88 @@
+﻿@using Kendo.Mvc.UI
+@{
+    Layout = null;
+}
+
+@Styles.Render("~/Content/css")
+@Styles.Render("~/Content/kendo/css")
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+@Scripts.Render("~/bundles/modernizr")
+@Scripts.Render("~/bundles/kendo")
+<br/>
+<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Invite new user</button>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Invite user</h4>
+            </div>
+            <div class="modal-body">
+                <h5>Find user by mail: </h5>
+                <input type="text" class="form-control" placeholder="Enter user mail here..." id="tbxMail"/>
+                <button type="button" class="btn btn-primary"></button>
+                <br/><br/>
+                <label id="lblUser"></label>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<br/><br/>
+
+@(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.InvitationVM>()
+    .Name("invitationsGrid")
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.Username);
+        columns.Bound(p => p.Email);
+        columns.Bound(p => p.DateCreated);
+        columns.Command(command => command.Destroy()).Width(200);
+    })
+    //.Editable(editable => editable.Mode(GridEditMode.InLine))
+    .Pageable()
+    .Sortable()
+    .Scrollable()
+    .HtmlAttributes(new { style = "height:550px;" })
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Batch(true)
+        .ServerOperation(false)
+        .PageSize(20)
+        .Events(events => events.Error("error_handler"))
+         .Model(model =>
+         {
+             model.Id(p => p.Id);
+         })
+        //.Create(update => update.Action("UsersInGroupGrid_Create", "AdminGroups"))
+        .Read(read => read.Action("InvitationsGrid_Read", "AdminGroups", new { groupId = ViewBag.GroupId }))
+        //.Update(update => update.Action("UsersInGroupGrid_Update", "AdminGroups"))
+        .Destroy(update => update.Action("InvitationsGrid_Destroy", "AdminGroups"))
+    )
+
+)
+<script type="text/javascript">
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function(key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function() {
+                        message += this + "\n";
+                    });
+                }
+            });
+            alert(message);
+        }
+    };
+
+
+</script>

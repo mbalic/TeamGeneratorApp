@@ -17,7 +17,7 @@ using TeamGeneratorApp.Models.ViewModels;
 namespace TeamGeneratorApp.Controllers
 {
     [Authorize]
-    public class PoolsController : Controller
+    public class GroupsController : Controller
     {
         private UnitOfWork unitOfWork = new UnitOfWork();
         private string userId;
@@ -48,19 +48,19 @@ namespace TeamGeneratorApp.Controllers
 
             ViewBag.CurrentFilter = searchString;
 
-            var pools = unitOfWork.PoolRepository.GetByUserId(userId);
+            var groups = unitOfWork.GroupRepository.GetByUserId(userId);
 
             if (!String.IsNullOrEmpty(searchString))
             {
                 switch (ddlFilter)
                 {
                     case "Name":
-                        pools = pools.Where(s => s.Name != null);
-                        pools = pools.Where(s => s.Name.Contains(searchString));
+                        groups = groups.Where(s => s.Name != null);
+                        groups = groups.Where(s => s.Name.Contains(searchString));
                         break;
                     default:
-                        pools = pools.Where(s => s.Name != null);
-                        pools = pools.Where(s => s.Name.Contains(searchString));
+                        groups = groups.Where(s => s.Name != null);
+                        groups = groups.Where(s => s.Name.Contains(searchString));
                         break;
                 }
             }
@@ -69,17 +69,17 @@ namespace TeamGeneratorApp.Controllers
             switch (sortOrder)
             {
                 case "Name_desc":
-                    pools = pools.OrderByDescending(s => s.Name);
+                    groups = groups.OrderByDescending(s => s.Name);
                     break;
                 default:
-                    pools = pools.OrderBy(s => s.Name);
+                    groups = groups.OrderBy(s => s.Name);
                     break;
             }
 
             int pageSize = 10;
             int pageNumber = (page ?? 1);
 
-            return View(pools.ToPagedList(pageNumber, pageSize));
+            return View(groups.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Pools/Details/5
@@ -90,13 +90,13 @@ namespace TeamGeneratorApp.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Pool pool = unitOfWork.PoolRepository.GetByID(id);
+            Group group = unitOfWork.GroupRepository.GetByID(id);
 
-            if (pool == null)
+            if (group == null)
             {
                 return HttpNotFound();
             }
-            return View(pool);
+            return View(group);
         }
 
         //// GET: Pools/Create
@@ -113,7 +113,7 @@ namespace TeamGeneratorApp.Controllers
         //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Description,OwnerId")] Pool pool)
+        public ActionResult Create([Bind(Include = "Id,Name,Description,OwnerId")] Group group)
         {
             userId = User.Identity.GetUserId();
 
@@ -121,7 +121,7 @@ namespace TeamGeneratorApp.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    unitOfWork.PoolRepository.Insert(pool);
+                    unitOfWork.GroupRepository.Insert(group);
                     unitOfWork.Commit();
                     return RedirectToAction("Index");
                 }
@@ -133,7 +133,7 @@ namespace TeamGeneratorApp.Controllers
 
             ViewBag.UserId = userId;
 
-            return View(pool);
+            return View(group);
         }
 
         //// GET: Pools/Edit/5
@@ -144,9 +144,9 @@ namespace TeamGeneratorApp.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Pool pool = unitOfWork.PoolRepository.GetByID(id);
+            Group group = unitOfWork.GroupRepository.GetByID(id);
 
-            if (pool == null)
+            if (group == null)
             {
                 return HttpNotFound();
             }
@@ -154,7 +154,7 @@ namespace TeamGeneratorApp.Controllers
             userId = User.Identity.GetUserId();
             ViewBag.UserId = userId;
 
-            return View(pool);
+            return View(group);
         }
 
         //// POST: Pools/Edit/5
@@ -162,13 +162,13 @@ namespace TeamGeneratorApp.Controllers
         //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Description,OwnerId")] Pool pool)
+        public ActionResult Edit([Bind(Include = "Id,Name,Description,OwnerId")] Group group)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    unitOfWork.PoolRepository.Update(pool);
+                    unitOfWork.GroupRepository.Update(group);
                     unitOfWork.Commit();
                     return RedirectToAction("Index");
                 }
@@ -181,7 +181,7 @@ namespace TeamGeneratorApp.Controllers
             userId = User.Identity.GetUserId();
             ViewBag.UserId = userId;
 
-            return View(pool);
+            return View(group);
         }
 
         //// GET: Pools/Delete/5
@@ -192,13 +192,13 @@ namespace TeamGeneratorApp.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Pool pool = unitOfWork.PoolRepository.GetByID(id);
+            Group group = unitOfWork.GroupRepository.GetByID(id);
 
-            if (pool == null)
+            if (group == null)
             {
                 return HttpNotFound();
             }
-            return View(pool);
+            return View(group);
         }
 
         //// POST: Pools/Delete/5
@@ -206,18 +206,18 @@ namespace TeamGeneratorApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Pool pool = unitOfWork.PoolRepository.GetByID(id);
+            Group group = unitOfWork.GroupRepository.GetByID(id);
 
             try
             {
-                unitOfWork.PoolRepository.Delete(pool);
+                unitOfWork.GroupRepository.Delete(group);
                 unitOfWork.Commit();
                 return RedirectToAction("Index");
             }
             catch (Exception)
             {
                 ViewBag.ConstraintError = "Unable to delete this item because it is used in other entities as foreign key.";
-                return View("Delete", pool);
+                return View("Delete", group);
             }
         }
 
@@ -231,19 +231,19 @@ namespace TeamGeneratorApp.Controllers
         }
 
 
-        public PartialViewResult PoolEvents(int poolId = 0)
+        public PartialViewResult GroupEvents(int groupId = 0)
         {
             //var events = unitOfWork.EventRepository.GetByPoolId(poolId);
-            ViewBag.PoolId = poolId;
+            ViewBag.GroupId = groupId;
 
-            return PartialView("_PoolEvents");
+            return PartialView("_GroupEvents");
         }
 
-        public PartialViewResult PoolUsers(int poolId = 0)
+        public PartialViewResult GroupUsers(int groupId = 0)
         {         
-            ViewBag.PoolId = poolId;
+            ViewBag.GroupId = groupId;
 
-            return PartialView("_PoolUsers");
+            return PartialView("_GroupUsers");
         }
 
 

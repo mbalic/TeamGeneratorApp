@@ -52,7 +52,7 @@
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="Description" ColumnName="Description" />
-          <ScalarProperty Name="PoolId" ColumnName="PoolId" />
+          <ScalarProperty Name="GroupId" ColumnName="GroupId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -60,7 +60,6 @@
       <EntityTypeMapping TypeName="TeamDb4Model.Event">
         <MappingFragment StoreEntitySet="Event">
           <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="PoolId" ColumnName="PoolId" />
           <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="Description" ColumnName="Description" />
@@ -70,9 +69,9 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Pool">
-      <EntityTypeMapping TypeName="TeamDb4Model.Pool">
-        <MappingFragment StoreEntitySet="Pool">
+    <EntitySetMapping Name="Group">
+      <EntityTypeMapping TypeName="TeamDb4Model.Group">
+        <MappingFragment StoreEntitySet="Group">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="Description" ColumnName="Description" />
@@ -84,9 +83,9 @@
       <EntityTypeMapping TypeName="TeamDb4Model.Team">
         <MappingFragment StoreEntitySet="Team">
           <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="EventId" ColumnName="EventId" />
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="TeamScore" ColumnName="TeamScore" />
+          <ScalarProperty Name="EventId" ColumnName="EventId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -94,9 +93,30 @@
       <EntityTypeMapping TypeName="TeamDb4Model.UserCategory">
         <MappingFragment StoreEntitySet="UserCategory">
           <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="UserInGroupId" ColumnName="UserInGroupId" />
           <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
           <ScalarProperty Name="Score" ColumnName="Score" />
+          <ScalarProperty Name="Active" ColumnName="Active" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserInGroup">
+      <EntityTypeMapping TypeName="TeamDb4Model.UserInGroup">
+        <MappingFragment StoreEntitySet="UserInGroup">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+          <ScalarProperty Name="Active" ColumnName="Active" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserInGroupInvitation">
+      <EntityTypeMapping TypeName="TeamDb4Model.UserInGroupInvitation">
+        <MappingFragment StoreEntitySet="UserInGroupInvitation">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+          <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -107,6 +127,19 @@
           <ScalarProperty Name="EventId" ColumnName="EventId" />
           <ScalarProperty Name="TeamId" ColumnName="TeamId" />
           <ScalarProperty Name="UserCategoryId" ColumnName="UserCategoryId" />
+          <ScalarProperty Name="VoteCounter" ColumnName="VoteCounter" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Voting">
+      <EntityTypeMapping TypeName="TeamDb4Model.Voting">
+        <MappingFragment StoreEntitySet="Voting">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="EventId" ColumnName="EventId" />
+          <ScalarProperty Name="StartVoting" ColumnName="StartVoting" />
+          <ScalarProperty Name="FinishVoting" ColumnName="FinishVoting" />
+          <ScalarProperty Name="Active" ColumnName="Active" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

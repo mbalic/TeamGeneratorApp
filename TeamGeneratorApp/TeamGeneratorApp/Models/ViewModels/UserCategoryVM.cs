@@ -6,16 +6,14 @@ using System.Threading.Tasks;
 
 namespace TeamGeneratorApp.Models.ViewModels
 {
-    public class UserInPoolVM
+    public class UserCategoryVM
     {
         public int Id { get; set; }
-        public int PoolId { get; set; }
         public string UserId { get; set; }
-        public string Weight { get; set; }
-        public int Score { get; set; }
         public string Username { get; set; }
-
-        
-
+        public int CategoryId { get; set; }
+        public Nullable<int> Score { get; set; }
+        //public UserVM User { get; set; }
+        //public CategoryVM Category { get; set; }
     }
 }

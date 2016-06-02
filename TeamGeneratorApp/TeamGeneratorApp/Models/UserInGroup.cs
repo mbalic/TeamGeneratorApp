@@ -12,21 +12,22 @@ namespace TeamGeneratorApp.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Pool
+    public partial class UserInGroup
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Pool()
+        public UserInGroup()
         {
-            this.Category = new HashSet<Category>();
+            this.UserCategory = new HashSet<UserCategory>();
         }
     
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string OwnerId { get; set; }
+        public string UserId { get; set; }
+        public int GroupId { get; set; }
+        public bool Active { get; set; }
     
         public virtual AspNetUsers AspNetUsers { get; set; }
+        public virtual Group Group { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Category> Category { get; set; }
+        public virtual ICollection<UserCategory> UserCategory { get; set; }
     }
 }

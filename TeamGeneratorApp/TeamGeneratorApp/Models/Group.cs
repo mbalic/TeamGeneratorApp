@@ -12,30 +12,27 @@ namespace TeamGeneratorApp.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Event
+    public partial class Group
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Event()
+        public Group()
         {
-            this.Team = new HashSet<Team>();
-            this.UserOnEvent = new HashSet<UserOnEvent>();
-            this.Voting = new HashSet<Voting>();
+            this.Category = new HashSet<Category>();
+            this.UserInGroup = new HashSet<UserInGroup>();
+            this.UserInGroupInvitation = new HashSet<UserInGroupInvitation>();
         }
     
         public int Id { get; set; }
-        public int CategoryId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public Nullable<System.DateTime> Start { get; set; }
-        public Nullable<System.DateTime> Finish { get; set; }
-        public int NumberOfTeams { get; set; }
+        public string OwnerId { get; set; }
     
-        public virtual Category Category { get; set; }
+        public virtual AspNetUsers AspNetUsers { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Team> Team { get; set; }
+        public virtual ICollection<Category> Category { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserOnEvent> UserOnEvent { get; set; }
+        public virtual ICollection<UserInGroup> UserInGroup { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Voting> Voting { get; set; }
+        public virtual ICollection<UserInGroupInvitation> UserInGroupInvitation { get; set; }
     }
 }

@@ -16,7 +16,6 @@
     .Columns(columns =>
     {
         columns.Bound(p => p.Name);
-        columns.Bound(p => p.Fullname);
         columns.Bound(p => p.Description);
         columns.Bound(p => p.NumberOfTeams);
         columns.Bound(p => p.Start);
@@ -36,10 +35,10 @@
         .PageSize(20)
         .Events(events => events.Error("error_handler"))
         .Model(model => model.Id(p => p.Id))
-        .Create(update => update.Action("PoolEvents_Create", "Pools", new { poolId = ViewBag.PoolId }))
-        .Read(read => read.Action("PoolEvents_Read", "Pools", new {poolId = ViewBag.PoolId}))
-        .Update(update => update.Action("PoolEvents_Update", "Pools"))
-        .Destroy(update => update.Action("PoolEvents_Destroy", "Pools"))
+        .Create(update => update.Action("GroupEvents_Create", "Groups", new { groupId = ViewBag.GroupId }))
+        .Read(read => read.Action("GroupEvents_Read", "Groups", new {groupId = ViewBag.GroupId }))
+        .Update(update => update.Action("GroupEvents_Update", "Groups"))
+        .Destroy(update => update.Action("GroupEvents_Destroy", "Groups"))
     )
 
 )

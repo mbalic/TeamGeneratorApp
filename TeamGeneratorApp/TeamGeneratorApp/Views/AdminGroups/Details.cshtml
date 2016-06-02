@@ -1,0 +1,70 @@
+﻿@model TeamGeneratorApp.Models.Group
+
+@{
+    ViewBag.Title = "Details";
+}
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+
+<h2>Details</h2>
+
+<div>
+    <h4>Group</h4>
+    <hr/>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            Owner
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AspNetUsers.UserName)
+        </dd>
+
+    </dl>
+</div>
+
+<div id="tabs">
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a href="#Categories" data-toggle="tab">Categories</a>
+        </li>
+        <li>
+            <a href="#Users" data-toggle="tab">Users</a>
+        </li>
+        <li>
+            <a href="#Invitations" data-toggle="tab">Invitations</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane active" id="Categories">
+            @Html.Action("CategoriesGrid", "AdminGroups", new { groupId = Model.Id })           
+        </div>
+        <div class="tab-pane" id="Users">
+            @Html.Action("UsersInGroupGrid", "AdminGroups", new {groupId = Model.Id})
+        </div>
+        <div class="tab-pane" id="Invitations">
+            @Html.Action("InvitationsGrid", "AdminGroups", new { groupId = Model.Id })
+        </div>
+    </div>
+
+</div>
+

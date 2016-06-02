@@ -93,11 +93,7 @@ namespace TeamGeneratorApp.DAL.Repositories
                 user.AspNetRoles.Clear();
             }
         }
+ 
 
-        //public IEnumerable<UserPoolCategory> GetFromPool(int poolId)
-        //{
-        //    return context.UserInPool.Where(e => e.PoolId == poolId);
-
-        //}
     }
 }

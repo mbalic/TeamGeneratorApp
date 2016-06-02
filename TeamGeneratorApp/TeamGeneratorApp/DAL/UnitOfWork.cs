@@ -18,8 +18,11 @@ namespace TeamGeneratorApp.DAL
         private RoleRepository roleRepository;
         private CategoryRepository categoryRepository;       
         private EventRepository eventRepository;
-        private PoolRepository poolRepository;
+        private GroupRepository groupRepository;
         private TeamRepository teamRepository;
+        private UserCategoryRepository userCategoryRepository;
+        private UserInGroupRepository userInGroupRepository;
+        private InvitationRepository invitationRepository;
 
         public UserRepository UserRepository
         {
@@ -70,15 +73,15 @@ namespace TeamGeneratorApp.DAL
             }
         }
 
-        public PoolRepository PoolRepository
+        public GroupRepository GroupRepository
         {
             get
             {
-                if (this.poolRepository == null)
+                if (this.groupRepository == null)
                 {
-                    this.poolRepository = new PoolRepository(context);
+                    this.groupRepository = new GroupRepository(context);
                 }
-                return poolRepository;
+                return groupRepository;
             }
         }
 
@@ -98,7 +101,45 @@ namespace TeamGeneratorApp.DAL
             }
         }
 
-      
+
+        public UserCategoryRepository UserCategoryRepository
+        {
+            get
+            {
+                if (this.userCategoryRepository == null)
+                {
+                    this.userCategoryRepository = new UserCategoryRepository(context);
+                }
+                return userCategoryRepository;
+            }
+        }
+
+        public UserInGroupRepository UserInGroupRepository
+        {
+            get
+            {
+                if (this.userInGroupRepository == null)
+                {
+                    this.userInGroupRepository = new UserInGroupRepository(context);
+                }
+                return userInGroupRepository;
+            }
+        }
+
+        public InvitationRepository InvitationRepository
+        {
+            get
+            {
+                if (this.invitationRepository == null)
+                {
+                    this.invitationRepository = new InvitationRepository(context);
+                }
+                return invitationRepository;
+            }
+        }
+
+
+
 
 
         public void SetModified<T>(T item) where T : class

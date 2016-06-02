@@ -12,16 +12,15 @@ namespace TeamGeneratorApp.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class UserOnEvent
+    public partial class Voting
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
+        public string Name { get; set; }
         public int EventId { get; set; }
-        public Nullable<int> TeamId { get; set; }
-        public int UserCategoryId { get; set; }
-        public Nullable<int> VoteCounter { get; set; }
+        public Nullable<System.DateTime> StartVoting { get; set; }
+        public Nullable<System.DateTime> FinishVoting { get; set; }
+        public Nullable<byte> Active { get; set; }
     
         public virtual Event Event { get; set; }
-        public virtual Team Team { get; set; }
-        public virtual UserCategory UserCategory { get; set; }
     }
 }

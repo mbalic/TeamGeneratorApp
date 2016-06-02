@@ -1,10 +1,10 @@
-﻿@model IEnumerable<TeamGeneratorApp.Models.Pool>
+﻿@model IEnumerable<TeamGeneratorApp.Models.Group>
 
 @{
-    ViewBag.Title = "Pools";
+    ViewBag.Title = "Groups";
 }
 
-<h2>Pools</h2>
+<h2>Groups</h2>
 <hr />
 <p>
     @Html.ActionLink("Back", "Index", "Admin")
@@ -13,7 +13,7 @@
     @Html.ActionLink("Create new", "Create")
 </p>
 <br/>
-@using (Html.BeginForm("Index", "AdminPools", FormMethod.Get))
+@using (Html.BeginForm("Index", "AdminGroups", FormMethod.Get))
 {
     <p>
         Find by @Html.DropDownList("ddlFilter") : @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
@@ -47,9 +47,9 @@
             @Html.DisplayFor(modelItem => item.AspNetUsers.UserName)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @*@Html.ActionLink("Details", "Details", new { id=item.Id }) |*@
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+            @Html.ActionLink("Edit", "Edit", new {id = item.Id}) |
+            @Html.ActionLink("Delete", "Delete", new {id = item.Id})
         </td>
     </tr>
 }

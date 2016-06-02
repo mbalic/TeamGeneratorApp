@@ -31,9 +31,12 @@ namespace TeamGeneratorApp.Models
         public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<Category> Category { get; set; }
         public virtual DbSet<Event> Event { get; set; }
-        public virtual DbSet<Pool> Pool { get; set; }
+        public virtual DbSet<Group> Group { get; set; }
         public virtual DbSet<Team> Team { get; set; }
         public virtual DbSet<UserCategory> UserCategory { get; set; }
+        public virtual DbSet<UserInGroup> UserInGroup { get; set; }
+        public virtual DbSet<UserInGroupInvitation> UserInGroupInvitation { get; set; }
         public virtual DbSet<UserOnEvent> UserOnEvent { get; set; }
+        public virtual DbSet<Voting> Voting { get; set; }
     }
 }
