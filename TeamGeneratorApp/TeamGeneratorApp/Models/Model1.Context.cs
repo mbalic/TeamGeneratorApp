@@ -13,10 +13,10 @@ namespace TeamGeneratorApp.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class TeamDb4Entities : DbContext
+    public partial class TeamDb6Entities : DbContext
     {
-        public TeamDb4Entities()
-            : base("name=TeamDb4Entities")
+        public TeamDb6Entities()
+            : base("name=TeamDb6Entities")
         {
         }
     
@@ -32,10 +32,11 @@ namespace TeamGeneratorApp.Models
         public virtual DbSet<Category> Category { get; set; }
         public virtual DbSet<Event> Event { get; set; }
         public virtual DbSet<Group> Group { get; set; }
+        public virtual DbSet<Invitaton> Invitaton { get; set; }
         public virtual DbSet<Team> Team { get; set; }
         public virtual DbSet<UserCategory> UserCategory { get; set; }
+        public virtual DbSet<UserDetails> UserDetails { get; set; }
         public virtual DbSet<UserInGroup> UserInGroup { get; set; }
-        public virtual DbSet<UserInGroupInvitation> UserInGroupInvitation { get; set; }
         public virtual DbSet<UserOnEvent> UserOnEvent { get; set; }
         public virtual DbSet<Voting> Voting { get; set; }
     }

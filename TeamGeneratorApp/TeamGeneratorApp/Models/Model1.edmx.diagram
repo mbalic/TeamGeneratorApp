@@ -4,37 +4,39 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="05688963ad27420b91ff9d670649b1de" Name="Diagram1">
-        <EntityTypeShape EntityType="TeamDb4Model.AspNetRoles" Width="1.5" PointX="0.75" PointY="11.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb4Model.AspNetUserClaims" Width="1.5" PointX="5.25" PointY="6.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb4Model.AspNetUserLogins" Width="1.5" PointX="5.25" PointY="9.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb4Model.AspNetUsers" Width="1.5" PointX="3" PointY="9.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb4Model.Category" Width="1.5" PointX="7.5" PointY="13.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb4Model.Event" Width="1.5" PointX="9.75" PointY="13" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb4Model.Group" Width="1.5" PointX="5.25" PointY="13.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb4Model.Team" Width="1.5" PointX="12" PointY="12" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb4Model.UserCategory" Width="1.5" PointX="9.75" PointY="9.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb4Model.UserInGroup" Width="1.5" PointX="7.5" PointY="9.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb4Model.UserInGroupInvitation" Width="1.5" PointX="7.5" PointY="16.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb4Model.UserOnEvent" Width="1.5" PointX="14.25" PointY="12.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb4Model.Voting" Width="1.5" PointX="12" PointY="14.875" IsExpanded="true" />
-        <AssociationConnector Association="TeamDb4Model.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
-        <AssociationConnector Association="TeamDb4Model.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
-        <AssociationConnector Association="TeamDb4Model.FK_Group_AspNetUsers" ManuallyRouted="false" />
-        <AssociationConnector Association="TeamDb4Model.FK_UserInGroup_AspNetUsers" ManuallyRouted="false" />
-        <AssociationConnector Association="TeamDb4Model.FK_UserInGroupInvitation_AspNetUsers" ManuallyRouted="false" />
-        <AssociationConnector Association="TeamDb4Model.FK_Category_Group" ManuallyRouted="false" />
-        <AssociationConnector Association="TeamDb4Model.FK_Event_Category" ManuallyRouted="false" />
-        <AssociationConnector Association="TeamDb4Model.FK_UserCategory_Category" ManuallyRouted="false" />
-        <AssociationConnector Association="TeamDb4Model.FK_Team_Event" ManuallyRouted="false" />
-        <AssociationConnector Association="TeamDb4Model.FK_UserOnEvent_Event" ManuallyRouted="false" />
-        <AssociationConnector Association="TeamDb4Model.FK_Voting_Event" ManuallyRouted="false" />
-        <AssociationConnector Association="TeamDb4Model.FK_UserInGroup_Group" ManuallyRouted="false" />
-        <AssociationConnector Association="TeamDb4Model.FK_UserInGroupInvitation_Group" ManuallyRouted="false" />
-        <AssociationConnector Association="TeamDb4Model.FK_UserOnEvent_Team" ManuallyRouted="false" />
-        <AssociationConnector Association="TeamDb4Model.FK_UserCategory_UserInGroup" ManuallyRouted="false" />
-        <AssociationConnector Association="TeamDb4Model.FK_UserOnEvent_UserCategory" ManuallyRouted="false" />
-        <AssociationConnector Association="TeamDb4Model.AspNetUserRoles" ManuallyRouted="false" />
+      <Diagram DiagramId="e2a98eacf0b64f84a2638a279e74925d" Name="Diagram1">
+        <EntityTypeShape EntityType="TeamDb6Model.AspNetRoles" Width="1.5" PointX="0.75" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb6Model.AspNetUserClaims" Width="1.5" PointX="5.25" PointY="6.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb6Model.AspNetUserLogins" Width="1.5" PointX="5.25" PointY="9.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb6Model.AspNetUsers" Width="1.5" PointX="3" PointY="11.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb6Model.Category" Width="1.5" PointX="7.5" PointY="13.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb6Model.Event" Width="1.5" PointX="9.75" PointY="13.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb6Model.Group" Width="1.5" PointX="5.25" PointY="13.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb6Model.Invitaton" Width="1.5" PointX="7.5" PointY="10.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb6Model.Team" Width="1.5" PointX="12" PointY="12.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb6Model.UserCategory" Width="1.5" PointX="9.75" PointY="9.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb6Model.UserDetails" Width="1.5" PointX="5.25" PointY="18.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb6Model.UserInGroup" Width="1.5" PointX="7.5" PointY="17.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb6Model.UserOnEvent" Width="1.5" PointX="14.25" PointY="13" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb6Model.Voting" Width="1.5" PointX="12" PointY="15" IsExpanded="true" />
+        <AssociationConnector Association="TeamDb6Model.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb6Model.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb6Model.FK_Group_AspNetUsers" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb6Model.FK_UserDetails_AspNetUsers" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb6Model.FK_UserInGroup_AspNetUsers" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb6Model.FK_UserInGroupInvitation_AspNetUsers" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb6Model.FK_Category_Group" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb6Model.FK_Event_Category" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb6Model.FK_UserCategory_Category" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb6Model.FK_Team_Event" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb6Model.FK_UserOnEvent_Event" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb6Model.FK_Voting_Event" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb6Model.FK_UserInGroup_Group" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb6Model.FK_UserInGroupInvitation_Group" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb6Model.FK_UserOnEvent_Team" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb6Model.FK_UserCategory_UserInGroup" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb6Model.FK_UserOnEvent_UserCategory" ManuallyRouted="false" />
+        <AssociationConnector Association="TeamDb6Model.AspNetUserRoles" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

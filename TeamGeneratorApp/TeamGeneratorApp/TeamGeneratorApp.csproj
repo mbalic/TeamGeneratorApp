@@ -179,6 +179,10 @@
     <Compile Include="DAL\Repositories\InvitationRepository.cs" />
     <Compile Include="DAL\Repositories\UserCategoryRepository.cs" />
     <Compile Include="DAL\Repositories\UserInGroupRepository.cs" />
+    <Compile Include="Migrations\201606022212480_Name.cs" />
+    <Compile Include="Migrations\201606022212480_Name.Designer.cs">
+      <DependentUpon>201606022212480_Name.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AspNetRoles.cs">
       <DependentUpon>Model1.tt</DependentUpon>
@@ -2032,6 +2036,11 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201606022212480_Name.resx">
+      <DependentUpon>201606022212480_Name.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

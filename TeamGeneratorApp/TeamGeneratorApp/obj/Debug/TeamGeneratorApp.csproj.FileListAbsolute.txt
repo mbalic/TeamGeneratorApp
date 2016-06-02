@@ -92,3 +92,5 @@ E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\sv-
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\tr-TR\Kendo.Mvc.resources.dll
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\uk-UA\Kendo.Mvc.resources.dll
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\zh-CN\Kendo.Mvc.resources.dll
+E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\obj\Debug\TeamGeneratorApp.Migrations.Name.resources
+E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\obj\Debug\TeamGeneratorApp.csproj.GenerateResource.Cache

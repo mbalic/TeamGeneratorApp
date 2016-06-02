@@ -19,7 +19,7 @@ namespace TeamGeneratorApp.Models
         {
             this.Category = new HashSet<Category>();
             this.UserInGroup = new HashSet<UserInGroup>();
-            this.UserInGroupInvitation = new HashSet<UserInGroupInvitation>();
+            this.Invitaton = new HashSet<Invitaton>();
         }
     
         public int Id { get; set; }
@@ -33,6 +33,6 @@ namespace TeamGeneratorApp.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserInGroup> UserInGroup { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserInGroupInvitation> UserInGroupInvitation { get; set; }
+        public virtual ICollection<Invitaton> Invitaton { get; set; }
     }
 }

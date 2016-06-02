@@ -12,7 +12,7 @@ namespace TeamGeneratorApp.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class UserInGroupInvitation
+    public partial class Invitaton
     {
         public int Id { get; set; }
         public string UserId { get; set; }
