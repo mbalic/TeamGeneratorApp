@@ -13,7 +13,7 @@ namespace TeamGeneratorApp.DAL
 {
     public class UnitOfWork : IDisposable
     {
-        private TeamDb4Entities context = new TeamDb4Entities();
+        private TeamDb6Entities context = new TeamDb6Entities();
         private UserRepository userRepository;
         private RoleRepository roleRepository;
         private CategoryRepository categoryRepository;       

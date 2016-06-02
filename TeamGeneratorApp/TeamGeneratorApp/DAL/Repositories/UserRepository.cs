@@ -12,7 +12,7 @@ namespace TeamGeneratorApp.DAL.Repositories
 {
     public class UserRepository : GenericRepository<AspNetUsers>
     {
-        public UserRepository(TeamDb4Entities context) : base(context)
+        public UserRepository(TeamDb6Entities context) : base(context)
         {
         }
 

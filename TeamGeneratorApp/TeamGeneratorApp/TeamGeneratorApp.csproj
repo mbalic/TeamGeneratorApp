@@ -205,6 +205,9 @@
     <Compile Include="Models\Group.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Invitaton.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Model1.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -226,10 +229,10 @@
     <Compile Include="Models\UserCategory.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\UserInGroup.cs">
+    <Compile Include="Models\UserDetails.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\UserInGroupInvitation.cs">
+    <Compile Include="Models\UserInGroup.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\UserOnEvent.cs">
@@ -239,6 +242,7 @@
     <Compile Include="Models\ViewModels\EventVM.cs" />
     <Compile Include="Models\ViewModels\InvitationVM.cs" />
     <Compile Include="Models\ViewModels\UserCategoryVM.cs" />
+    <Compile Include="Models\ViewModels\UserDetailsVM.cs" />
     <Compile Include="Models\ViewModels\UserInGroupVM.cs" />
     <Compile Include="Models\ViewModels\UserVM.cs" />
     <Compile Include="Models\Voting.cs">

@@ -9,7 +9,7 @@ namespace TeamGeneratorApp.DAL.Repositories
 {
     public class EventRepository : GenericRepository<Event>
     {
-        public EventRepository(TeamDb4Entities context) : base(context)
+        public EventRepository(TeamDb6Entities context) : base(context)
         {
         }
 

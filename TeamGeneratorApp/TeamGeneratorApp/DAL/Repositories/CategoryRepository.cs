@@ -11,7 +11,7 @@ namespace TeamGeneratorApp.DAL.Repositories
     public class CategoryRepository : GenericRepository<Category>
     {
         public CategoryRepository(
-            TeamDb4Entities context) : base(context)
+            TeamDb6Entities context) : base(context)
         {
         }
 

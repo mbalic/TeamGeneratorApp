@@ -9,7 +9,7 @@ namespace TeamGeneratorApp.DAL.Repositories
 {
     public class GroupRepository : GenericRepository<Group>
     {
-        public GroupRepository(TeamDb4Entities context) : base(context)
+        public GroupRepository(TeamDb6Entities context) : base(context)
         {
         }
 

@@ -9,7 +9,7 @@ namespace TeamGeneratorApp.DAL.Repositories
 {
     public class UserCategoryRepository : GenericRepository<UserCategory>
     {
-        public UserCategoryRepository(TeamDb4Entities context) : base(context)
+        public UserCategoryRepository(TeamDb6Entities context) : base(context)
         {
         }
 

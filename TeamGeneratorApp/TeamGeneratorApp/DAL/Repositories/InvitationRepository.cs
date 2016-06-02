@@ -7,15 +7,15 @@ using TeamGeneratorApp.Models;
 
 namespace TeamGeneratorApp.DAL.Repositories
 {
-    public class InvitationRepository : GenericRepository<UserInGroupInvitation>
+    public class InvitationRepository : GenericRepository<Invitaton>
     {
-        public InvitationRepository(TeamDb4Entities context) : base(context)
+        public InvitationRepository(TeamDb6Entities context) : base(context)
         {
         }
 
-        public IEnumerable<UserInGroupInvitation> GetByGroupId(int groupId)
+        public IEnumerable<Invitaton> GetByGroupId(int groupId)
         {
-            return context.UserInGroupInvitation.Where(p => p.GroupId == groupId).OrderByDescending(p => p.DateCreated);
+            return context.Invitaton.Where(p => p.GroupId == groupId).OrderByDescending(p => p.DateCreated);
         }
 
     }

@@ -9,7 +9,7 @@ namespace TeamGeneratorApp.DAL.Repositories
 {
     public class RoleRepository : GenericRepository<AspNetRoles>
     {
-        public RoleRepository(TeamDb4Entities context) : base(context)
+        public RoleRepository(TeamDb6Entities context) : base(context)
         {
         }
 

@@ -12,10 +12,10 @@ namespace TeamGeneratorApp.DAL.Repositories
     public class GenericRepository<TEntity> :
          IGenericRepository<TEntity> where TEntity : class
     {
-        internal TeamDb4Entities context;
+        internal TeamDb6Entities context;
         internal DbSet<TEntity> dbSet;
 
-        public GenericRepository(TeamDb4Entities context)
+        public GenericRepository(TeamDb6Entities context)
         {
             this.context = context;
             this.dbSet = context.Set<TEntity>();
