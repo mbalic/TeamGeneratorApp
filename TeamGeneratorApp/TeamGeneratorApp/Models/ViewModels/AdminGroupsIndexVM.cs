@@ -7,12 +7,18 @@ using System.Threading.Tasks;
 
 namespace TeamGeneratorApp.Models.ViewModels
 {
-    public class AdminUserIndexVM
+    public class AdminGroupsIndexVM
     {
-        public string Id { get; set; }        
-        public string Email { get; set; }
-        public string UserName { get; set; }
-        public bool IsAdmin { get; set; }
+        public int Id { get; set; }
+
+        [Required]
         public string Name { get; set; }
+        public string Description { get; set; }
+
+        [Required]
+        public string OwnerId { get; set; }
+        public OwnerVM Owner { get; set; }
+
+
     }
 }

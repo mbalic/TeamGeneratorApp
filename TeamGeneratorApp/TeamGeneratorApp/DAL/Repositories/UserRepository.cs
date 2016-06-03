@@ -16,27 +16,6 @@ namespace TeamGeneratorApp.DAL.Repositories
         {
         }
 
-        public IEnumerable<AdminUserIndexVM> GetAllForIndex()
-        {
-            List<AdminUserIndexVM> result = new List<AdminUserIndexVM>();
-
-            foreach (var item in dbSet)
-            {
-                AdminUserIndexVM user = new AdminUserIndexVM();
-                user.Id = item.Id;
-                user.UserName = item.UserName;
-                user.Email = item.Email;
-
-                if (item.AspNetRoles.Count > 0)
-                    user.IsAdmin = true;
-                else
-                    user.IsAdmin = false;
-
-                result.Add(user);
-            }
-
-            return result;
-        }
 
         public void InsertUser(AdminUserCreateVM user)
         {

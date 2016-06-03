@@ -4,11 +4,11 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="e2a98eacf0b64f84a2638a279e74925d" Name="Diagram1">
+      <Diagram DiagramId="129d53efc964499cba6a62b3ea635f83" Name="Diagram1">
         <EntityTypeShape EntityType="TeamDb6Model.AspNetRoles" Width="1.5" PointX="0.75" PointY="12.75" IsExpanded="true" />
         <EntityTypeShape EntityType="TeamDb6Model.AspNetUserClaims" Width="1.5" PointX="5.25" PointY="6.875" IsExpanded="true" />
         <EntityTypeShape EntityType="TeamDb6Model.AspNetUserLogins" Width="1.5" PointX="5.25" PointY="9.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb6Model.AspNetUsers" Width="1.5" PointX="3" PointY="11.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb6Model.AspNetUsers" Width="1.5" PointX="3" PointY="11" IsExpanded="true" />
         <EntityTypeShape EntityType="TeamDb6Model.Category" Width="1.5" PointX="7.5" PointY="13.625" IsExpanded="true" />
         <EntityTypeShape EntityType="TeamDb6Model.Event" Width="1.5" PointX="9.75" PointY="13.25" IsExpanded="true" />
         <EntityTypeShape EntityType="TeamDb6Model.Group" Width="1.5" PointX="5.25" PointY="13.5" IsExpanded="true" />

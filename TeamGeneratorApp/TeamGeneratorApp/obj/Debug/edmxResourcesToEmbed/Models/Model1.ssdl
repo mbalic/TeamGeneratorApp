@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Schema Namespace="TeamDb4Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+<Schema Namespace="TeamDb6Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
   <EntityType Name="AspNetRoles">
     <Key>
       <PropertyRef Name="Id" />
@@ -39,6 +39,7 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" />
     <Property Name="Email" Type="nvarchar" MaxLength="256" />
     <Property Name="EmailConfirmed" Type="bit" Nullable="false" />
     <Property Name="PasswordHash" Type="nvarchar(max)" />
@@ -50,6 +51,7 @@
     <Property Name="LockoutEnabled" Type="bit" Nullable="false" />
     <Property Name="AccessFailedCount" Type="int" Nullable="false" />
     <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
+    <Property Name="ImageUrl" Type="nvarchar" MaxLength="256" />
   </EntityType>
   <EntityType Name="Category">
     <Key>
@@ -81,6 +83,15 @@
     <Property Name="Description" Type="nchar" MaxLength="128" />
     <Property Name="OwnerId" Type="nvarchar" MaxLength="128" Nullable="false" />
   </EntityType>
+  <EntityType Name="Invitaton">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="GroupId" Type="int" Nullable="false" />
+    <Property Name="DateCreated" Type="datetime" Nullable="false" />
+  </EntityType>
   <EntityType Name="Team">
     <Key>
       <PropertyRef Name="Id" />
@@ -100,6 +111,16 @@
     <Property Name="Score" Type="int" />
     <Property Name="Active" Type="bit" Nullable="false" />
   </EntityType>
+  <EntityType Name="UserDetails">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="ImageUrl" Type="nvarchar" MaxLength="128" />
+    <Property Name="Age" Type="int" />
+    <Property Name="Sex" Type="nvarchar" MaxLength="10" />
+  </EntityType>
   <EntityType Name="UserInGroup">
     <Key>
       <PropertyRef Name="Id" />
@@ -108,15 +129,6 @@
     <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="GroupId" Type="int" Nullable="false" />
     <Property Name="Active" Type="bit" Nullable="false" />
-  </EntityType>
-  <EntityType Name="UserInGroupInvitation">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
-    <Property Name="GroupId" Type="int" Nullable="false" />
-    <Property Name="DateCreated" Type="datetime" Nullable="false" />
   </EntityType>
   <EntityType Name="UserOnEvent">
     <Key>
@@ -267,6 +279,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_UserDetails_AspNetUsers">
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+    <End Role="UserDetails" Type="Self.UserDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserDetails">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_UserInGroup_AspNetUsers">
     <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
     <End Role="UserInGroup" Type="Self.UserInGroup" Multiplicity="*" />
@@ -293,24 +317,24 @@
   </Association>
   <Association Name="FK_UserInGroupInvitation_AspNetUsers">
     <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
-    <End Role="UserInGroupInvitation" Type="Self.UserInGroupInvitation" Multiplicity="*" />
+    <End Role="Invitaton" Type="Self.Invitaton" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="AspNetUsers">
         <PropertyRef Name="Id" />
       </Principal>
-      <Dependent Role="UserInGroupInvitation">
+      <Dependent Role="Invitaton">
         <PropertyRef Name="UserId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_UserInGroupInvitation_Group">
     <End Role="Group" Type="Self.Group" Multiplicity="1" />
-    <End Role="UserInGroupInvitation" Type="Self.UserInGroupInvitation" Multiplicity="*" />
+    <End Role="Invitaton" Type="Self.Invitaton" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Group">
         <PropertyRef Name="Id" />
       </Principal>
-      <Dependent Role="UserInGroupInvitation">
+      <Dependent Role="Invitaton">
         <PropertyRef Name="GroupId" />
       </Dependent>
     </ReferentialConstraint>
@@ -363,7 +387,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityContainer Name="TeamDb4ModelStoreContainer">
+  <EntityContainer Name="TeamDb6ModelStoreContainer">
     <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
@@ -372,10 +396,11 @@
     <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Event" EntityType="Self.Event" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Group" EntityType="Self.Group" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Invitaton" EntityType="Self.Invitaton" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Team" EntityType="Self.Team" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserCategory" EntityType="Self.UserCategory" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserDetails" EntityType="Self.UserDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserInGroup" EntityType="Self.UserInGroup" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="UserInGroupInvitation" EntityType="Self.UserInGroupInvitation" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserOnEvent" EntityType="Self.UserOnEvent" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Voting" EntityType="Self.Voting" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_Category_Group" Association="Self.FK_Category_Group">
@@ -418,6 +443,10 @@
       <End Role="UserInGroup" EntitySet="UserInGroup" />
       <End Role="UserCategory" EntitySet="UserCategory" />
     </AssociationSet>
+    <AssociationSet Name="FK_UserDetails_AspNetUsers" Association="Self.FK_UserDetails_AspNetUsers">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="UserDetails" EntitySet="UserDetails" />
+    </AssociationSet>
     <AssociationSet Name="FK_UserInGroup_AspNetUsers" Association="Self.FK_UserInGroup_AspNetUsers">
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
       <End Role="UserInGroup" EntitySet="UserInGroup" />
@@ -428,11 +457,11 @@
     </AssociationSet>
     <AssociationSet Name="FK_UserInGroupInvitation_AspNetUsers" Association="Self.FK_UserInGroupInvitation_AspNetUsers">
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-      <End Role="UserInGroupInvitation" EntitySet="UserInGroupInvitation" />
+      <End Role="Invitaton" EntitySet="Invitaton" />
     </AssociationSet>
     <AssociationSet Name="FK_UserInGroupInvitation_Group" Association="Self.FK_UserInGroupInvitation_Group">
       <End Role="Group" EntitySet="Group" />
-      <End Role="UserInGroupInvitation" EntitySet="UserInGroupInvitation" />
+      <End Role="Invitaton" EntitySet="Invitaton" />
     </AssociationSet>
     <AssociationSet Name="FK_UserOnEvent_Event" Association="Self.FK_UserOnEvent_Event">
       <End Role="Event" EntitySet="Event" />

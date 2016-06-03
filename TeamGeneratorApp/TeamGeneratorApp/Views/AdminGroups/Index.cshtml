@@ -1,5 +1,4 @@
-﻿@model IEnumerable<TeamGeneratorApp.Models.Group>
-
+﻿
 @{
     ViewBag.Title = "Groups";
 }
@@ -9,49 +8,68 @@
 <p>
     @Html.ActionLink("Back", "Index", "Admin")
 </p>
-<p>
-    @Html.ActionLink("Create new", "Create")
-</p>
-<br/>
-@using (Html.BeginForm("Index", "AdminGroups", FormMethod.Get))
-{
-    <p>
-        Find by @Html.DropDownList("ddlFilter") : @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
-        <input type="submit" value="Search" />
-    </p>
-}
+<br />
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter, ddlFilter = Request.QueryString["ddlFilter"] })
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th>
-            @Html.ActionLink("Owner", "Index", new { sortOrder = ViewBag.OwnerSortParm, currentFilter = ViewBag.CurrentFilter, ddlFilter = Request.QueryString["ddlFilter"] })
-        </th>
-        <th></th>
-    </tr>
+<script type="text/javascript">
+    function viewDetails(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var itemId = dataItem.Id
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AspNetUsers.UserName)
-        </td>
-        <td>
-            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-            @Html.ActionLink("Edit", "Edit", new {id = item.Id}) |
-            @Html.ActionLink("Delete", "Delete", new {id = item.Id})
-        </td>
-    </tr>
-}
+        @*window.location.href = "@Url.Action("Details","AdminUsers")?id=" + itemId;*@
 
-</table>
+    };
+</script>
+
+@(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.AdminGroupsIndexVM>()
+    .Name("groupsGrid")
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.Name);
+        columns.Bound(p => p.Description);
+        columns.ForeignKey(p => p.OwnerId, (System.Collections.IEnumerable)ViewData["owners"], "Id", "Name")
+            .Title("Owner").Width(200);
+        columns.Command(command => { command.Edit(); command.Destroy(); }).Width(200);
+        columns.Command(command => command.Custom("Details").Click("viewDetails"));
+    })
+    .ToolBar(toolbar => toolbar.Create())
+    .Editable(editable => editable.Mode(GridEditMode.InLine))
+    .Pageable()
+    .Sortable()
+    .Scrollable()
+    .HtmlAttributes(new { style = "height:550px;" })
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Batch(true)
+        .ServerOperation(false)
+        .PageSize(20)
+        .Events(events => events.Error("error_handler"))
+         .Model(model =>
+         {
+             model.Id(p => p.Id);
+         })
+        .Create(update => update.Action("AdminGroupsGrid_Create", "AdminGroups"))
+        .Read(read => read.Action("AdminGroupsGrid_Read", "AdminGroups"))
+        .Update(update => update.Action("AdminGroupsGrid_Update", "AdminGroups"))
+        .Destroy(update => update.Action("AdminGroupsGrid_Destroy", "AdminGroups"))
+    )
+
+)
+<script type="text/javascript">
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function() {
+                        message += this + "\n";
+                    });
+                }
+            });
+            alert(message);
+        }
+    };
+
+</script>
+
+

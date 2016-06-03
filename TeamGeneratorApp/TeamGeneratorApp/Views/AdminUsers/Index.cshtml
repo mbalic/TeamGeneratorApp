@@ -1,7 +1,4 @@
-﻿@model PagedList.IPagedList<TeamGeneratorApp.Models.ViewModels.AdminUserIndexVM>
-@using PagedList.Mvc;
-<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
-
+﻿@using Kendo.Mvc.UI
 @{
     ViewBag.Title = "Users";
 }
@@ -11,111 +8,90 @@
 <p>
     @Html.ActionLink("Back", "Index", "Admin")
 </p>
-<p>
+@*<p>
     @Html.ActionLink("Create new", "Create")
-</p>
-<br />
-@using (Html.BeginForm("Index", "AdminUsers", FormMethod.Get))
-{
-    <p>
-        Find by @Html.DropDownList("ddlFilter") : @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
-        <input type="submit" value="Search" />
-    </p>
-}
+</p>*@
+<br/>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.ActionLink("Username", "Index", new { sortOrder = ViewBag.UsernameSortParm, currentFilter = ViewBag.CurrentFilter, ddlFilter = Request.QueryString["ddlFilter"] })
-        </th>
-        <th>
-            @Html.ActionLink("Email", "Index", new {sortOrder = ViewBag.EmailSortParm, currentFilter = ViewBag.CurrentFilter, ddlFilter = Request.QueryString["ddlFilter"]})
-        </th>
-        <th>
-            Is admin
-            @*@Html.ActionLink("Is admin", "Index", new { sortOrder = ViewBag.SortParm, currentFilter = ViewBag.CurrentFilter, ddlFilter = Request.QueryString["ddlFilter"] })*@
-        </th>
-        @*<th>
-            @Html.DisplayNameFor(model => model.EmailConfirmed)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PasswordHash)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.SecurityStamp)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PhoneNumberConfirmed)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TwoFactorEnabled)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LockoutEndDateUtc)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LockoutEnabled)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.AccessFailedCount)
-        </th>*@
+<script type="text/javascript">
+    function viewEdit(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var itemId = dataItem.Id
 
-        <th></th>
-    </tr>
+        @*window.location.href = "@Url.Action("Details","AdminUsers")?id=" + itemId;*@
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.UserName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Email)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsAdmin)
-        </td>
-        @*<td>
-            @Html.DisplayFor(modelItem => item.EmailConfirmed)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PasswordHash)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.SecurityStamp)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PhoneNumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PhoneNumberConfirmed)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TwoFactorEnabled)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LockoutEndDateUtc)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LockoutEnabled)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AccessFailedCount)
-        </td>*@
+        };
 
-        <td>
-            @Html.ActionLink("Edit", "Edit", new {id = item.Id}) |
-            @*@Html.ActionLink("Details", "Details", new {id = item.Id}) |*@
-            @Html.ActionLink("Delete", "Delete", new {id = item.Id})
-        </td>
-    </tr>
-}
+    function viewDetails(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var itemId = dataItem.Id
 
-</table>
-<br />
-Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+        @*window.location.href = "@Url.Action("Details","AdminUsers")?id=" + itemId;*@
 
-@Html.PagedListPager(Model, page => Url.Action("Index",
-    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, ddlFilter = Request.QueryString["ddlFilter"] }))
+    };
+</script>
+
+@(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.AdminUserIndexVM>()
+    .Name("usersGrid")
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.Name);
+        columns.Bound(p => p.UserName);
+        columns.Bound(p => p.Email);
+        columns.Bound(p => p.IsAdmin)
+            .ClientTemplate("<input type='checkbox' #= IsAdmin ? checked='checked': '' # class='chkbx' />")
+            .HtmlAttributes(new { style = "text-align: center" });
+        //columns.Command(command => { command.Edit(); command.Destroy(); }).Width(200);
+        columns.Command(command => command.Custom("Edit").Click("viewEdit"));
+        columns.Command(command => command.Custom("Details").Click("viewDetails"));
+    })
+    //.ToolBar(toolbar => toolbar.Create())
+    .Editable(editable => editable.Mode(GridEditMode.InLine))
+    .Pageable()
+    .Sortable()
+    .Scrollable()
+    .HtmlAttributes(new { style = "height:550px;" })
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Batch(true)
+        .ServerOperation(false)
+        .PageSize(20)
+        .Events(events => events.Error("error_handler"))
+         .Model(model =>
+         {
+             model.Id(p => p.Id);
+         })
+        .Create(update => update.Action("AdminUsersGrid_Create", "AdminUsers"))
+        .Read(read => read.Action("AdminUsersGrid_Read", "AdminUsers"))
+        .Update(update => update.Action("AdminUsersGrid_Update", "AdminUsers"))
+        .Destroy(update => update.Action("AdminUsersGrid_Destroy", "AdminUsers"))
+    )
+
+)
+<script type="text/javascript">
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function() {
+                        message += this + "\n";
+                    });
+                }
+            });
+            alert(message);
+        }
+    };
+
+    $(function () {
+        $('#usersGrid').on('click', '.chkbx', function () {
+            var checked = $(this).is(':checked');
+            var grid = $('#usersGrid').data().kendoGrid;
+            var dataItem = grid.dataItem($(this).closest('tr'));
+            dataItem.set('IsAdmin', checked);
+        });
+    });
+</script>
+

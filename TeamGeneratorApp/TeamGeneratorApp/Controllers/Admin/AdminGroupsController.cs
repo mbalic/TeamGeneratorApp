@@ -20,6 +20,8 @@ namespace TeamGeneratorApp.Controllers.Admin
     {
         private UnitOfWork unitOfWork = new UnitOfWork();
 
+        #region OldCode
+/*
         // GET: AdminGroups
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page, string ddlFilter = "Name")
         {
@@ -89,22 +91,7 @@ namespace TeamGeneratorApp.Controllers.Admin
             return View(groups.ToPagedList(pageNumber, pageSize));
         }
 
-        //GET: AdminGroups/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Group group = unitOfWork.GroupRepository.GetByID(id);
-
-            if (group == null)
-            {
-                return HttpNotFound();
-            }
-            return View(group);
-        }
-
+      
         //// GET: AdminGroups/Create
         public ActionResult Create()
         {
@@ -219,6 +206,164 @@ namespace TeamGeneratorApp.Controllers.Admin
                 return View("Delete", group);
             }
         }
+        */
+#endregion
+
+
+        public ActionResult Index()
+        {
+           ViewData["owners"] =  unitOfWork.UserRepository.Get().AsQueryable()
+                     .Select(e => new OwnerVM
+                     {
+                         Id = e.Id,
+                         Name = e.Name
+                     })
+                     .OrderBy(e => e.Name);
+
+            return View();
+        }
+
+
+        #region IndexGrid
+
+        public ActionResult AdminGroupsGrid_Read([DataSourceRequest] DataSourceRequest request)
+        {
+            var res = unitOfWork.GroupRepository.Get().ToList();
+
+            var list = new List<AdminGroupsIndexVM>();
+            foreach (var e in res)
+            {
+                var newVm = new AdminGroupsIndexVM
+                {
+                    Id = e.Id,
+                    Name = e.Name,
+                    Description = e.Description,
+                    OwnerId = e.OwnerId,
+                    Owner = new OwnerVM { Id = e.AspNetUsers.Id, Name = e.AspNetUsers.Name}
+                };
+
+                list.Add(newVm);
+            }
+
+            return Json(list.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult AdminGroupsGrid_Create([DataSourceRequest] DataSourceRequest request,
+           [Bind(Prefix = "models")]IEnumerable<AdminGroupsIndexVM> list)
+        {
+            var results = new List<AdminGroupsIndexVM>();
+            if (list != null && ModelState.IsValid)
+            {
+                foreach (var e in list)
+                {
+                    var newModel = new Group
+                    {
+                        Id = e.Id,
+                        Name = e.Name,
+                        Description = e.Description,
+                        OwnerId = e.OwnerId
+                    };
+                    try
+                    {
+                        unitOfWork.GroupRepository.Insert(newModel);
+                        unitOfWork.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        ViewBag.ConstraintError = "There was an error while adding rows in grid.";
+                    }
+                    results.Add(e);
+                }
+            }
+
+            return Json(results.ToDataSourceResult(request, ModelState));
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult AdminGroupsGrid_Update([DataSourceRequest] DataSourceRequest request,
+          [Bind(Prefix = "models")]IEnumerable<AdminGroupsIndexVM> list)
+        {
+            var results = new List<AdminGroupsIndexVM>();
+            if (list != null && ModelState.IsValid)
+            {
+                foreach (var e in list)
+                {
+                    var newModel = new Group
+                    {
+                        Id = e.Id,
+                        Name = e.Name,
+                        Description = e.Description,
+                        OwnerId = e.OwnerId
+                    };
+                    try
+                    {
+                        unitOfWork.GroupRepository.Update(newModel);
+                        unitOfWork.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        ViewBag.ConstraintError = "There was an error while updating rows in grid.";
+                    }
+                    results.Add(e);
+                }
+            }
+
+            return Json(results.ToDataSourceResult(request, ModelState));
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult AdminGroupsGrid_Destroy([DataSourceRequest] DataSourceRequest request,
+         [Bind(Prefix = "models")]IEnumerable<AdminGroupsIndexVM> list)
+        {
+            var results = new List<AdminGroupsIndexVM>();
+            if (list != null && ModelState.IsValid)
+            {
+                foreach (var e in list)
+                {
+                    var newModel = new Group
+                    {
+                        Id = e.Id,
+                        Name = e.Name,
+                        Description = e.Description,
+                        OwnerId = e.OwnerId
+                    };
+                    try
+                    {
+                        unitOfWork.GroupRepository.Delete(newModel);
+                        unitOfWork.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        ViewBag.ConstraintError = "There was an error while deleting rows in grid.";
+                    }
+                }
+            }
+
+            return Json(results.ToDataSourceResult(request, ModelState));
+        }
+
+
+        #endregion
+
+
+        //GET: AdminGroups/Details/5
+        public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Group group = unitOfWork.GroupRepository.GetByID(id);
+
+            if (group == null)
+            {
+                return HttpNotFound();
+            }
+            return View(group);
+        }
+
+
 
         protected override void Dispose(bool disposing)
         {
@@ -267,6 +412,7 @@ namespace TeamGeneratorApp.Controllers.Admin
 
             return Json(list.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
         }
+
 
         //[AcceptVerbs(HttpVerbs.Post)]
         //public ActionResult UsersInGroupGrid_Create([DataSourceRequest] DataSourceRequest request,
@@ -534,7 +680,7 @@ namespace TeamGeneratorApp.Controllers.Admin
             {
                 foreach (var e in list)
                 {
-                    var newInvitation = new UserInGroupInvitation
+                    var newInvitation = new Invitaton
                     {
                         Id = e.Id,
                         UserId = e.UserId,
