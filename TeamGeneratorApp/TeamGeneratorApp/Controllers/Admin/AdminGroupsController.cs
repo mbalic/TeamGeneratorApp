@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using Microsoft.AspNet.Identity;
 using PagedList;
 using TeamGeneratorApp.DAL;
 using TeamGeneratorApp.Models;
@@ -15,11 +16,12 @@ using TeamGeneratorApp.Models.ViewModels;
 
 namespace TeamGeneratorApp.Controllers.Admin
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
+    [Authorize]
     public class AdminGroupsController : Controller
     {
         private UnitOfWork unitOfWork = new UnitOfWork();
-
+      
         #region OldCode
 /*
         // GET: AdminGroups
@@ -212,7 +214,9 @@ namespace TeamGeneratorApp.Controllers.Admin
 
         public ActionResult Index()
         {
-           ViewData["owners"] =  unitOfWork.UserRepository.Get().AsQueryable()
+            //userId = User.Identity.GetUserId(); 
+
+            ViewData["owners"] =  unitOfWork.UserRepository.Get().AsQueryable()
                      .Select(e => new OwnerVM
                      {
                          Id = e.Id,
@@ -228,8 +232,9 @@ namespace TeamGeneratorApp.Controllers.Admin
 
         public ActionResult AdminGroupsGrid_Read([DataSourceRequest] DataSourceRequest request)
         {
-            var res = unitOfWork.GroupRepository.Get().ToList();
 
+            var res = unitOfWork.GroupRepository.Get().ToList();
+            
             var list = new List<AdminGroupsIndexVM>();
             foreach (var e in res)
             {
@@ -647,7 +652,7 @@ namespace TeamGeneratorApp.Controllers.Admin
             return PartialView("_InvitationsGrid");
         }
 
-
+        #region Invitations
         public ActionResult InvitationsGrid_Read([DataSourceRequest] DataSourceRequest request, int groupId)
         {
             var res = unitOfWork.InvitationRepository.GetByGroupId(groupId).ToList();
@@ -702,6 +707,8 @@ namespace TeamGeneratorApp.Controllers.Admin
 
             return Json(results.ToDataSourceResult(request, ModelState));
         }
+
+#endregion
 
     }
 }

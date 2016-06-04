@@ -20,7 +20,7 @@ namespace TeamGeneratorApp.DAL
         private EventRepository eventRepository;
         private GroupRepository groupRepository;
         private TeamRepository teamRepository;
-        private UserCategoryRepository userCategoryRepository;
+        private UserInCategoryRepository userInCategoryRepository;
         private UserInGroupRepository userInGroupRepository;
         private InvitationRepository invitationRepository;
 
@@ -102,15 +102,15 @@ namespace TeamGeneratorApp.DAL
         }
 
 
-        public UserCategoryRepository UserCategoryRepository
+        public UserInCategoryRepository UserInCategoryRepository
         {
             get
             {
-                if (this.userCategoryRepository == null)
+                if (this.userInCategoryRepository == null)
                 {
-                    this.userCategoryRepository = new UserCategoryRepository(context);
+                    this.userInCategoryRepository = new UserInCategoryRepository(context);
                 }
-                return userCategoryRepository;
+                return userInCategoryRepository;
             }
         }
 

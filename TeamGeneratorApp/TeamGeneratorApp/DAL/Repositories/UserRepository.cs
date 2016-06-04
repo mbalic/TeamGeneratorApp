@@ -38,21 +38,6 @@ namespace TeamGeneratorApp.DAL.Repositories
             
         }
 
-        public AdminUserCreateVM GetByIDForEdit(string id)
-        {
-            AspNetUsers user = GetByID(id);
-
-            AdminUserCreateVM result = new AdminUserCreateVM();
-            result.Id = user.Id;
-            result.UserName = user.UserName;
-            result.Email = user.Email;
-            if (user.AspNetRoles.Count > 0)
-                result.IsAdmin = true;
-            else
-                result.IsAdmin = false;
-
-            return result;
-        }
 
         public void Update(AdminUserCreateVM data)
         {
@@ -71,6 +56,11 @@ namespace TeamGeneratorApp.DAL.Repositories
             {
                 user.AspNetRoles.Clear();
             }
+        }
+
+        public AspNetUsers SearchByMail(string mail)
+        {
+            return context.AspNetUsers.Where(p => p.Email == mail).FirstOrDefault();
         }
  
 

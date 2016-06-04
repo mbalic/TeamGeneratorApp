@@ -28,8 +28,9 @@
                 <ul class="nav navbar-nav">
                     @*<li>@Html.ActionLink("About", "About", "Home")</li>*@
                     @if (MenuSecurity.AdminTabVisible){<li id="AdminTab">@Html.ActionLink("Admin panel", "Index", "Admin")</li>}
-                    @if (MenuSecurity.UserTabVisible){<li id="UserTab">@Html.ActionLink("My groups", "Index", "Groups")</li>}
-                    @*@if (MenuSecurity.UserTabVisible){<li id="UserTab">@Html.ActionLink("Votings", "Index", "Voting")</li>}*@
+                    @if (MenuSecurity.UserTabVisible){<li class="UserTab">@Html.ActionLink("My groups", "Index", "Groups")</li>}
+                    <li class="UserTab">@Html.ActionLink("About", "About", "Home")</li>}
+                    @*@if (MenuSecurity.UserTabVisible){<li class="UserTab">@Html.ActionLink("My profile", "Index", "User")</li>}*@
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

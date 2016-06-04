@@ -22,6 +22,6 @@ namespace TeamGeneratorApp.Models
     
         public virtual Event Event { get; set; }
         public virtual Team Team { get; set; }
-        public virtual UserCategory UserCategory { get; set; }
+        public virtual UserInCategory UserInCategory { get; set; }
     }
 }

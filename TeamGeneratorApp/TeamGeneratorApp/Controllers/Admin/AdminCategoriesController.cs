@@ -354,7 +354,7 @@ namespace TeamGeneratorApp.Controllers.Admin
 
         public ActionResult UsersGrid_Read([DataSourceRequest] DataSourceRequest request, int categoryId)
         {
-            var res = unitOfWork.UserCategoryRepository.GetByCategoryId(categoryId).ToList();
+            var res = unitOfWork.UserInCategoryRepository.GetByCategoryId(categoryId).ToList();
 
             var list = new List<UserCategoryVM>();
             //foreach (var e in res)

@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using Microsoft.SqlServer.Server;
 using PagedList;
 using TeamGeneratorApp.DAL;
 using TeamGeneratorApp.Models;
@@ -26,6 +28,95 @@ namespace TeamGeneratorApp.Controllers.Admin
             return View();
         }
 
+        //// GET: AdminUsers/Edit/5
+        public ActionResult Edit(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var user = unitOfWork.UserRepository.GetByID(id);
+
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+
+            var result = new AdminUserEditVM();
+            result.Id = user.Id;
+            result.Name = user.Name;
+            result.UserName = user.UserName;
+            result.Email = user.Email;
+            result.ImageUrl = user.ImageUrl;
+
+            if (user.AspNetRoles.Count > 0)
+                result.IsAdmin = true;
+            else
+                result.IsAdmin = false;
+
+            ViewBag.ImageUrl = result.ImageUrl;
+
+            return View(result);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = "Id,Email,UserName,IsAdmin,Name")] AdminUserEditVM userVm, HttpPostedFileBase file)
+        {
+            //try
+            //{
+                if (ModelState.IsValid)
+                {
+                    var serverPath = "";
+                    userVm.ImageUrl = ViewBag.ImageUrl;
+
+                    var user = unitOfWork.UserRepository.GetByID(userVm.Id);
+                        user.Email = userVm.Email;
+                        user.UserName = userVm.UserName;
+                        user.Name = userVm.Name;
+
+                    if (file != null && file.ContentLength > 0)
+                    {
+                        var allowedExtensions = new[] { ".Jpg", ".png", ".jpg", "jpeg" };
+                        var ext = Path.GetExtension(file.FileName);
+                        if (allowedExtensions.Contains(ext)) //check what type of extension  
+                        {
+                            var fileName = Guid.NewGuid() + ext;
+                            serverPath = Path.Combine(Server.MapPath("~/Img/"), fileName);
+                            user.ImageUrl = "http://localhost:2422" + "/Img/" + fileName;
+                        }
+                    }
+
+                    if (userVm.IsAdmin)
+                        {
+                            if (user.AspNetRoles.Count == 0)
+                            {
+                                var role = unitOfWork.RoleRepository.FindByName("Admin");
+                                user.AspNetRoles.Add(role);
+                            }
+                        }
+                        else
+                        {
+                            user.AspNetRoles.Clear();
+                        }
+
+                        unitOfWork.UserRepository.Update(user);
+                        unitOfWork.Commit();
+                        
+                        if(serverPath != "")
+                            file.SaveAs(serverPath); 
+                        
+                        return RedirectToAction("Index");
+                }
+            //}
+            //catch (Exception)
+            //{
+            //    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+            //}
+
+            return View(userVm);
+        }
+
 
         public ActionResult AdminUsersGrid_Read([DataSourceRequest] DataSourceRequest request)
         {
@@ -40,6 +131,7 @@ namespace TeamGeneratorApp.Controllers.Admin
                 newVm.Name = e.Name;
                 newVm.Email = e.Email;
                 newVm.UserName = e.UserName;
+                newVm.Image = e.ImageUrl;
                 
                 if (e.AspNetRoles.Count > 0)
                     newVm.IsAdmin = true;

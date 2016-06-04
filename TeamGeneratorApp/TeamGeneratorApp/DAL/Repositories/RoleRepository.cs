@@ -19,6 +19,11 @@ namespace TeamGeneratorApp.DAL.Repositories
             dbSet.Add(role);
         }
 
+        public AspNetRoles FindByName(string name)
+        {
+            return context.AspNetRoles.Where(p => p.Name == name).Single();
+        } 
+
 
     }
 }

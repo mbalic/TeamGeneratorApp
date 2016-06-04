@@ -91,6 +91,16 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="PositionInCategory">
+      <EntityTypeMapping TypeName="TeamDb6Model.PositionInCategory">
+        <MappingFragment StoreEntitySet="PositionInCategory">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Value" ColumnName="Value" />
+          <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="Team">
       <EntityTypeMapping TypeName="TeamDb6Model.Team">
         <MappingFragment StoreEntitySet="Team">
@@ -98,17 +108,6 @@
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="TeamScore" ColumnName="TeamScore" />
           <ScalarProperty Name="EventId" ColumnName="EventId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="UserCategory">
-      <EntityTypeMapping TypeName="TeamDb6Model.UserCategory">
-        <MappingFragment StoreEntitySet="UserCategory">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="UserInGroupId" ColumnName="UserInGroupId" />
-          <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
-          <ScalarProperty Name="Score" ColumnName="Score" />
-          <ScalarProperty Name="Active" ColumnName="Active" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -120,6 +119,18 @@
           <ScalarProperty Name="ImageUrl" ColumnName="ImageUrl" />
           <ScalarProperty Name="Age" ColumnName="Age" />
           <ScalarProperty Name="Sex" ColumnName="Sex" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserInCategory">
+      <EntityTypeMapping TypeName="TeamDb6Model.UserInCategory">
+        <MappingFragment StoreEntitySet="UserInCategory">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="UserInGroupId" ColumnName="UserInGroupId" />
+          <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+          <ScalarProperty Name="Score" ColumnName="Score" />
+          <ScalarProperty Name="Active" ColumnName="Active" />
+          <ScalarProperty Name="PositionInCategoryId" ColumnName="PositionInCategoryId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

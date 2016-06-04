@@ -14,6 +14,7 @@ namespace TeamGeneratorApp.Models.ViewModels
         public int GroupId { get; set; }
         public System.DateTime DateCreated { get; set; }
         public string Username { get; set; }
+        public string Name { get; set; }
         public string Email { get; set; }
     }
 }

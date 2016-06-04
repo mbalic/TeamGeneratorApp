@@ -177,7 +177,7 @@
   <ItemGroup>
     <Compile Include="Controllers\EventsController.cs" />
     <Compile Include="DAL\Repositories\InvitationRepository.cs" />
-    <Compile Include="DAL\Repositories\UserCategoryRepository.cs" />
+    <Compile Include="DAL\Repositories\UserInCategoryRepository.cs" />
     <Compile Include="DAL\Repositories\UserInGroupRepository.cs" />
     <Compile Include="Migrations\201606022212480_Name.cs" />
     <Compile Include="Migrations\201606022212480_Name.Designer.cs">
@@ -223,13 +223,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model1.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\PositionInCategory.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Team.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\UserCategory.cs">
+    <Compile Include="Models\UserDetails.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\UserDetails.cs">
+    <Compile Include="Models\UserInCategory.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\UserInGroup.cs">
@@ -239,8 +242,11 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ViewModels\AdminGroupsIndexVM.cs" />
+    <Compile Include="Models\ViewModels\AdminUserEditVM.cs" />
     <Compile Include="Models\ViewModels\CategoryVM.cs" />
     <Compile Include="Models\ViewModels\EventVM.cs" />
+    <Compile Include="Models\ViewModels\GroupDetailsVM.cs" />
+    <Compile Include="Models\ViewModels\GroupListVM.cs" />
     <Compile Include="Models\ViewModels\InvitationVM.cs" />
     <Compile Include="Models\ViewModels\OwnerVM.cs" />
     <Compile Include="Models\ViewModels\UserCategoryVM.cs" />
@@ -744,6 +750,8 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -1418,7 +1426,6 @@
     <Content Include="Views\Groups\Edit.cshtml" />
     <Content Include="Views\Groups\Index.cshtml" />
     <Content Include="Views\Groups\_GroupEvents.cshtml" />
-    <Content Include="Views\Groups\_GroupUsers.cshtml" />
     <Content Include="Scripts\kendo\cultures\kendo.culture.af-ZA.min.js.map" />
     <Content Include="Scripts\kendo\cultures\kendo.culture.af.min.js.map" />
     <Content Include="Scripts\kendo\cultures\kendo.culture.am-ET.min.js.map" />
@@ -2030,9 +2037,13 @@
     <Content Include="Views\AdminGroups\_InvitationsGrid.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\GridForeignKey.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Date.cshtml" />
+    <Content Include="Views\Groups\_CategoriesGrid.cshtml" />
+    <Content Include="Views\Groups\_UsersInGroupGrid.cshtml" />
+    <Content Include="Views\Groups\_InvitationsGrid.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Img\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

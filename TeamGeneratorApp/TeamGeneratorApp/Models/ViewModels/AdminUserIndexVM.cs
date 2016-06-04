@@ -14,5 +14,6 @@ namespace TeamGeneratorApp.Models.ViewModels
         public string UserName { get; set; }
         public bool IsAdmin { get; set; }
         public string Name { get; set; }
+        public string Image { get; set; }
     }
 }

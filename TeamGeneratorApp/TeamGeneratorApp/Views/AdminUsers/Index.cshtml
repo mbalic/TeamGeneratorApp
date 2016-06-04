@@ -17,30 +17,36 @@
     function viewEdit(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        var itemId = dataItem.Id
+        var itemId = dataItem.Id;
 
-        @*window.location.href = "@Url.Action("Details","AdminUsers")?id=" + itemId;*@
+        window.location.href = "@Url.Action("Edit","AdminUsers")?id=" + itemId;
 
         };
 
     function viewDetails(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        var itemId = dataItem.Id
+        var itemId = dataItem.Id;
 
         @*window.location.href = "@Url.Action("Details","AdminUsers")?id=" + itemId;*@
 
     };
+
+    //function GetImage(image) {
+    //    var returnString = '<img src="/Img/35a94481-124c-45d0-9a4a-1b81c512cd37.png" title=\"image\" class=\"avatar img-circle img-thumbnail\" height=\"20\" alt=\"image\"/>';
+    //    return returnString;
+    //}
 </script>
 
 @(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.AdminUserIndexVM>()
     .Name("usersGrid")
     .Columns(columns =>
     {
+        columns.Bound(p => p.Image).ClientTemplate("<img src='#=Image#' alt='#=Name #' Title='#=Name #' class='avatar img-circle img-thumbnail' />");
         columns.Bound(p => p.Name);
-        columns.Bound(p => p.UserName);
+        columns.Bound(p => p.UserName).Title("Username");
         columns.Bound(p => p.Email);
-        columns.Bound(p => p.IsAdmin)
+        columns.Bound(p => p.IsAdmin).Title("Is admin")
             .ClientTemplate("<input type='checkbox' #= IsAdmin ? checked='checked': '' # class='chkbx' />")
             .HtmlAttributes(new { style = "text-align: center" });
         //columns.Command(command => { command.Edit(); command.Destroy(); }).Width(200);
@@ -63,10 +69,10 @@
          {
              model.Id(p => p.Id);
          })
-        .Create(update => update.Action("AdminUsersGrid_Create", "AdminUsers"))
-        .Read(read => read.Action("AdminUsersGrid_Read", "AdminUsers"))
-        .Update(update => update.Action("AdminUsersGrid_Update", "AdminUsers"))
-        .Destroy(update => update.Action("AdminUsersGrid_Destroy", "AdminUsers"))
+        .Create(update => update.Action("AdminUserGrid_Create", "AdminUsers"))
+        .Read(read => read.Action("AdminUserGrid_Read", "AdminUsers"))
+        .Update(update => update.Action("AdminUserGrid_Update", "AdminUsers"))
+        .Destroy(update => update.Action("AdminUserGrid_Destroy", "AdminUsers"))
     )
 
 )
