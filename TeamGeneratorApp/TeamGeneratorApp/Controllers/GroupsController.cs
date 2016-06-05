@@ -413,7 +413,7 @@ namespace TeamGeneratorApp.Controllers
                 var userInGroupVm = new UserInGroupVM
                 {
                     Id = e.Id,
-                    Username = e.AspNetUsers.UserName,
+                    Name = e.AspNetUsers.UserName,
                     UserId = e.UserId,
                     Email = e.AspNetUsers.Email,
                     GroupId = e.GroupId,
@@ -545,7 +545,7 @@ namespace TeamGeneratorApp.Controllers
                     UserId = e.UserId,
                     GroupId = e.GroupId,
                     DateCreated = e.DateCreated,
-                    Username = e.AspNetUsers.UserName,
+                    Name = e.AspNetUsers.Name,
                     Email = e.AspNetUsers.Email
                 };
                 list.Add(invitationVm);
@@ -564,16 +564,16 @@ namespace TeamGeneratorApp.Controllers
             {
                 foreach (var e in list)
                 {
-                    var newInvitation = new Invitaton
-                    {
-                        Id = e.Id,
-                        UserId = e.UserId,
-                        GroupId = e.GroupId,
-                        DateCreated = e.DateCreated
-                    };
+                    //var newInvitation = new Invitaton
+                    //{
+                    //    Id = e.Id,
+                    //    UserId = e.UserId,
+                    //    GroupId = e.GroupId,
+                    //    DateCreated = e.DateCreated
+                    //};
                     try
                     {
-                        unitOfWork.InvitationRepository.Delete(newInvitation.Id);
+                        unitOfWork.InvitationRepository.Delete(e.Id);
                         unitOfWork.Commit();
                     }
                     catch (Exception)
@@ -607,7 +607,7 @@ namespace TeamGeneratorApp.Controllers
                 newVm.Id = "NULL";
             }
 
-            return Json(newVm, JsonRequestBehavior.AllowGet);
+            return Json(newVm);
         }
 
         [HttpPost]
@@ -628,9 +628,9 @@ namespace TeamGeneratorApp.Controllers
             }
             catch (Exception e)
             {
-                return Json(new {status=e.Message}, JsonRequestBehavior.AllowGet);
+                return Json(new {status=e.Message});
             }
-            return Json(new {status="OK"}, JsonRequestBehavior.AllowGet);
+            return Json(new {status="OK"});
 
 
         }

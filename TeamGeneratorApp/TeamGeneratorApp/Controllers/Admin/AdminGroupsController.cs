@@ -406,7 +406,7 @@ namespace TeamGeneratorApp.Controllers.Admin
                 var userInGroupVm = new UserInGroupVM
                 {
                     Id = e.Id,
-                    Username = e.AspNetUsers.UserName,
+                    Name = e.AspNetUsers.UserName,
                     UserId = e.UserId,
                     Email = e.AspNetUsers.Email,
                     GroupId = e.GroupId,
@@ -666,7 +666,7 @@ namespace TeamGeneratorApp.Controllers.Admin
                     UserId = e.UserId,
                     GroupId = e.GroupId,
                     DateCreated = e.DateCreated,
-                    Username = e.AspNetUsers.UserName,
+                    Name = e.AspNetUsers.Name,
                     Email = e.AspNetUsers.Email
                 };
                 list.Add(invitationVm);
@@ -685,16 +685,16 @@ namespace TeamGeneratorApp.Controllers.Admin
             {
                 foreach (var e in list)
                 {
-                    var newInvitation = new Invitaton
-                    {
-                        Id = e.Id,
-                        UserId = e.UserId,
-                        GroupId = e.GroupId,
-                        DateCreated = e.DateCreated
-                    };
+                    //var newInvitation = new Invitaton
+                    //{
+                    //    Id = e.Id,
+                    //    UserId = e.UserId,
+                    //    GroupId = e.GroupId,
+                    //    DateCreated = e.DateCreated
+                    //};
                     try
                     {
-                        unitOfWork.InvitationRepository.Delete(newInvitation.Id);
+                        unitOfWork.InvitationRepository.Delete(e.Id);
                         unitOfWork.Commit();
                     }
                     catch (Exception)

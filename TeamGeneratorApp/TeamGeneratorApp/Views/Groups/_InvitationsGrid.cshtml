@@ -48,9 +48,9 @@
     .Name("invitationsGrid")
     .Columns(columns =>
     {
-        columns.Bound(p => p.Username);
+        columns.Bound(p => p.Name);
         columns.Bound(p => p.Email);
-        columns.Bound(p => p.DateCreated);
+        columns.Bound(p => p.DateCreated).Title("Date sent");
         columns.Command(command => command.Destroy()).Width(200);
     })
     //.Editable(editable => editable.Mode(GridEditMode.InLine))
@@ -130,14 +130,14 @@
                         $('#lblName').text("");
                         $("#btnInvite").hide();
                         $('#lblUserId').val("");
-                        //location.reload();
-                    } else {
+                    } 
+                    else {
                         alert(result.status);
                     }
+                },
+                error: function () {
+                    alert(error);
                 }
-                //error: function () {
-                //    $( "#btnClose" ).trigger( "click" );
-                //}
             });
             return false;
         });

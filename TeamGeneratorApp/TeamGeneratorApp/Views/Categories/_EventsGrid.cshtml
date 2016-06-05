@@ -11,25 +11,27 @@
 @Scripts.Render("~/bundles/kendo")
 
 <script type="text/javascript">
-    function viewCategory(e) {
+    function viewEvent(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        var categoryId = dataItem.Id
+        var eventId = dataItem.Id;
 
-        window.location.href = "@Url.Action("Details","Categories")?id=" + categoryId;
+        window.location.href = "@Url.Action("Details","Events")?id=" + eventId;
 
-    }    
+    }
 </script>
 
-
-@(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.CategoryVM>()
-    .Name("categoriesGrid")
+@(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.EventVM>()
+    .Name("grid1")
     .Columns(columns =>
     {
         columns.Bound(p => p.Name);
         columns.Bound(p => p.Description);
+        columns.Bound(p => p.Start);
+        columns.Bound(p => p.Finish);
+        columns.Bound(p => p.NumberOfTeams);
         columns.Command(command => { command.Edit(); command.Destroy(); }).Width(200);
-        columns.Command(command => command.Custom("Details").Click("viewCategory"));
+        columns.Command(command => command.Custom("Details").Click("viewEvent"));
     })
     .ToolBar(toolbar => toolbar.Create())
     .Editable(editable => editable.Mode(GridEditMode.InLine))
@@ -42,16 +44,16 @@
         .Batch(true)
         .ServerOperation(false)
         .PageSize(20)
-        .Events(events => events.Error("error_handler").Sync("sync_handler"))
+        .Events(events => events.Error("error_handler"))
         .Model(model =>
-         {
-             model.Id(p => p.Id);
-             model.Field(p => p.GroupId).DefaultValue(ViewBag.GroupId);
-         })
-        .Create(update => update.Action("CategoriesGrid_Create", "Groups"))
-        .Read(read => read.Action("CategoriesGrid_Read", "Groups", new { groupId = ViewBag.GroupId }))
-        .Update(update => update.Action("CategoriesGrid_Update", "Groups"))
-        .Destroy(update => update.Action("CategoriesGrid_Destroy", "AdminGroups"))
+        {
+            model.Id(p => p.Id);
+            model.Field(p => p.CategoryId).DefaultValue(ViewBag.CategoryId);
+        })
+        .Create(update => update.Action("EventsGrid_Create", "AdminCategories"))
+        .Read(read => read.Action("EventsGrid_Read", "AdminCategories", new { categoryId = ViewBag.CategoryId }))
+        .Update(update => update.Action("EventsGrid_Update", "AdminCategories"))
+        .Destroy(update => update.Action("EventsGrid_Destroy", "AdminCategories"))
     )
 
 )
@@ -68,9 +70,5 @@
             });
             alert(message);
         }
-    };
-    function sync_handler(e) {
-        this.read();
-    };
+    }
 </script>
-

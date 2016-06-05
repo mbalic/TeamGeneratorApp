@@ -5,11 +5,11 @@
 }
 <br />
 <p>
-    @Html.ActionLink("< Back", "Index", "AdminGroups")
+    @Html.ActionLink("< Back", "Details", "Groups", new {id = ViewBag.GroupId}, null)
 </p>
 <h2>@ViewBag.CategoryName</h2>
 <hr />
-<h4>Group</h4>
+<h4>Category</h4>
 <br />
 <div>
     <dl class="dl-horizontal">
@@ -20,7 +20,13 @@
         <dd>
             @Html.DisplayFor(model => model.Name)
         </dd>
+        <dt>
+            Group
+        </dt>
 
+        <dd>
+            @Html.DisplayFor(model => model.Group.Name)
+        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Description)
         </dt>
@@ -29,26 +35,27 @@
             @Html.DisplayFor(model => model.Description)
         </dd>
 
+
+
     </dl>
 </div>
 <div id="tabs">
     <ul class="nav nav-tabs">
         <li class="active">
-            <a href="#Users" data-toggle="tab">Users</a>
+            <a href="#Events" data-toggle="tab">Events</a>
         </li>
         <li>
-            <a href="#Events" data-toggle="tab">Events</a>
+            <a href="#Users" data-toggle="tab">Users</a>
         </li>
     </ul>
 
     <div class="tab-content">
-        <div class="tab-pane active" id="Users">
-            @Html.Action("UsersGrid", "AdminCategories", new { categoryId = Model.Id})
+        <div class="tab-pane active" id="Events">
+            @Html.Action("EventsGrid", "Categories", new { categoryId = Model.Id })
         </div>
-        <div class="tab-pane" id="Events">
-            @Html.Action("EventsGrid", "AdminCategories", new { categoryId = Model.Id})
+        <div class="tab-pane" id="Users">
+            @Html.Action("UsersGrid", "Categories", new { categoryId = Model.Id })
         </div>
     </div>
 
 </div>
-

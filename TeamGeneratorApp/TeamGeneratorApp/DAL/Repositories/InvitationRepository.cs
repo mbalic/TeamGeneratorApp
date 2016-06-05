@@ -18,5 +18,10 @@ namespace TeamGeneratorApp.DAL.Repositories
             return context.Invitaton.Where(p => p.GroupId == groupId).OrderByDescending(p => p.DateCreated);
         }
 
+        public IEnumerable<Invitaton> GetByUserId(string userId)
+        {
+            return context.Invitaton.Where(p => p.UserId == userId).OrderByDescending(p => p.DateCreated);
+        }
+
     }
 }

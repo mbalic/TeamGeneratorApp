@@ -175,6 +175,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\EventsController.cs" />
     <Compile Include="DAL\Repositories\InvitationRepository.cs" />
     <Compile Include="DAL\Repositories\UserInCategoryRepository.cs" />
@@ -247,6 +248,7 @@
     <Compile Include="Models\ViewModels\EventVM.cs" />
     <Compile Include="Models\ViewModels\GroupDetailsVM.cs" />
     <Compile Include="Models\ViewModels\GroupListVM.cs" />
+    <Compile Include="Models\ViewModels\InvitationRequestVM.cs" />
     <Compile Include="Models\ViewModels\InvitationVM.cs" />
     <Compile Include="Models\ViewModels\OwnerVM.cs" />
     <Compile Include="Models\ViewModels\UserCategoryVM.cs" />
@@ -2040,6 +2042,10 @@
     <Content Include="Views\Groups\_CategoriesGrid.cshtml" />
     <Content Include="Views\Groups\_UsersInGroupGrid.cshtml" />
     <Content Include="Views\Groups\_InvitationsGrid.cshtml" />
+    <Content Include="Views\Home\_InvitationsGrid.cshtml" />
+    <Content Include="Views\Categories\Details.cshtml" />
+    <Content Include="Views\Categories\_EventsGrid.cshtml" />
+    <Content Include="Views\Categories\_UsersGrid.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
