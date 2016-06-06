@@ -7,19 +7,19 @@
 <p>
     @Html.ActionLink("< Back", "Details", "Groups", new {id = ViewBag.GroupId}, null)
 </p>
-<h2>@ViewBag.CategoryName</h2>
+<h2>@Html.DisplayFor(model => model.Name)</h2>
 <hr />
 <h4>Category</h4>
 <br />
 <div>
     <dl class="dl-horizontal">
-        <dt>
+        @*<dt>
             @Html.DisplayNameFor(model => model.Name)
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.Name)
-        </dd>
+        </dd>*@
         <dt>
             Group
         </dt>

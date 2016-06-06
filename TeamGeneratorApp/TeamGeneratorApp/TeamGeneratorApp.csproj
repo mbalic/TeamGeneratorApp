@@ -178,8 +178,10 @@
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\EventsController.cs" />
     <Compile Include="DAL\Repositories\InvitationRepository.cs" />
+    <Compile Include="DAL\Repositories\PositionRepository.cs" />
     <Compile Include="DAL\Repositories\UserInCategoryRepository.cs" />
     <Compile Include="DAL\Repositories\UserInGroupRepository.cs" />
+    <Compile Include="DAL\Repositories\UserOnEventRepository.cs" />
     <Compile Include="Migrations\201606022212480_Name.cs" />
     <Compile Include="Migrations\201606022212480_Name.Designer.cs">
       <DependentUpon>201606022212480_Name.cs</DependentUpon>
@@ -251,10 +253,13 @@
     <Compile Include="Models\ViewModels\InvitationRequestVM.cs" />
     <Compile Include="Models\ViewModels\InvitationVM.cs" />
     <Compile Include="Models\ViewModels\OwnerVM.cs" />
+    <Compile Include="Models\ViewModels\PositionVM.cs" />
     <Compile Include="Models\ViewModels\UserCategoryVM.cs" />
+    <Compile Include="Models\ViewModels\UserddlVM.cs" />
     <Compile Include="Models\ViewModels\UserDetailsVM.cs" />
     <Compile Include="Models\ViewModels\UserInGroupVM.cs" />
     <Compile Include="Models\ViewModels\UserIndexVM.cs" />
+    <Compile Include="Models\ViewModels\UserOnEventVM.cs" />
     <Compile Include="Models\Voting.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -1427,7 +1432,6 @@
     <Content Include="Views\Groups\Details.cshtml" />
     <Content Include="Views\Groups\Edit.cshtml" />
     <Content Include="Views\Groups\Index.cshtml" />
-    <Content Include="Views\Groups\_GroupEvents.cshtml" />
     <Content Include="Scripts\kendo\cultures\kendo.culture.af-ZA.min.js.map" />
     <Content Include="Scripts\kendo\cultures\kendo.culture.af.min.js.map" />
     <Content Include="Scripts\kendo\cultures\kendo.culture.am-ET.min.js.map" />
@@ -2046,6 +2050,13 @@
     <Content Include="Views\Categories\Details.cshtml" />
     <Content Include="Views\Categories\_EventsGrid.cshtml" />
     <Content Include="Views\Categories\_UsersGrid.cshtml" />
+    <Content Include="Views\Events\Create.cshtml" />
+    <Content Include="Views\Events\Delete.cshtml" />
+    <Content Include="Views\Events\Details.cshtml" />
+    <Content Include="Views\Events\Edit.cshtml" />
+    <Content Include="Views\Events\Index.cshtml" />
+    <Content Include="Views\Events\_UsersGrid.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

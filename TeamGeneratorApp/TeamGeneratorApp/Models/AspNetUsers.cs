@@ -21,8 +21,10 @@ namespace TeamGeneratorApp.Models
             this.AspNetUserLogins = new HashSet<AspNetUserLogins>();
             this.Group = new HashSet<Group>();
             this.UserDetails = new HashSet<UserDetails>();
+            this.UserInCategory = new HashSet<UserInCategory>();
             this.UserInGroup = new HashSet<UserInGroup>();
             this.Invitaton = new HashSet<Invitaton>();
+            this.UserOnEvent = new HashSet<UserOnEvent>();
             this.AspNetRoles = new HashSet<AspNetRoles>();
         }
     
@@ -50,9 +52,13 @@ namespace TeamGeneratorApp.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserDetails> UserDetails { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserInCategory> UserInCategory { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserInGroup> UserInGroup { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Invitaton> Invitaton { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserOnEvent> UserOnEvent { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetRoles> AspNetRoles { get; set; }
     }

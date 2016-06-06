@@ -17,11 +17,11 @@ namespace TeamGeneratorApp.Models
         public int Id { get; set; }
         public int EventId { get; set; }
         public Nullable<int> TeamId { get; set; }
-        public int UserCategoryId { get; set; }
+        public string UserId { get; set; }
         public Nullable<int> VoteCounter { get; set; }
     
+        public virtual AspNetUsers AspNetUsers { get; set; }
         public virtual Event Event { get; set; }
         public virtual Team Team { get; set; }
-        public virtual UserInCategory UserInCategory { get; set; }
     }
 }

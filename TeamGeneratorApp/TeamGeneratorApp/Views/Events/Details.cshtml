@@ -1,4 +1,4 @@
-﻿@model TeamGeneratorApp.Models.EventVM
+﻿@model TeamGeneratorApp.Models.ViewModels.EventVM
 
 @{
     ViewBag.Title = "Details";
@@ -7,7 +7,7 @@
 <p>
     @Html.ActionLink("< Back", "Details", "Categories", new { id = ViewBag.CategoryId }, null)
 </p>
-<h2>@ViewBag.EventName</h2>
+<h2>@Html.DisplayFor(model => model.Name)</h2>
 <hr />
 <h4>Event</h4>
 <br />
@@ -63,7 +63,7 @@
             @Html.Action("UsersGrid", "Events", new { eventId = Model.Id })
         </div>
         <div class="tab-pane" id="Users">
-            @Html.Action("VotingsGrid", "Events", new { eventId = Model.Id })
+            @*@Html.Action("VotingsGrid", "Events", new { eventId = Model.Id })*@
         </div>
     </div>
 

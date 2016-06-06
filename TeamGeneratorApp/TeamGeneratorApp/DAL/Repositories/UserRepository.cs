@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Core.Common.CommandTrees;
 using System.Linq;
 using System.Security.AccessControl;
 using System.Text;
@@ -62,7 +63,16 @@ namespace TeamGeneratorApp.DAL.Repositories
         {
             return context.AspNetUsers.Where(p => p.Email == mail).FirstOrDefault();
         }
- 
+
+        public IEnumerable<AspNetUsers> GetByCategoryId(int categoryId)
+        {
+            var u =
+                from users in context.AspNetUsers
+                join userInCategory in context.UserInCategory on users.Id equals userInCategory.UserIId
+                select users;
+
+            return u;
+        }
 
     }
 }

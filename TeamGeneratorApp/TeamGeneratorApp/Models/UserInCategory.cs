@@ -14,23 +14,15 @@ namespace TeamGeneratorApp.Models
     
     public partial class UserInCategory
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public UserInCategory()
-        {
-            this.UserOnEvent = new HashSet<UserOnEvent>();
-        }
-    
         public int Id { get; set; }
-        public int UserInGroupId { get; set; }
+        public string UserIId { get; set; }
         public int CategoryId { get; set; }
         public Nullable<int> Score { get; set; }
         public bool Active { get; set; }
-        public int PositionInCategoryId { get; set; }
+        public Nullable<int> PositionInCategoryId { get; set; }
     
+        public virtual AspNetUsers AspNetUsers { get; set; }
         public virtual Category Category { get; set; }
         public virtual PositionInCategory PositionInCategory { get; set; }
-        public virtual UserInGroup UserInGroup { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserOnEvent> UserOnEvent { get; set; }
     }
 }

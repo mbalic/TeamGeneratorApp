@@ -126,7 +126,7 @@
       <EntityTypeMapping TypeName="TeamDb6Model.UserInCategory">
         <MappingFragment StoreEntitySet="UserInCategory">
           <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="UserInGroupId" ColumnName="UserInGroupId" />
+          <ScalarProperty Name="UserIId" ColumnName="UserIId" />
           <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
           <ScalarProperty Name="Score" ColumnName="Score" />
           <ScalarProperty Name="Active" ColumnName="Active" />
@@ -150,7 +150,7 @@
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="EventId" ColumnName="EventId" />
           <ScalarProperty Name="TeamId" ColumnName="TeamId" />
-          <ScalarProperty Name="UserCategoryId" ColumnName="UserCategoryId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
           <ScalarProperty Name="VoteCounter" ColumnName="VoteCounter" />
         </MappingFragment>
       </EntityTypeMapping>

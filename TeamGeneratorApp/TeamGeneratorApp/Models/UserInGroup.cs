@@ -14,12 +14,6 @@ namespace TeamGeneratorApp.Models
     
     public partial class UserInGroup
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public UserInGroup()
-        {
-            this.UserInCategory = new HashSet<UserInCategory>();
-        }
-    
         public int Id { get; set; }
         public string UserId { get; set; }
         public int GroupId { get; set; }
@@ -27,7 +21,5 @@ namespace TeamGeneratorApp.Models
     
         public virtual AspNetUsers AspNetUsers { get; set; }
         public virtual Group Group { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserInCategory> UserInCategory { get; set; }
     }
 }

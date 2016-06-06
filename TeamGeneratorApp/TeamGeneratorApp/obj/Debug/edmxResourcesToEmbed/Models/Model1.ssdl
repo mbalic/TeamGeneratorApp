@@ -125,11 +125,11 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="UserInGroupId" Type="int" Nullable="false" />
+    <Property Name="UserIId" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="CategoryId" Type="int" Nullable="false" />
     <Property Name="Score" Type="int" />
     <Property Name="Active" Type="bit" Nullable="false" />
-    <Property Name="PositionInCategoryId" Type="int" Nullable="false" />
+    <Property Name="PositionInCategoryId" Type="int" />
   </EntityType>
   <EntityType Name="UserInGroup">
     <Key>
@@ -147,7 +147,7 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="EventId" Type="int" Nullable="false" />
     <Property Name="TeamId" Type="int" />
-    <Property Name="UserCategoryId" Type="int" Nullable="false" />
+    <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="VoteCounter" Type="int" />
   </EntityType>
   <EntityType Name="Voting">
@@ -289,18 +289,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_UserCategory_UserInGroup">
-    <End Role="UserInGroup" Type="Self.UserInGroup" Multiplicity="1" />
-    <End Role="UserInCategory" Type="Self.UserInCategory" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="UserInGroup">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="UserInCategory">
-        <PropertyRef Name="UserInGroupId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_UserDetails_AspNetUsers">
     <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
     <End Role="UserDetails" Type="Self.UserDetails" Multiplicity="*" />
@@ -313,8 +301,20 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_UserInCategory_AspNetUsers">
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+    <End Role="UserInCategory" Type="Self.UserInCategory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserInCategory">
+        <PropertyRef Name="UserIId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_UserInCategory_PositionInCategory">
-    <End Role="PositionInCategory" Type="Self.PositionInCategory" Multiplicity="1" />
+    <End Role="PositionInCategory" Type="Self.PositionInCategory" Multiplicity="0..1" />
     <End Role="UserInCategory" Type="Self.UserInCategory" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="PositionInCategory">
@@ -373,6 +373,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_UserOnEvent_AspNetUsers">
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+    <End Role="UserOnEvent" Type="Self.UserOnEvent" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserOnEvent">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_UserOnEvent_Event">
     <End Role="Event" Type="Self.Event" Multiplicity="1" />
     <End Role="UserOnEvent" Type="Self.UserOnEvent" Multiplicity="*" />
@@ -394,18 +406,6 @@
       </Principal>
       <Dependent Role="UserOnEvent">
         <PropertyRef Name="TeamId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_UserOnEvent_UserCategory">
-    <End Role="UserInCategory" Type="Self.UserInCategory" Multiplicity="1" />
-    <End Role="UserOnEvent" Type="Self.UserOnEvent" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="UserInCategory">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="UserOnEvent">
-        <PropertyRef Name="UserCategoryId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -478,13 +478,13 @@
       <End Role="Category" EntitySet="Category" />
       <End Role="UserInCategory" EntitySet="UserInCategory" />
     </AssociationSet>
-    <AssociationSet Name="FK_UserCategory_UserInGroup" Association="Self.FK_UserCategory_UserInGroup">
-      <End Role="UserInGroup" EntitySet="UserInGroup" />
-      <End Role="UserInCategory" EntitySet="UserInCategory" />
-    </AssociationSet>
     <AssociationSet Name="FK_UserDetails_AspNetUsers" Association="Self.FK_UserDetails_AspNetUsers">
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
       <End Role="UserDetails" EntitySet="UserDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserInCategory_AspNetUsers" Association="Self.FK_UserInCategory_AspNetUsers">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="UserInCategory" EntitySet="UserInCategory" />
     </AssociationSet>
     <AssociationSet Name="FK_UserInCategory_PositionInCategory" Association="Self.FK_UserInCategory_PositionInCategory">
       <End Role="PositionInCategory" EntitySet="PositionInCategory" />
@@ -506,16 +506,16 @@
       <End Role="Group" EntitySet="Group" />
       <End Role="Invitaton" EntitySet="Invitaton" />
     </AssociationSet>
+    <AssociationSet Name="FK_UserOnEvent_AspNetUsers" Association="Self.FK_UserOnEvent_AspNetUsers">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="UserOnEvent" EntitySet="UserOnEvent" />
+    </AssociationSet>
     <AssociationSet Name="FK_UserOnEvent_Event" Association="Self.FK_UserOnEvent_Event">
       <End Role="Event" EntitySet="Event" />
       <End Role="UserOnEvent" EntitySet="UserOnEvent" />
     </AssociationSet>
     <AssociationSet Name="FK_UserOnEvent_Team" Association="Self.FK_UserOnEvent_Team">
       <End Role="Team" EntitySet="Team" />
-      <End Role="UserOnEvent" EntitySet="UserOnEvent" />
-    </AssociationSet>
-    <AssociationSet Name="FK_UserOnEvent_UserCategory" Association="Self.FK_UserOnEvent_UserCategory">
-      <End Role="UserInCategory" EntitySet="UserInCategory" />
       <End Role="UserOnEvent" EntitySet="UserOnEvent" />
     </AssociationSet>
     <AssociationSet Name="FK_Voting_Event" Association="Self.FK_Voting_Event">

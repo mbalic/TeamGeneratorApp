@@ -23,6 +23,9 @@ namespace TeamGeneratorApp.DAL
         private UserInCategoryRepository userInCategoryRepository;
         private UserInGroupRepository userInGroupRepository;
         private InvitationRepository invitationRepository;
+        private UserOnEventRepository userOnEventRepository;
+        private PositionRepository positionRepository;
+
 
         public UserRepository UserRepository
         {
@@ -138,6 +141,29 @@ namespace TeamGeneratorApp.DAL
             }
         }
 
+        public UserOnEventRepository UserOnEventRepository
+        {
+            get
+            {
+                if (this.userOnEventRepository == null)
+                {
+                    this.userOnEventRepository = new UserOnEventRepository(context);
+                }
+                return userOnEventRepository;
+            }
+        }
+
+        public PositionRepository PositionRepository
+        {
+            get
+            {
+                if (this.positionRepository == null)
+                {
+                    this.positionRepository = new PositionRepository(context);
+                }
+                return positionRepository;
+            }
+        }
 
 
 

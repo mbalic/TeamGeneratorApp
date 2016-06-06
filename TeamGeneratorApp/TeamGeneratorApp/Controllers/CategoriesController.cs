@@ -195,6 +195,24 @@ namespace TeamGeneratorApp.Controllers
 
         public PartialViewResult UsersGrid(int categoryId = 0)
         {
+            var category = unitOfWork.CategoryRepository.GetByID(categoryId);
+            //var userInGroup = unitOfWork.UserInGroupRepository.GetByGroupId(category.GroupId);
+            ViewData["users"] = unitOfWork.UserInGroupRepository.GetByGroupId(category.GroupId).AsQueryable()
+                  .Select(e => new UserddlVM
+                  {
+                      Id = e.UserId,
+                      Name = e.AspNetUsers.Name
+                  })
+                  .OrderBy(e => e.Name);
+
+
+            ViewData["positions"] = unitOfWork.PositionRepository.GetByCategoryId(categoryId).AsQueryable()
+                   .Select(e => new PositionVM
+                   {
+                       Id = e.Id,
+                       Name = e.Name
+                   })
+                   .OrderBy(e => e.Name);
 
             ViewBag.CategoryId = categoryId;
             return PartialView("_UsersGrid");
@@ -205,23 +223,130 @@ namespace TeamGeneratorApp.Controllers
             var res = unitOfWork.UserInCategoryRepository.GetByCategoryId(categoryId).ToList();
 
             var list = new List<UserCategoryVM>();
-            //foreach (var e in res)
-            //{
-            //    var newItem = new UserCategoryVM
-            //    {
-            //        Id = e.Id,
-            //        UserId = e.UserId,
-            //        CategoryId = e.CategoryId,
-            //        Username = e.AspNetUsers.UserName,
-            //        Score = e.Score
+            foreach (var e in res)
+            {
+                var newItem = new UserCategoryVM
+                {
+                    Id = e.Id,
+                    UserId = e.UserIId,
+                    CategoryId = e.CategoryId,
+                    UserPersonalName = e.AspNetUsers.Name,
+                    Score = e.Score,
 
-            //    };
-            //    list.Add(newItem);
-            //}
+                    PositionName = e.PositionInCategory == null? null : e.PositionInCategory.Name
+
+                };
+                list.Add(newItem);
+            }
 
             return Json(list.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
         }
+        
 
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult UsersGrid_Create([DataSourceRequest] DataSourceRequest request,
+          [Bind(Prefix = "models")]IEnumerable<UserCategoryVM> res)
+        {
+            var list = new List<UserCategoryVM>();
+            if (res != null && ModelState.IsValid)
+            {
+                foreach (var e in res)
+                {
+                    var newUser = new UserInCategory
+                    {
+                        Id = e.Id,
+                        UserIId = e.UserId,
+                        CategoryId = e.CategoryId,
+                        Score = e.Score,
+                        Active = e.Active,
+                        PositionInCategoryId = e.PositionInCategoryId
+                        
+                    };
+                    try
+                    {
+                        unitOfWork.UserInCategoryRepository.Insert(newUser);
+                        unitOfWork.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        ViewBag.ConstraintError = "There was an error while adding rows in grid.";
+                    }
+                    list.Add(e);
+                }
+            }
+
+            return Json(list.ToDataSourceResult(request, ModelState));
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult UsersGrid_Update([DataSourceRequest] DataSourceRequest request,
+        [Bind(Prefix = "models")]IEnumerable<UserCategoryVM> res)
+        {
+            var list = new List<UserCategoryVM>();
+            if (res != null && ModelState.IsValid)
+            {
+                foreach (var e in res)
+                {
+                    var newUser = new UserInCategory
+                    {
+                        Id = e.Id,
+                        UserIId = e.UserId,
+                        CategoryId = e.CategoryId,
+                        Score = e.Score,
+                        Active = e.Active,
+                        PositionInCategoryId = e.PositionInCategoryId
+                    };
+                    try
+                    {
+                        unitOfWork.UserInCategoryRepository.Update(newUser);
+                        unitOfWork.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        ViewBag.ConstraintError = "There was an error while updating rows in grid.";
+                    }
+                    list.Add(e);
+                }
+            }
+
+            return Json(list.ToDataSourceResult(request, ModelState));
+        }
+
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult UsersGrid_Destroy([DataSourceRequest] DataSourceRequest request,
+         [Bind(Prefix = "models")]IEnumerable<UserCategoryVM> res)
+        {
+            var list = new List<UserCategoryVM>();
+            if (res != null && ModelState.IsValid)
+            {
+                foreach (var e in res)
+                {
+                    //var newEvent = new UserInCategory
+                    //{
+                    //    Id = e.Id,
+                    //    UserIId = e.UserId,
+                    //    CategoryId = e.CategoryId,
+                    //    Score = e.Score,
+                    //    Active = e.Active,
+                    //    PositionInCategoryId = e.PositionInCategoryId
+                    //};
+                    try
+                    {
+                        unitOfWork.UserInCategoryRepository.Delete(e.Id);
+                        unitOfWork.Commit();
+                        list.Add(e);
+                    }
+                    catch (Exception)
+                    {
+                        ViewBag.ConstraintError = "There was an error while deleting rows in grid.";
+                    }
+                }
+            }
+
+            return Json(list.ToDataSourceResult(request, ModelState));
+        }
 
     }
 }
