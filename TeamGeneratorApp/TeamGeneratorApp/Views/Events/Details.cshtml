@@ -56,13 +56,19 @@
         <li>
             <a href="#Votings" data-toggle="tab">Votings</a>
         </li>
+        <li>
+            <a href="#GeneratedTeams" data-toggle="tab">Generated teams</a>
+        </li>
     </ul>
 
     <div class="tab-content">
-        <div class="tab-pane active" id="Events">
+        <div class="tab-pane active" id="Users">
             @Html.Action("UsersGrid", "Events", new { eventId = Model.Id })
         </div>
-        <div class="tab-pane" id="Users">
+        <div class="tab-pane" id="Votings">
+            @Html.Action("VotingsGrid", "Events", new { eventId = Model.Id })
+        </div>
+        <div class="tab-pane" id="GeneratedTeams">
             @*@Html.Action("VotingsGrid", "Events", new { eventId = Model.Id })*@
         </div>
     </div>

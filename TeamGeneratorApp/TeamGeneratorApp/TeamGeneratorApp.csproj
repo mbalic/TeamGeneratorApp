@@ -178,10 +178,10 @@
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\EventsController.cs" />
     <Compile Include="DAL\Repositories\InvitationRepository.cs" />
-    <Compile Include="DAL\Repositories\PositionRepository.cs" />
     <Compile Include="DAL\Repositories\UserInCategoryRepository.cs" />
     <Compile Include="DAL\Repositories\UserInGroupRepository.cs" />
     <Compile Include="DAL\Repositories\UserOnEventRepository.cs" />
+    <Compile Include="DAL\Repositories\VotingRepository.cs" />
     <Compile Include="Migrations\201606022212480_Name.cs" />
     <Compile Include="Migrations\201606022212480_Name.Designer.cs">
       <DependentUpon>201606022212480_Name.cs</DependentUpon>
@@ -244,6 +244,9 @@
     <Compile Include="Models\UserOnEvent.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\UserVoting.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ViewModels\AdminGroupsIndexVM.cs" />
     <Compile Include="Models\ViewModels\AdminUserEditVM.cs" />
     <Compile Include="Models\ViewModels\CategoryVM.cs" />
@@ -260,6 +263,7 @@
     <Compile Include="Models\ViewModels\UserInGroupVM.cs" />
     <Compile Include="Models\ViewModels\UserIndexVM.cs" />
     <Compile Include="Models\ViewModels\UserOnEventVM.cs" />
+    <Compile Include="Models\ViewModels\VotingVM.cs" />
     <Compile Include="Models\Voting.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -2057,6 +2061,8 @@
     <Content Include="Views\Events\Index.cshtml" />
     <Content Include="Views\Events\_UsersGrid.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
+    <Content Include="Views\Categories\_PositionsGrid.cshtml" />
+    <Content Include="Views\Events\_VotingsGrid.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

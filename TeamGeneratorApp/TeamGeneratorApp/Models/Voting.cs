@@ -14,13 +14,21 @@ namespace TeamGeneratorApp.Models
     
     public partial class Voting
     {
-        public string Id { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Voting()
+        {
+            this.UserVoting = new HashSet<UserVoting>();
+        }
+    
+        public int Id { get; set; }
         public string Name { get; set; }
         public int EventId { get; set; }
         public Nullable<System.DateTime> StartVoting { get; set; }
         public Nullable<System.DateTime> FinishVoting { get; set; }
-        public Nullable<byte> Active { get; set; }
+        public bool Active { get; set; }
     
         public virtual Event Event { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserVoting> UserVoting { get; set; }
     }
 }

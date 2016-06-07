@@ -77,7 +77,7 @@
         .Batch(true)
         .ServerOperation(false)
         .PageSize(20)
-        .Events(events => events.Error("error_handler"))
+        .Events(events => events.Error("error_handler").Sync("sync_handler"))
         .Model(model =>
         {
             model.Id(p => p.Id);
@@ -104,5 +104,7 @@
             alert(message);
         }
     };
-   
+    function sync_handler(e) {
+        this.read();
+    };
 </script>

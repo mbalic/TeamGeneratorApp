@@ -25,6 +25,7 @@ namespace TeamGeneratorApp.Models
             this.UserInGroup = new HashSet<UserInGroup>();
             this.Invitaton = new HashSet<Invitaton>();
             this.UserOnEvent = new HashSet<UserOnEvent>();
+            this.UserVoting = new HashSet<UserVoting>();
             this.AspNetRoles = new HashSet<AspNetRoles>();
         }
     
@@ -59,6 +60,8 @@ namespace TeamGeneratorApp.Models
         public virtual ICollection<Invitaton> Invitaton { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserOnEvent> UserOnEvent { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserVoting> UserVoting { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetRoles> AspNetRoles { get; set; }
     }

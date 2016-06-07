@@ -18,7 +18,6 @@ namespace TeamGeneratorApp.Models
         public int EventId { get; set; }
         public Nullable<int> TeamId { get; set; }
         public string UserId { get; set; }
-        public Nullable<int> VoteCounter { get; set; }
     
         public virtual AspNetUsers AspNetUsers { get; set; }
         public virtual Event Event { get; set; }
