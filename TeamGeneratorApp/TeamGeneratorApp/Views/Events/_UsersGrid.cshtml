@@ -75,6 +75,7 @@ else
           .Columns(columns =>
           {
               columns.Bound(p => p.UserPersonalName).Title("User");
+              columns.Command(command => command.Custom("Details").Click("viewUser"));
           })
           //.ToolBar(toolbar => toolbar.Create())
           //.Editable(editable => editable.Mode(GridEditMode.InLine))

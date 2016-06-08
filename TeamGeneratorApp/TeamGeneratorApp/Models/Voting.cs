@@ -26,6 +26,7 @@ namespace TeamGeneratorApp.Models
         public Nullable<System.DateTime> StartVoting { get; set; }
         public Nullable<System.DateTime> FinishVoting { get; set; }
         public bool Active { get; set; }
+        public int VotesPerUser { get; set; }
     
         public virtual Event Event { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -131,9 +131,31 @@ namespace TeamGeneratorApp.Controllers
                         UserId = e.UserId,
                         EventId = e.EventId,
                     };
+                    //insert users into UserVoting
+                    var votingList = unitOfWork.VotingRepository.GetByEventId(e.EventId);
+                    var listVotings = new List<UserVoting>();
+
+                    foreach (var voting in votingList)
+                    {
+                        var userVoting = new UserVoting
+                        {
+                            VotingId = voting.Id,
+                            UserId = newUser.UserId,
+                            Wins = 0,
+                            Loses = 0,
+                            VoteCounter = 0
+                        };
+                        listVotings.Add(userVoting);
+
+                    }
+
                     try
                     {
                         unitOfWork.UserOnEventRepository.Insert(newUser);
+                        foreach (var item in listVotings)
+                        {
+                            unitOfWork.VotingRepository.InsertUserVoting(item);
+                        }
                         unitOfWork.Commit();
                     }
                     catch (Exception)
@@ -230,7 +252,8 @@ namespace TeamGeneratorApp.Controllers
                     EventId = e.EventId,
                     StartVoting = e.StartVoting,
                     FinishVoting = e.FinishVoting,
-                    Active = e.Active
+                    Active = e.Active,
+                    VotesPerUser = e.VotesPerUser
                 };
                 list.Add(newItem);
             }
@@ -254,7 +277,8 @@ namespace TeamGeneratorApp.Controllers
                         EventId = e.EventId,
                         StartVoting = e.StartVoting,
                         FinishVoting = e.FinishVoting,
-                        Active = e.Active
+                        Active = e.Active,
+                        VotesPerUser = e.VotesPerUser
 
                     };
                     
@@ -270,7 +294,8 @@ namespace TeamGeneratorApp.Controllers
                             UserId = user.UserId,
                             Wins = 0,
                             Loses = 0,
-                            VoteCounter = 0
+                            Draws = 0,
+                            VoteCounter = 0                           
                         };
                         listUsers.Add(userVoting);
 
@@ -299,31 +324,35 @@ namespace TeamGeneratorApp.Controllers
 
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult VotingsGrid_Update([DataSourceRequest] DataSourceRequest request,
-       [Bind(Prefix = "models")]IEnumerable<UserOnEventVM> res)
+       [Bind(Prefix = "models")]IEnumerable<VotingVM> res)
         {
-            //var list = new List<UserOnEventVM>();
-            //if (res != null && ModelState.IsValid)
-            //{
-            //    foreach (var e in res)
-            //    {
-            //        var newUser = new UserOnEvent
-            //        {
-            //            Id = e.Id,
-            //            UserId = e.UserId,
-            //            EventId = e.EventId
-            //        };
-            //        try
-            //        {
-            //            unitOfWork.UserOnEventRepository.Update(newUser);
-            //            unitOfWork.Commit();
-            //        }
-            //        catch (Exception)
-            //        {
-            //            ViewBag.ConstraintError = "There was an error while updating rows in grid.";
-            //        }
-            //        list.Add(e);
-            //    }
-            //}
+            var list = new List<VotingVM>();
+            if (res != null && ModelState.IsValid)
+            {
+                foreach (var e in res)
+                {
+                    var newVoting = new Voting
+                    {
+                        Id = e.Id,
+                        EventId = e.EventId,
+                        Name = e.Name,
+                        StartVoting = e.StartVoting,
+                        FinishVoting = e.FinishVoting,
+                        Active = e.Active,
+                        VotesPerUser = e.VotesPerUser
+                    };
+                    try
+                    {
+                        unitOfWork.VotingRepository.Update(newVoting);
+                        unitOfWork.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        ViewBag.ConstraintError = "There was an error while updating rows in grid.";
+                    }
+                    list.Add(e);
+                }
+            }
 
             return Json(res.ToDataSourceResult(request, ModelState));
         }
@@ -357,12 +386,60 @@ namespace TeamGeneratorApp.Controllers
         #endregion
 
 
+
+        // GET: Events/VotingDetails/5
+        public ActionResult VotingDetails(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Voting voting = unitOfWork.VotingRepository.GetByID(id);
+
+            if (voting == null)
+            {
+                return HttpNotFound();
+            }
+
+            var votingVm = new VotingVM
+            {
+                Id = voting.Id,
+                StartVoting = voting.StartVoting,
+                FinishVoting = voting.FinishVoting,
+                Name = voting.Name,
+                Active = voting.Active,
+                EventId = voting.EventId,
+                EventName = voting.Event.Name,
+                VotesPerUser = voting.VotesPerUser
+            };
+
+            var userVoting = unitOfWork.UserVotingRepository.GetUserVoting(User.Identity.GetUserId(), voting.Id);
+            if (userVoting == null)
+                ViewBag.UserCanVote = false;
+            else
+                ViewBag.UserCanVote = true;
+
+
+            ViewBag.EventId = voting.EventId;
+            return View(votingVm);
+        }
+
+
+
         // GET: Events/Voting/5
         public ActionResult Voting(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            //check if voting is active
+            var voting = unitOfWork.VotingRepository.GetByID(id);
+            if (!voting.Active)
+            {
+                ViewBag.Message = "This voting is not active.";
+                return View("ErrorVoting");
             }
 
             //check if user is on this event
@@ -372,7 +449,7 @@ namespace TeamGeneratorApp.Controllers
             if (userOnEvent != null)
             {
                 var userVoting = unitOfWork.UserVotingRepository.GetUserVoting(userId, id);
-                if (userVoting.VoteCounter > 70)
+                if (userVoting.VoteCounter > voting.VotesPerUser)
                 {
                     ViewBag.Message = "You have voted maximum times on this voting.";
                     return View("ErrorVoting");
@@ -424,7 +501,7 @@ namespace TeamGeneratorApp.Controllers
             var userVoting = unitOfWork.UserVotingRepository.GetUserVoting(userId, votingId);
             userVoting.VoteCounter++;
             unitOfWork.UserVotingRepository.Update(userVoting);
-            //unitOfWork.Commit();
+            unitOfWork.Commit();
 
 
 

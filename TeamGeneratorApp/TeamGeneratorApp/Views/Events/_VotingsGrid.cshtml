@@ -17,10 +17,10 @@
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         var votingId = dataItem.Id;
 
-        window.location.href = "@Url.Action("Voting","Events")?id=" + votingId;
+        window.location.href = "@Url.Action("VotingDetails","Events")?id=" + votingId;
     }
     function db(e) {
-        this.table.find(".k-grid-edit").hide();
+        //this.table.find(".k-grid-edit").hide();
 
         var grid = this;
         $(".templateCell").each(function () {
@@ -63,9 +63,10 @@
                       .HtmlAttributes(new { data_bind = "value:FinishVoting" })
                       .ToClientTemplate().ToString()
                       ).Format("{0:dd/MM/yyyy HH:mm}").Width(200);
-            columns.Bound(p => p.Active);
-                   //.ClientTemplate("<input type='checkbox' #= Active ? checked='checked': '' # class='chkbx' />")
-                   //.HtmlAttributes(new { style = "text-align: center" });
+            columns.Bound(p => p.VotesPerUser).Title("Votes per user");
+            columns.Bound(p => p.Active)
+                   .ClientTemplate("<input type='checkbox' #= Active ? checked='checked': '' # class='chkbx' />")
+                   .HtmlAttributes(new { style = "text-align: center" }).Width(100);
             columns.Command(command =>
             {
                 command.Edit();
@@ -90,11 +91,12 @@
             {
                 model.Id(p => p.Id);
                 model.Field(p => p.EventId).DefaultValue(ViewBag.EventId);
-                model.Field(p => p.Active).DefaultValue(false).Editable(false);
+                model.Field(p => p.Active).DefaultValue(false);
+                model.Field(p => p.VotesPerUser).DefaultValue(50);
             })
             .Create(update => update.Action("VotingsGrid_Create", "Events"))
             .Read(read => read.Action("VotingsGrid_Read", "Events", new { eventId = ViewBag.EventId }))
-            .Update(update => update.Action("EventsGrid_Update", "AdminCategories"))
+            .Update(update => update.Action("VotingsGrid_Update", "Events"))
             .Destroy(update => update.Action("VotingsGrid_Destroy", "Events"))
 
         )

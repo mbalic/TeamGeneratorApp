@@ -20,6 +20,7 @@ namespace TeamGeneratorApp.Models
         public Nullable<int> VoteCounter { get; set; }
         public Nullable<int> Wins { get; set; }
         public Nullable<int> Loses { get; set; }
+        public Nullable<int> Draws { get; set; }
     
         public virtual AspNetUsers AspNetUsers { get; set; }
         public virtual Voting Voting { get; set; }

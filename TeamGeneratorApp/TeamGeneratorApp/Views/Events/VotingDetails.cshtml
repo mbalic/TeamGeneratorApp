@@ -1,0 +1,65 @@
+﻿@model TeamGeneratorApp.Models.ViewModels.VotingVM
+
+@{
+    ViewBag.Title = "Details";
+}
+<br />
+<p>
+    @Html.ActionLink("< Back to event", "Details", "Events", new { id = ViewBag.EventId }, null)
+</p>
+<h2>@Html.DisplayFor(model => model.Name)</h2>
+<hr />
+<h4>Voting</h4>
+<br />
+<div>
+    <dl class="dl-horizontal">
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EventName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EventName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StartVoting)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StartVoting)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FinishVoting)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FinishVoting)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.VotesPerUser)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.VotesPerUser)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Active)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Active)
+        </dd>
+
+    </dl>
+</div>
+<br/>
+@if(ViewBag.UserCanVote)
+{
+    <p>
+        <button>@Html.ActionLink("Vote!", "Voting", new { id = Model.Id })</button>
+    </p>
+}

@@ -2068,6 +2068,7 @@
     <Content Include="Views\Events\_VotingsGrid.cshtml" />
     <Content Include="Views\Events\ErrorVoting.cshtml" />
     <Content Include="Views\Events\Voting.cshtml" />
+    <Content Include="Views\Events\VotingDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

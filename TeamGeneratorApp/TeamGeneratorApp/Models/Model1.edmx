@@ -164,6 +164,7 @@
           <Property Name="VoteCounter" Type="int" />
           <Property Name="Wins" Type="int" />
           <Property Name="Loses" Type="int" />
+          <Property Name="Draws" Type="int" />
         </EntityType>
         <EntityType Name="Voting">
           <Key>
@@ -175,6 +176,7 @@
           <Property Name="StartVoting" Type="datetime" />
           <Property Name="FinishVoting" Type="datetime" />
           <Property Name="Active" Type="bit" Nullable="false" />
+          <Property Name="VotesPerUser" Type="int" Nullable="false" />
         </EntityType>
         <Association Name="FK_Category_Group">
           <End Role="Group" Type="Self.Group" Multiplicity="1" />
@@ -769,6 +771,7 @@
           <Property Name="VoteCounter" Type="Int32" />
           <Property Name="Wins" Type="Int32" />
           <Property Name="Loses" Type="Int32" />
+          <Property Name="Draws" Type="Int32" />
           <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_UserVoting_AspNetUsers" FromRole="UserVoting" ToRole="AspNetUsers" />
           <NavigationProperty Name="Voting" Relationship="Self.FK_UserVoting_Voting" FromRole="UserVoting" ToRole="Voting" />
         </EntityType>
@@ -782,6 +785,7 @@
           <Property Name="StartVoting" Type="DateTime" Precision="3" />
           <Property Name="FinishVoting" Type="DateTime" Precision="3" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="VotesPerUser" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Event" Relationship="Self.FK_Voting_Event" FromRole="Voting" ToRole="Event" />
           <NavigationProperty Name="UserVoting" Relationship="Self.FK_UserVoting_Voting" FromRole="Voting" ToRole="UserVoting" />
         </EntityType>
@@ -1321,6 +1325,7 @@
                 <ScalarProperty Name="VoteCounter" ColumnName="VoteCounter" />
                 <ScalarProperty Name="Wins" ColumnName="Wins" />
                 <ScalarProperty Name="Loses" ColumnName="Loses" />
+                <ScalarProperty Name="Draws" ColumnName="Draws" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1333,6 +1338,7 @@
                 <ScalarProperty Name="StartVoting" ColumnName="StartVoting" />
                 <ScalarProperty Name="FinishVoting" ColumnName="FinishVoting" />
                 <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="VotesPerUser" ColumnName="VotesPerUser" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
