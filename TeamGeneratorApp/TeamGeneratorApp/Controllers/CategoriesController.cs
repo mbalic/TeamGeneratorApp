@@ -208,7 +208,7 @@ namespace TeamGeneratorApp.Controllers
 
 
             ViewData["positions"] = unitOfWork.CategoryRepository.GetPositionsInCategory(categoryId).AsQueryable()
-                   .Select(e => new PositionVM
+                   .Select(e => new PositionddlVM()
                    {
                        Id = e.Id,
                        Name = e.Name
@@ -238,7 +238,7 @@ namespace TeamGeneratorApp.Controllers
                     UserPersonalName = e.AspNetUsers.Name,
                     Score = e.Score,
                     Active = e.Active,
-                    PositionInCategoryId = e.PositionInCategoryId,
+                    PositionInCategoryId = e.PositionInCategoryId
 
                     //PositionName = e.PositionInCategory == null? null : e.PositionInCategory.Name
 

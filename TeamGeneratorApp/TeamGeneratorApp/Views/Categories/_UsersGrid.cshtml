@@ -20,11 +20,9 @@
 
     };
 
-    //function edit(e) {
-    //    if (e.model.isNew()) {
-    //        $("#UserId").attr("readonly", true);
-    //    }
-    //}
+    //function db(e) {
+    //    this.table.find(".k-grid-edit").hide();
+    //};
 
 </script>
 
@@ -43,6 +41,7 @@
         columns.Command(command => { command.Edit(); command.Destroy(); }).Width(200);
         columns.Command(command => command.Custom("Details").Click("viewUser"));
     })
+    //.Events(e => e.DataBound("db"))
     .ToolBar(toolbar => toolbar.Create())
     .Editable(editable => editable.Mode(GridEditMode.InLine))
     .Pageable()

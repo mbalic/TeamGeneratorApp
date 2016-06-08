@@ -15,6 +15,6 @@ namespace TeamGeneratorApp.Models.ViewModels
         public Nullable<int> VoteCounter { get; set; }
 
         public string UserPersonalName { get; set; }
-        public string TeamName { get; set; }
+        //public string TeamName { get; set; }
     }
 }

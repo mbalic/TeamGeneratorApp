@@ -1,0 +1,37 @@
+﻿@model TeamGeneratorApp.Models.ViewModels.VotingProcessVM
+@{
+    ViewBag.Title = "Voting";
+}
+
+<br />
+<p>
+    @Html.ActionLink("< Back to event", "Details", new {id = ViewBag.EventId})
+</p>
+<h2>Voting</h2>
+<hr />
+<h4>@ViewBag.EventName</h4>
+<br />
+<center>
+    <p>Who wins this duel?</p>
+    <br/><br/>
+
+
+    <table>
+        <tr>
+            <td><img id="user1_img" style="height: 200px;width: 150px" src="@Html.DisplayFor(model => model.User1_Image)" class="avatar img-circle img-thumbnail" alt="avatar"></td>
+            <td><img id="user2_img" style="height: 200px;width: 150px" src="@Html.DisplayFor(model => model.User2_Image)" class="avatar img-circle img-thumbnail" alt="avatar"></td>
+        </tr>
+        <tr>
+            <td>@Html.DisplayFor(model => model.User1_PersonalName)</td>
+            <td>@Html.DisplayFor(model => model.User2_PersonalName)</td>
+        </tr>
+        <tr>
+            <td>@Html.ActionLink("Win", "Rate", new { userVotingId = Model.UserVotingId, votingId = Model.VotingId, winnerId = Model.User1_Id, loserId = Model.User2_Id })</td>
+            <td>@Html.ActionLink("Win", "Rate", new { userVotingId = Model.UserVotingId, votingId = Model.VotingId, winnerId = Model.User2_Id, loserId = Model.User1_Id })</td>
+        </tr>
+        <tr>
+            <td>@Html.ActionLink("Draw", "Rate", new { userVotingId = Model.UserVotingId, votingId = Model.VotingId, drawId1 = Model.User1_Id, drawId2 = Model.User2_Id })</td>
+        </tr>
+    </table>
+</center>
+

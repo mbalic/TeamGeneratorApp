@@ -25,6 +25,7 @@ namespace TeamGeneratorApp.DAL
         private InvitationRepository invitationRepository;
         private UserOnEventRepository userOnEventRepository;
         private VotingRepository votingRepository;
+        private UserVotingRepository userVotingRepository;
 
 
         public UserRepository UserRepository
@@ -165,6 +166,17 @@ namespace TeamGeneratorApp.DAL
             }
         }
 
+        public UserVotingRepository UserVotingRepository
+        {
+            get
+            {
+                if (this.userVotingRepository == null)
+                {
+                    this.userVotingRepository = new UserVotingRepository(context);
+                }
+                return userVotingRepository;
+            }
+        }
 
 
 

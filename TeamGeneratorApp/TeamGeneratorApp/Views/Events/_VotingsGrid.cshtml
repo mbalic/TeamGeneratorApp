@@ -15,11 +15,13 @@
     function viewVoting(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        var userId = dataItem.Id;
+        var votingId = dataItem.Id;
 
-        @*window.location.href = "@Url.Action("Details","AdminUser")?id=" + eventId;*@
+        window.location.href = "@Url.Action("Voting","Events")?id=" + votingId;
     }
     function db(e) {
+        this.table.find(".k-grid-edit").hide();
+
         var grid = this;
         $(".templateCell").each(function () {
             eval($(this).children("script").last().html());
@@ -27,7 +29,7 @@
             var item = grid.dataItem(tr);
             kendo.bind($(this), item);
         });
-        this.table.find(".k-grid-edit").hide();
+        
     };
 </script>
 
@@ -45,11 +47,11 @@
             }).ClientTemplate(
                 Html.Kendo().DatePicker()
                  .Name("FDPicker_#=Id#1")
-                 .Format("{0:dd/MM/yyyy}")
+                 .Format("{0:dd/MM/yyyy HH:mm}")
                  .HtmlAttributes(new { data_bind = "value:StartVoting" })
                  .ToClientTemplate().ToString()
 
-                 ).Format("{0:dd/MM/yyyy}").Width(200);
+                 ).Format("{0:dd/MM/yyyy HH:mm}").Width(200);
             columns.Bound(p => p.FinishVoting).HtmlAttributes(new
             {
                 @class = "templateCell"
@@ -57,14 +59,18 @@
             }).ClientTemplate(
                      Html.Kendo().DatePicker()
                       .Name("FDPicker_#=Id#2")
-                      .Format("{0:dd/MM/yyyy}")
+                      .Format("{0:dd/MM/yyyy HH:mm}")
                       .HtmlAttributes(new { data_bind = "value:FinishVoting" })
                       .ToClientTemplate().ToString()
-                      ).Format("{0:dd/MM/yyyy}").Width(200);
+                      ).Format("{0:dd/MM/yyyy HH:mm}").Width(200);
             columns.Bound(p => p.Active);
                    //.ClientTemplate("<input type='checkbox' #= Active ? checked='checked': '' # class='chkbx' />")
                    //.HtmlAttributes(new { style = "text-align: center" });
-            columns.Command(command => { command.Edit(); command.Destroy(); }).Width(200);
+            columns.Command(command =>
+            {
+                command.Edit();
+                command.Destroy();
+            });
             columns.Command(command => command.Custom("Details").Click("viewVoting"));
         })
         .Events(e => e.DataBound("db"))

@@ -45,11 +45,11 @@
         }).ClientTemplate(
          Html.Kendo().DatePicker()
           .Name("FDPicker_#=Id#1")
-          .Format("{0:dd/MM/yyyy}")
+          .Format("{0:dd/MM/yyyy HH:mm}")
           .HtmlAttributes(new { data_bind = "value:Start" })
           .ToClientTemplate().ToString()
 
-          ).Format("{0:dd/MM/yyyy}").Width(200); 
+          ).Format("{0:dd/MM/yyyy HH:mm}").Width(200); 
         columns.Bound(p => p.Finish).HtmlAttributes(new
         {
             @class = "templateCell"
@@ -57,10 +57,10 @@
         }).ClientTemplate(
          Html.Kendo().DatePicker()
           .Name("FDPicker_#=Id#2")
-          .Format("{0:dd/MM/yyyy}")
+          .Format("{0:dd/MM/yyyy HH:mm}")
           .HtmlAttributes(new { data_bind = "value:Finish" })
           .ToClientTemplate().ToString()
-          ).Format("{0:dd/MM/yyyy}").Width(200);
+          ).Format("{0:dd/MM/yyyy HH:mm}").Width(200);
         columns.Bound(p => p.NumberOfTeams);
         columns.Command(command => { command.Edit(); command.Destroy(); }).Width(200);
         columns.Command(command => command.Custom("Details").Click("viewEvent"));

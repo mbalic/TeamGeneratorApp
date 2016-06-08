@@ -129,7 +129,7 @@
     <Property Name="CategoryId" Type="int" Nullable="false" />
     <Property Name="Score" Type="int" />
     <Property Name="Active" Type="bit" Nullable="false" />
-    <Property Name="PositionInCategoryId" Type="int" />
+    <Property Name="PositionInCategoryId" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="UserInGroup">
     <Key>
@@ -154,7 +154,7 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="VotingId" Type="int" Nullable="false" />
+    <Property Name="VotingId" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="VoteCounter" Type="int" />
     <Property Name="Wins" Type="int" />
@@ -164,7 +164,7 @@
     <Key>
       <PropertyRef Name="Id" />
     </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Id" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="Name" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="EventId" Type="int" Nullable="false" />
     <Property Name="StartVoting" Type="datetime" />
@@ -324,7 +324,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_UserInCategory_PositionInCategory">
-    <End Role="PositionInCategory" Type="Self.PositionInCategory" Multiplicity="0..1" />
+    <End Role="PositionInCategory" Type="Self.PositionInCategory" Multiplicity="1" />
     <End Role="UserInCategory" Type="Self.UserInCategory" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="PositionInCategory">
@@ -432,7 +432,9 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_UserVoting_Voting">
-    <End Role="Voting" Type="Self.Voting" Multiplicity="1" />
+    <End Role="Voting" Type="Self.Voting" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
     <End Role="UserVoting" Type="Self.UserVoting" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Voting">

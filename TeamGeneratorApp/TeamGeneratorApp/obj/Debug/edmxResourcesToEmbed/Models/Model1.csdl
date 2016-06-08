@@ -153,7 +153,7 @@
     <Property Name="CategoryId" Type="Int32" Nullable="false" />
     <Property Name="Score" Type="Int32" />
     <Property Name="Active" Type="Boolean" Nullable="false" />
-    <Property Name="PositionInCategoryId" Type="Int32" />
+    <Property Name="PositionInCategoryId" Type="Int32" Nullable="false" />
     <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_UserInCategory_AspNetUsers" FromRole="UserInCategory" ToRole="AspNetUsers" />
     <NavigationProperty Name="Category" Relationship="Self.FK_UserCategory_Category" FromRole="UserInCategory" ToRole="Category" />
     <NavigationProperty Name="PositionInCategory" Relationship="Self.FK_UserInCategory_PositionInCategory" FromRole="UserInCategory" ToRole="PositionInCategory" />
@@ -186,7 +186,7 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="VotingId" Type="Int32" Nullable="false" />
+    <Property Name="VotingId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="VoteCounter" Type="Int32" />
     <Property Name="Wins" Type="Int32" />
@@ -198,7 +198,7 @@
     <Key>
       <PropertyRef Name="Id" />
     </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Id" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="Name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="EventId" Type="Int32" Nullable="false" />
     <Property Name="StartVoting" Type="DateTime" Precision="3" />
@@ -428,7 +428,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_UserInCategory_PositionInCategory">
-    <End Role="PositionInCategory" Type="Self.PositionInCategory" Multiplicity="0..1" />
+    <End Role="PositionInCategory" Type="Self.PositionInCategory" Multiplicity="1" />
     <End Role="UserInCategory" Type="Self.UserInCategory" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="PositionInCategory">
@@ -452,7 +452,9 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_UserVoting_Voting">
-    <End Role="Voting" Type="Self.Voting" Multiplicity="1" />
+    <End Role="Voting" Type="Self.Voting" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
     <End Role="UserVoting" Type="Self.UserVoting" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Voting">

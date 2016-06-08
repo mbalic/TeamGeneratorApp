@@ -15,7 +15,7 @@ namespace TeamGeneratorApp.Models
     public partial class UserVoting
     {
         public int Id { get; set; }
-        public int VotingId { get; set; }
+        public string VotingId { get; set; }
         public string UserId { get; set; }
         public Nullable<int> VoteCounter { get; set; }
         public Nullable<int> Wins { get; set; }

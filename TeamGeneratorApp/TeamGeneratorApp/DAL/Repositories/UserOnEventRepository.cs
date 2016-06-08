@@ -17,5 +17,10 @@ namespace TeamGeneratorApp.DAL.Repositories
         {
             return context.UserOnEvent.Where(c => c.EventId == eventId);
         }
+
+        public UserOnEvent GetByUserId(string userId)
+        {
+            return context.UserOnEvent.Where(p => p.UserId == userId).Single();
+        }
     }
 }

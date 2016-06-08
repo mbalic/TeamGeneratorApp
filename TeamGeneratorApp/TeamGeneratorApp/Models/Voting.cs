@@ -20,7 +20,7 @@ namespace TeamGeneratorApp.Models
             this.UserVoting = new HashSet<UserVoting>();
         }
     
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
         public int EventId { get; set; }
         public Nullable<System.DateTime> StartVoting { get; set; }

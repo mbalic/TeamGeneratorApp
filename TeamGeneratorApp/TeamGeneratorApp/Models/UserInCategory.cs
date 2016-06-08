@@ -19,7 +19,7 @@ namespace TeamGeneratorApp.Models
         public int CategoryId { get; set; }
         public Nullable<int> Score { get; set; }
         public bool Active { get; set; }
-        public Nullable<int> PositionInCategoryId { get; set; }
+        public int PositionInCategoryId { get; set; }
     
         public virtual AspNetUsers AspNetUsers { get; set; }
         public virtual Category Category { get; set; }

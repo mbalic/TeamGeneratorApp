@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,5 +18,11 @@ namespace TeamGeneratorApp.DAL.Repositories
         {
             return context.Voting.Where(c => c.EventId == eventId);
         }
+
+        public void InsertUserVoting(UserVoting item)
+        {
+            context.UserVoting.Add(item);
+        }
+        
     }
 }

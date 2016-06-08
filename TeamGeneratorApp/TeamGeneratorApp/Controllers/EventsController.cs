@@ -81,6 +81,14 @@ namespace TeamGeneratorApp.Controllers
                 }
             }
 
+            ViewData["users"] = unitOfWork.UserInCategoryRepository.GetByCategoryId(@event.CategoryId).AsQueryable()
+                  .Select(e => new UserddlVM
+                  {
+                      Id = e.AspNetUsers.Id,
+                      Name = e.AspNetUsers.Name
+                  })
+                  .OrderBy(e => e.Name);
+
             ViewBag.EventId = eventId;
             return PartialView("_UsersGrid");
         }
@@ -100,8 +108,7 @@ namespace TeamGeneratorApp.Controllers
                     UserId = e.UserId,
                     EventId = e.EventId,
                     UserPersonalName = e.AspNetUsers.Name,
-                    TeamId = e.TeamId,
-                    TeamName = e.Team.Name
+                    TeamId = e.TeamId
                 };
                 list.Add(newItem);
             }
@@ -242,7 +249,7 @@ namespace TeamGeneratorApp.Controllers
                 {
                     var newVoting = new Voting
                     {
-                        Id = e.Id,
+                        Id = Guid.NewGuid().ToString(),
                         Name = e.Name,
                         EventId = e.EventId,
                         StartVoting = e.StartVoting,
@@ -250,9 +257,33 @@ namespace TeamGeneratorApp.Controllers
                         Active = e.Active
 
                     };
+                    
+                    //insert users into UserVoting
+                    var userOnEvent = unitOfWork.UserOnEventRepository.GetByEventId(e.EventId);
+                    var listUsers = new List<UserVoting>();
+
+                    foreach (var user in userOnEvent)
+                    {
+                        var userVoting = new UserVoting
+                        {
+                            VotingId = newVoting.Id,
+                            UserId = user.UserId,
+                            Wins = 0,
+                            Loses = 0,
+                            VoteCounter = 0
+                        };
+                        listUsers.Add(userVoting);
+
+                    }
+
+                    
                     try
                     {
                         unitOfWork.VotingRepository.Insert(newVoting);
+                        foreach (var item in listUsers)
+                        {
+                            unitOfWork.VotingRepository.InsertUserVoting(item);
+                        }
                         unitOfWork.Commit();
                     }
                     catch (Exception)
@@ -324,5 +355,94 @@ namespace TeamGeneratorApp.Controllers
         }
 
         #endregion
+
+
+        // GET: Events/Voting/5
+        public ActionResult Voting(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            //check if user is on this event
+            var userId = User.Identity.GetUserId();
+            var userOnEvent = unitOfWork.UserOnEventRepository.GetByUserId(userId);
+
+            if (userOnEvent != null)
+            {
+                var userVoting = unitOfWork.UserVotingRepository.GetUserVoting(userId, id);
+                if (userVoting.VoteCounter > 70)
+                {
+                    ViewBag.Message = "You have voted maximum times on this voting.";
+                    return View("ErrorVoting");
+                }
+
+                //fetche all users on this event
+                var userList = unitOfWork.UserOnEventRepository.GetByEventId(userOnEvent.EventId).ToList();
+
+                //remove current user from list
+                var userToRemove = unitOfWork.UserOnEventRepository.GetByUserId(userId);
+                userList.Remove(userToRemove);
+
+                //random pick 2 users
+                var random = new Random();
+                var choosenOnes = userList.OrderBy(x => random.Next()).Take(2);
+                var user1 = choosenOnes.ElementAt(0);
+                var user2 = choosenOnes.ElementAt(1);
+
+                //voting process
+                var votingProcess = new VotingProcessVM
+                {
+                    VotingId = id,
+                    UserVotingId = userVoting.Id,
+                    User1_Id = user1.UserId,
+                    User1_PersonalName = user1.AspNetUsers.Name,
+                    User1_Image = user1.AspNetUsers.ImageUrl,
+                    User2_Id = user2.UserId,
+                    User2_PersonalName = user2.AspNetUsers.Name,
+                    User2_Image = user2.AspNetUsers.ImageUrl
+                };
+
+                ViewBag.EventId = userOnEvent.EventId;
+                ViewBag.EventName = userOnEvent.Event.Name;
+                return View(votingProcess);
+            }
+            else
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+           
+        }
+
+        public ActionResult Rate(string votingId, int userVotingId, string winnerId, string loserId, string drawId1, string drawId2)
+        {
+            var userId = User.Identity.GetUserId();
+
+            //+1 vote for this user
+            var userVoting = unitOfWork.UserVotingRepository.GetUserVoting(userId, votingId);
+            userVoting.VoteCounter++;
+            unitOfWork.UserVotingRepository.Update(userVoting);
+            //unitOfWork.Commit();
+
+
+
+            if (winnerId != null && loserId != null)
+            {
+                //var winner = unitOfWork.
+                
+                //elo
+
+            }
+            else
+            {
+                //elo for draw
+            }
+            return RedirectToAction("Voting", new {id = votingId});
+
+        }
+
+
     }
 }
