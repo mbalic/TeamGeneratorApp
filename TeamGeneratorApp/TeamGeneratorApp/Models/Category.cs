@@ -18,7 +18,7 @@ namespace TeamGeneratorApp.Models
         public Category()
         {
             this.Event = new HashSet<Event>();
-            this.PositionInCategory = new HashSet<PositionInCategory>();
+            this.Position = new HashSet<Position>();
             this.UserInCategory = new HashSet<UserInCategory>();
         }
     
@@ -31,7 +31,7 @@ namespace TeamGeneratorApp.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Event> Event { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PositionInCategory> PositionInCategory { get; set; }
+        public virtual ICollection<Position> Position { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserInCategory> UserInCategory { get; set; }
     }

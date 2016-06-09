@@ -35,6 +35,7 @@
           .Columns(columns =>
           {
               columns.ForeignKey(p => p.UserId, (System.Collections.IEnumerable)ViewData["users"], "Id", "Name").Title("User").Width(200);
+              columns.ForeignKey(p => p.PositionId, (System.Collections.IEnumerable)ViewData["positions"], "Id", "Name").Title("Position").Width(200);
               columns.Command(command =>
               {
                   command.Edit();
@@ -42,7 +43,6 @@
               });
               columns.Command(command => command.Custom("Details").Click("viewUser"));
           })
-          .Events(e => e.DataBound("db"))
           .ToolBar(toolbar => toolbar.Create())
           .Editable(editable => editable.Mode(GridEditMode.InLine))
           .Pageable()
@@ -62,7 +62,7 @@
               })
               .Create(update => update.Action("UsersGrid_Create", "Events"))
               .Read(read => read.Action("UsersGrid_Read", "Events", new {eventId = ViewBag.EventId}))
-              .Update(update => update.Action("UsersGrid_Update", "Events"))
+             //.Update(update => update.Action("UsersGrid_Update", "Events"))
              .Destroy(update => update.Action("UsersGrid_Destroy", "Events"))
           )
 

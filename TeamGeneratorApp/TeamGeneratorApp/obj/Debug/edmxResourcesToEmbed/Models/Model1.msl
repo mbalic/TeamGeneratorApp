@@ -91,9 +91,9 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="PositionInCategory">
-      <EntityTypeMapping TypeName="TeamDb6Model.PositionInCategory">
-        <MappingFragment StoreEntitySet="PositionInCategory">
+    <EntitySetMapping Name="Position">
+      <EntityTypeMapping TypeName="TeamDb6Model.Position">
+        <MappingFragment StoreEntitySet="Position">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="Value" ColumnName="Value" />
@@ -130,7 +130,6 @@
           <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
           <ScalarProperty Name="Score" ColumnName="Score" />
           <ScalarProperty Name="Active" ColumnName="Active" />
-          <ScalarProperty Name="PositionInCategoryId" ColumnName="PositionInCategoryId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -151,6 +150,7 @@
           <ScalarProperty Name="EventId" ColumnName="EventId" />
           <ScalarProperty Name="TeamId" ColumnName="TeamId" />
           <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="PositionId" ColumnName="PositionId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -163,6 +163,7 @@
           <ScalarProperty Name="VoteCounter" ColumnName="VoteCounter" />
           <ScalarProperty Name="Wins" ColumnName="Wins" />
           <ScalarProperty Name="Loses" ColumnName="Loses" />
+          <ScalarProperty Name="Draws" ColumnName="Draws" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -175,6 +176,7 @@
           <ScalarProperty Name="StartVoting" ColumnName="StartVoting" />
           <ScalarProperty Name="FinishVoting" ColumnName="FinishVoting" />
           <ScalarProperty Name="Active" ColumnName="Active" />
+          <ScalarProperty Name="VotesPerUser" ColumnName="VotesPerUser" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

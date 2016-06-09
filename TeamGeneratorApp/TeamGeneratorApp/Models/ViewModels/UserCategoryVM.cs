@@ -15,10 +15,7 @@ namespace TeamGeneratorApp.Models.ViewModels
         public int CategoryId { get; set; }
         public Nullable<int> Score { get; set; }
         public bool Active { get; set; }
-        public int PositionInCategoryId { get; set; }
 
-        [Display(Name = "Position")]
-        public string PositionName { get; set; }
 
         //public UserVM User { get; set; }
         //public CategoryVM Category { get; set; }

@@ -12,12 +12,12 @@ namespace TeamGeneratorApp.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PositionInCategory
+    public partial class Position
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public PositionInCategory()
+        public Position()
         {
-            this.UserInCategory = new HashSet<UserInCategory>();
+            this.UserOnEvent = new HashSet<UserOnEvent>();
         }
     
         public int Id { get; set; }
@@ -27,6 +27,6 @@ namespace TeamGeneratorApp.Models
     
         public virtual Category Category { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserInCategory> UserInCategory { get; set; }
+        public virtual ICollection<UserOnEvent> UserOnEvent { get; set; }
     }
 }

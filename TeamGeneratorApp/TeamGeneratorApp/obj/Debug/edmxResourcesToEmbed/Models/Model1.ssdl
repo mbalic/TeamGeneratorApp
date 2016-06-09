@@ -92,7 +92,7 @@
     <Property Name="GroupId" Type="int" Nullable="false" />
     <Property Name="DateCreated" Type="datetime" Nullable="false" />
   </EntityType>
-  <EntityType Name="PositionInCategory">
+  <EntityType Name="Position">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
@@ -129,7 +129,6 @@
     <Property Name="CategoryId" Type="int" Nullable="false" />
     <Property Name="Score" Type="int" />
     <Property Name="Active" Type="bit" Nullable="false" />
-    <Property Name="PositionInCategoryId" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="UserInGroup">
     <Key>
@@ -148,6 +147,7 @@
     <Property Name="EventId" Type="int" Nullable="false" />
     <Property Name="TeamId" Type="int" />
     <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="PositionId" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="UserVoting">
     <Key>
@@ -159,6 +159,7 @@
     <Property Name="VoteCounter" Type="int" />
     <Property Name="Wins" Type="int" />
     <Property Name="Loses" Type="int" />
+    <Property Name="Draws" Type="int" />
   </EntityType>
   <EntityType Name="Voting">
     <Key>
@@ -170,6 +171,7 @@
     <Property Name="StartVoting" Type="datetime" />
     <Property Name="FinishVoting" Type="datetime" />
     <Property Name="Active" Type="bit" Nullable="false" />
+    <Property Name="VotesPerUser" Type="int" Nullable="false" />
   </EntityType>
   <Association Name="FK_Category_Group">
     <End Role="Group" Type="Self.Group" Multiplicity="1" />
@@ -265,12 +267,12 @@
   </Association>
   <Association Name="FK_PositionInCategory_Category">
     <End Role="Category" Type="Self.Category" Multiplicity="1" />
-    <End Role="PositionInCategory" Type="Self.PositionInCategory" Multiplicity="*" />
+    <End Role="Position" Type="Self.Position" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Category">
         <PropertyRef Name="Id" />
       </Principal>
-      <Dependent Role="PositionInCategory">
+      <Dependent Role="Position">
         <PropertyRef Name="CategoryId" />
       </Dependent>
     </ReferentialConstraint>
@@ -320,18 +322,6 @@
       </Principal>
       <Dependent Role="UserInCategory">
         <PropertyRef Name="UserIId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_UserInCategory_PositionInCategory">
-    <End Role="PositionInCategory" Type="Self.PositionInCategory" Multiplicity="1" />
-    <End Role="UserInCategory" Type="Self.UserInCategory" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="PositionInCategory">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="UserInCategory">
-        <PropertyRef Name="PositionInCategoryId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -407,6 +397,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_UserOnEvent_Position">
+    <End Role="Position" Type="Self.Position" Multiplicity="1" />
+    <End Role="UserOnEvent" Type="Self.UserOnEvent" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Position">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserOnEvent">
+        <PropertyRef Name="PositionId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_UserOnEvent_Team">
     <End Role="Team" Type="Self.Team" Multiplicity="0..1" />
     <End Role="UserOnEvent" Type="Self.UserOnEvent" Multiplicity="*" />
@@ -467,7 +469,7 @@
     <EntitySet Name="Event" EntityType="Self.Event" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Group" EntityType="Self.Group" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Invitaton" EntityType="Self.Invitaton" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="PositionInCategory" EntityType="Self.PositionInCategory" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Position" EntityType="Self.Position" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Team" EntityType="Self.Team" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserDetails" EntityType="Self.UserDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserInCategory" EntityType="Self.UserInCategory" Schema="dbo" store:Type="Tables" />
@@ -505,7 +507,7 @@
     </AssociationSet>
     <AssociationSet Name="FK_PositionInCategory_Category" Association="Self.FK_PositionInCategory_Category">
       <End Role="Category" EntitySet="Category" />
-      <End Role="PositionInCategory" EntitySet="PositionInCategory" />
+      <End Role="Position" EntitySet="Position" />
     </AssociationSet>
     <AssociationSet Name="FK_Team_Event" Association="Self.FK_Team_Event">
       <End Role="Event" EntitySet="Event" />
@@ -521,10 +523,6 @@
     </AssociationSet>
     <AssociationSet Name="FK_UserInCategory_AspNetUsers" Association="Self.FK_UserInCategory_AspNetUsers">
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-      <End Role="UserInCategory" EntitySet="UserInCategory" />
-    </AssociationSet>
-    <AssociationSet Name="FK_UserInCategory_PositionInCategory" Association="Self.FK_UserInCategory_PositionInCategory">
-      <End Role="PositionInCategory" EntitySet="PositionInCategory" />
       <End Role="UserInCategory" EntitySet="UserInCategory" />
     </AssociationSet>
     <AssociationSet Name="FK_UserInGroup_AspNetUsers" Association="Self.FK_UserInGroup_AspNetUsers">
@@ -549,6 +547,10 @@
     </AssociationSet>
     <AssociationSet Name="FK_UserOnEvent_Event" Association="Self.FK_UserOnEvent_Event">
       <End Role="Event" EntitySet="Event" />
+      <End Role="UserOnEvent" EntitySet="UserOnEvent" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserOnEvent_Position" Association="Self.FK_UserOnEvent_Position">
+      <End Role="Position" EntitySet="Position" />
       <End Role="UserOnEvent" EntitySet="UserOnEvent" />
     </AssociationSet>
     <AssociationSet Name="FK_UserOnEvent_Team" Association="Self.FK_UserOnEvent_Team">

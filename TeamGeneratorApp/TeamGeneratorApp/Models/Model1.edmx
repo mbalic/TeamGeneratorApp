@@ -97,7 +97,7 @@
           <Property Name="GroupId" Type="int" Nullable="false" />
           <Property Name="DateCreated" Type="datetime" Nullable="false" />
         </EntityType>
-        <EntityType Name="PositionInCategory">
+        <EntityType Name="Position">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -134,7 +134,6 @@
           <Property Name="CategoryId" Type="int" Nullable="false" />
           <Property Name="Score" Type="int" />
           <Property Name="Active" Type="bit" Nullable="false" />
-          <Property Name="PositionInCategoryId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="UserInGroup">
           <Key>
@@ -153,6 +152,7 @@
           <Property Name="EventId" Type="int" Nullable="false" />
           <Property Name="TeamId" Type="int" />
           <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="PositionId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="UserVoting">
           <Key>
@@ -272,12 +272,12 @@
         </Association>
         <Association Name="FK_PositionInCategory_Category">
           <End Role="Category" Type="Self.Category" Multiplicity="1" />
-          <End Role="PositionInCategory" Type="Self.PositionInCategory" Multiplicity="*" />
+          <End Role="Position" Type="Self.Position" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Category">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="PositionInCategory">
+            <Dependent Role="Position">
               <PropertyRef Name="CategoryId" />
             </Dependent>
           </ReferentialConstraint>
@@ -327,18 +327,6 @@
             </Principal>
             <Dependent Role="UserInCategory">
               <PropertyRef Name="UserIId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_UserInCategory_PositionInCategory">
-          <End Role="PositionInCategory" Type="Self.PositionInCategory" Multiplicity="1" />
-          <End Role="UserInCategory" Type="Self.UserInCategory" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PositionInCategory">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="UserInCategory">
-              <PropertyRef Name="PositionInCategoryId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -414,6 +402,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_UserOnEvent_Position">
+          <End Role="Position" Type="Self.Position" Multiplicity="1" />
+          <End Role="UserOnEvent" Type="Self.UserOnEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Position">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserOnEvent">
+              <PropertyRef Name="PositionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_UserOnEvent_Team">
           <End Role="Team" Type="Self.Team" Multiplicity="0..1" />
           <End Role="UserOnEvent" Type="Self.UserOnEvent" Multiplicity="*" />
@@ -474,7 +474,7 @@
           <EntitySet Name="Event" EntityType="Self.Event" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Group" EntityType="Self.Group" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Invitaton" EntityType="Self.Invitaton" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="PositionInCategory" EntityType="Self.PositionInCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Position" EntityType="Self.Position" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Team" EntityType="Self.Team" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserDetails" EntityType="Self.UserDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserInCategory" EntityType="Self.UserInCategory" Schema="dbo" store:Type="Tables" />
@@ -512,7 +512,7 @@
           </AssociationSet>
           <AssociationSet Name="FK_PositionInCategory_Category" Association="Self.FK_PositionInCategory_Category">
             <End Role="Category" EntitySet="Category" />
-            <End Role="PositionInCategory" EntitySet="PositionInCategory" />
+            <End Role="Position" EntitySet="Position" />
           </AssociationSet>
           <AssociationSet Name="FK_Team_Event" Association="Self.FK_Team_Event">
             <End Role="Event" EntitySet="Event" />
@@ -528,10 +528,6 @@
           </AssociationSet>
           <AssociationSet Name="FK_UserInCategory_AspNetUsers" Association="Self.FK_UserInCategory_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="UserInCategory" EntitySet="UserInCategory" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserInCategory_PositionInCategory" Association="Self.FK_UserInCategory_PositionInCategory">
-            <End Role="PositionInCategory" EntitySet="PositionInCategory" />
             <End Role="UserInCategory" EntitySet="UserInCategory" />
           </AssociationSet>
           <AssociationSet Name="FK_UserInGroup_AspNetUsers" Association="Self.FK_UserInGroup_AspNetUsers">
@@ -556,6 +552,10 @@
           </AssociationSet>
           <AssociationSet Name="FK_UserOnEvent_Event" Association="Self.FK_UserOnEvent_Event">
             <End Role="Event" EntitySet="Event" />
+            <End Role="UserOnEvent" EntitySet="UserOnEvent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserOnEvent_Position" Association="Self.FK_UserOnEvent_Position">
+            <End Role="Position" EntitySet="Position" />
             <End Role="UserOnEvent" EntitySet="UserOnEvent" />
           </AssociationSet>
           <AssociationSet Name="FK_UserOnEvent_Team" Association="Self.FK_UserOnEvent_Team">
@@ -648,7 +648,7 @@
           <Property Name="GroupId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Group" Relationship="Self.FK_Category_Group" FromRole="Category" ToRole="Group" />
           <NavigationProperty Name="Event" Relationship="Self.FK_Event_Category" FromRole="Category" ToRole="Event" />
-          <NavigationProperty Name="PositionInCategory" Relationship="Self.FK_PositionInCategory_Category" FromRole="Category" ToRole="PositionInCategory" />
+          <NavigationProperty Name="Position" Relationship="Self.FK_PositionInCategory_Category" FromRole="Category" ToRole="Position" />
           <NavigationProperty Name="UserInCategory" Relationship="Self.FK_UserCategory_Category" FromRole="Category" ToRole="UserInCategory" />
         </EntityType>
         <EntityType Name="Event">
@@ -691,7 +691,7 @@
           <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_UserInGroupInvitation_AspNetUsers" FromRole="Invitaton" ToRole="AspNetUsers" />
           <NavigationProperty Name="Group" Relationship="Self.FK_UserInGroupInvitation_Group" FromRole="Invitaton" ToRole="Group" />
         </EntityType>
-        <EntityType Name="PositionInCategory">
+        <EntityType Name="Position">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -699,8 +699,8 @@
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Value" Type="Int32" />
           <Property Name="CategoryId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Category" Relationship="Self.FK_PositionInCategory_Category" FromRole="PositionInCategory" ToRole="Category" />
-          <NavigationProperty Name="UserInCategory" Relationship="Self.FK_UserInCategory_PositionInCategory" FromRole="PositionInCategory" ToRole="UserInCategory" />
+          <NavigationProperty Name="Category" Relationship="Self.FK_PositionInCategory_Category" FromRole="Position" ToRole="Category" />
+          <NavigationProperty Name="UserOnEvent" Relationship="Self.FK_UserOnEvent_Position" FromRole="Position" ToRole="UserOnEvent" />
         </EntityType>
         <EntityType Name="Team">
           <Key>
@@ -733,10 +733,8 @@
           <Property Name="CategoryId" Type="Int32" Nullable="false" />
           <Property Name="Score" Type="Int32" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
-          <Property Name="PositionInCategoryId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_UserInCategory_AspNetUsers" FromRole="UserInCategory" ToRole="AspNetUsers" />
           <NavigationProperty Name="Category" Relationship="Self.FK_UserCategory_Category" FromRole="UserInCategory" ToRole="Category" />
-          <NavigationProperty Name="PositionInCategory" Relationship="Self.FK_UserInCategory_PositionInCategory" FromRole="UserInCategory" ToRole="PositionInCategory" />
         </EntityType>
         <EntityType Name="UserInGroup">
           <Key>
@@ -757,8 +755,10 @@
           <Property Name="EventId" Type="Int32" Nullable="false" />
           <Property Name="TeamId" Type="Int32" />
           <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PositionId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_UserOnEvent_AspNetUsers" FromRole="UserOnEvent" ToRole="AspNetUsers" />
           <NavigationProperty Name="Event" Relationship="Self.FK_UserOnEvent_Event" FromRole="UserOnEvent" ToRole="Event" />
+          <NavigationProperty Name="Position" Relationship="Self.FK_UserOnEvent_Position" FromRole="UserOnEvent" ToRole="Position" />
           <NavigationProperty Name="Team" Relationship="Self.FK_UserOnEvent_Team" FromRole="UserOnEvent" ToRole="Team" />
         </EntityType>
         <EntityType Name="UserVoting">
@@ -927,12 +927,12 @@
         </Association>
         <Association Name="FK_PositionInCategory_Category">
           <End Role="Category" Type="Self.Category" Multiplicity="1" />
-          <End Role="PositionInCategory" Type="Self.PositionInCategory" Multiplicity="*" />
+          <End Role="Position" Type="Self.Position" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Category">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="PositionInCategory">
+            <Dependent Role="Position">
               <PropertyRef Name="CategoryId" />
             </Dependent>
           </ReferentialConstraint>
@@ -1009,15 +1009,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_UserInCategory_PositionInCategory">
-          <End Role="PositionInCategory" Type="Self.PositionInCategory" Multiplicity="1" />
-          <End Role="UserInCategory" Type="Self.UserInCategory" Multiplicity="*" />
+        <Association Name="FK_UserOnEvent_Position">
+          <End Role="Position" Type="Self.Position" Multiplicity="1" />
+          <End Role="UserOnEvent" Type="Self.UserOnEvent" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="PositionInCategory">
+            <Principal Role="Position">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="UserInCategory">
-              <PropertyRef Name="PositionInCategoryId" />
+            <Dependent Role="UserOnEvent">
+              <PropertyRef Name="PositionId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1060,7 +1060,7 @@
           <EntitySet Name="Event" EntityType="Self.Event" />
           <EntitySet Name="Group" EntityType="Self.Group" />
           <EntitySet Name="Invitaton" EntityType="Self.Invitaton" />
-          <EntitySet Name="PositionInCategory" EntityType="Self.PositionInCategory" />
+          <EntitySet Name="Position" EntityType="Self.Position" />
           <EntitySet Name="Team" EntityType="Self.Team" />
           <EntitySet Name="UserDetails" EntityType="Self.UserDetails" />
           <EntitySet Name="UserInCategory" EntityType="Self.UserInCategory" />
@@ -1114,7 +1114,7 @@
           </AssociationSet>
           <AssociationSet Name="FK_PositionInCategory_Category" Association="Self.FK_PositionInCategory_Category">
             <End Role="Category" EntitySet="Category" />
-            <End Role="PositionInCategory" EntitySet="PositionInCategory" />
+            <End Role="Position" EntitySet="Position" />
           </AssociationSet>
           <AssociationSet Name="FK_UserCategory_Category" Association="Self.FK_UserCategory_Category">
             <End Role="Category" EntitySet="Category" />
@@ -1140,9 +1140,9 @@
             <End Role="Group" EntitySet="Group" />
             <End Role="Invitaton" EntitySet="Invitaton" />
           </AssociationSet>
-          <AssociationSet Name="FK_UserInCategory_PositionInCategory" Association="Self.FK_UserInCategory_PositionInCategory">
-            <End Role="PositionInCategory" EntitySet="PositionInCategory" />
-            <End Role="UserInCategory" EntitySet="UserInCategory" />
+          <AssociationSet Name="FK_UserOnEvent_Position" Association="Self.FK_UserOnEvent_Position">
+            <End Role="Position" EntitySet="Position" />
+            <End Role="UserOnEvent" EntitySet="UserOnEvent" />
           </AssociationSet>
           <AssociationSet Name="FK_UserOnEvent_Team" Association="Self.FK_UserOnEvent_Team">
             <End Role="Team" EntitySet="Team" />
@@ -1253,9 +1253,9 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="PositionInCategory">
-            <EntityTypeMapping TypeName="TeamDb6Model.PositionInCategory">
-              <MappingFragment StoreEntitySet="PositionInCategory">
+          <EntitySetMapping Name="Position">
+            <EntityTypeMapping TypeName="TeamDb6Model.Position">
+              <MappingFragment StoreEntitySet="Position">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Value" ColumnName="Value" />
@@ -1292,7 +1292,6 @@
                 <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
                 <ScalarProperty Name="Score" ColumnName="Score" />
                 <ScalarProperty Name="Active" ColumnName="Active" />
-                <ScalarProperty Name="PositionInCategoryId" ColumnName="PositionInCategoryId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1313,6 +1312,7 @@
                 <ScalarProperty Name="EventId" ColumnName="EventId" />
                 <ScalarProperty Name="TeamId" ColumnName="TeamId" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="PositionId" ColumnName="PositionId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

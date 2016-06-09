@@ -183,6 +183,7 @@
     <Compile Include="DAL\Repositories\UserOnEventRepository.cs" />
     <Compile Include="DAL\Repositories\UserVotingRepository.cs" />
     <Compile Include="DAL\Repositories\VotingRepository.cs" />
+    <Compile Include="Helpers\EloRating.cs" />
     <Compile Include="Migrations\201606022212480_Name.cs" />
     <Compile Include="Migrations\201606022212480_Name.Designer.cs">
       <DependentUpon>201606022212480_Name.cs</DependentUpon>
@@ -227,7 +228,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model1.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\PositionInCategory.cs">
+    <Compile Include="Models\Position.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Team.cs">

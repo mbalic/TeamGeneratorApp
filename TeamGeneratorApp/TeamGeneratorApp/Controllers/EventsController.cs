@@ -13,6 +13,7 @@ using PagedList;
 using TeamGeneratorApp.DAL;
 using TeamGeneratorApp.Models;
 using TeamGeneratorApp.Models.ViewModels;
+using TeamGeneratorApp.Helpers;
 
 namespace TeamGeneratorApp.Controllers
 {
@@ -74,7 +75,7 @@ namespace TeamGeneratorApp.Controllers
             {
                 foreach (var voting in @event.Voting)
                 {
-                    if (voting.StartVoting < DateTime.Now)
+                    if (voting.StartVoting < DateTime.Now || voting.Active)
                         ViewBag.VotingStarted = true;
                     else
                         ViewBag.VotingStarted = false;
@@ -88,6 +89,14 @@ namespace TeamGeneratorApp.Controllers
                       Name = e.AspNetUsers.Name
                   })
                   .OrderBy(e => e.Name);
+
+            ViewData["positions"] = unitOfWork.CategoryRepository.GetPositionsInCategory(@event.CategoryId).AsQueryable()
+                   .Select(e => new PositionddlVM()
+                   {
+                       Id = e.Id,
+                       Name = e.Name
+                   })
+                   .OrderBy(e => e.Name);
 
             ViewBag.EventId = eventId;
             return PartialView("_UsersGrid");
@@ -108,7 +117,8 @@ namespace TeamGeneratorApp.Controllers
                     UserId = e.UserId,
                     EventId = e.EventId,
                     UserPersonalName = e.AspNetUsers.Name,
-                    TeamId = e.TeamId
+                    TeamId = e.TeamId,
+                    PositionId = e.PositionId
                 };
                 list.Add(newItem);
             }
@@ -130,6 +140,7 @@ namespace TeamGeneratorApp.Controllers
                         Id = e.Id,
                         UserId = e.UserId,
                         EventId = e.EventId,
+                        PositionId = e.PositionId
                     };
                     //insert users into UserVoting
                     var votingList = unitOfWork.VotingRepository.GetByEventId(e.EventId);
@@ -182,7 +193,8 @@ namespace TeamGeneratorApp.Controllers
             //        {
             //            Id = e.Id,
             //            UserId = e.UserId,
-            //            EventId = e.EventId
+            //            EventId = e.EventId,
+            //            PositionId = e.PositionId
             //        };
             //        try
             //        {
@@ -481,8 +493,11 @@ namespace TeamGeneratorApp.Controllers
                     User2_Image = user2.AspNetUsers.ImageUrl
                 };
 
+                ViewBag.CategoryId = userOnEvent.Event.CategoryId;
+                ViewBag.CategoryName = userOnEvent.Event.Category.Name;
                 ViewBag.EventId = userOnEvent.EventId;
                 ViewBag.EventName = userOnEvent.Event.Name;
+
                 return View(votingProcess);
             }
             else
@@ -493,7 +508,7 @@ namespace TeamGeneratorApp.Controllers
            
         }
 
-        public ActionResult Rate(string votingId, int userVotingId, string winnerId, string loserId, string drawId1, string drawId2)
+        public ActionResult Rate(int categoryId, string votingId, int userVotingId, string user1_Id, string user2_Id, bool draw, bool firstWins)
         {
             var userId = User.Identity.GetUserId();
 
@@ -501,21 +516,43 @@ namespace TeamGeneratorApp.Controllers
             var userVoting = unitOfWork.UserVotingRepository.GetUserVoting(userId, votingId);
             userVoting.VoteCounter++;
             unitOfWork.UserVotingRepository.Update(userVoting);
-            unitOfWork.Commit();
 
+            var userVoting1 = unitOfWork.UserVotingRepository.GetUserVoting(user1_Id, votingId);
+            var userVoting2 = unitOfWork.UserVotingRepository.GetUserVoting(user2_Id, votingId);
 
-
-            if (winnerId != null && loserId != null)
+            if (!draw)
             {
-                //var winner = unitOfWork.
-                
-                //elo
-
+                if (firstWins)
+                {
+                    userVoting1.Wins++;
+                    userVoting2.Loses++;
+                }
+                else
+                {
+                    userVoting2.Wins++;
+                    userVoting1.Loses++;
+                }
             }
             else
             {
-                //elo for draw
+                userVoting1.Draws++;
+                userVoting2.Draws++;
             }
+
+            var user1 = unitOfWork.UserInCategoryRepository.GetByUserAndCategoryId(user1_Id, categoryId);
+            var user2 = unitOfWork.UserInCategoryRepository.GetByUserAndCategoryId(user2_Id, categoryId);
+
+            //elo algorithm
+            var eloRating = new EloRating(Convert.ToDouble(user1.Score), Convert.ToDouble(user2.Score), draw, firstWins);
+
+            //update score
+            user1.Score = Convert.ToInt32(eloRating.FinalRating1);
+            user2.Score = Convert.ToInt32(eloRating.FinalRating2);
+
+            unitOfWork.UserInCategoryRepository.Update(user1);
+            unitOfWork.UserInCategoryRepository.Update(user1);
+            unitOfWork.Commit();
+
             return RedirectToAction("Voting", new {id = votingId});
 
         }

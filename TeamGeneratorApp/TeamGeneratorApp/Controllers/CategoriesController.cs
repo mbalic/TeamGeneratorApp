@@ -207,14 +207,6 @@ namespace TeamGeneratorApp.Controllers
                   .OrderBy(e => e.Name);
 
 
-            ViewData["positions"] = unitOfWork.CategoryRepository.GetPositionsInCategory(categoryId).AsQueryable()
-                   .Select(e => new PositionddlVM()
-                   {
-                       Id = e.Id,
-                       Name = e.Name
-                   })
-                   .OrderBy(e => e.Name);
-
             ViewBag.CategoryId = categoryId;
             return PartialView("_UsersGrid");
         }
@@ -237,8 +229,7 @@ namespace TeamGeneratorApp.Controllers
                     CategoryId = e.CategoryId,
                     UserPersonalName = e.AspNetUsers.Name,
                     Score = e.Score,
-                    Active = e.Active,
-                    PositionInCategoryId = e.PositionInCategoryId
+                    Active = e.Active                 
 
                     //PositionName = e.PositionInCategory == null? null : e.PositionInCategory.Name
 
@@ -266,9 +257,7 @@ namespace TeamGeneratorApp.Controllers
                         UserIId = e.UserId,
                         CategoryId = e.CategoryId,
                         Score = e.Score,
-                        Active = e.Active,
-                        PositionInCategoryId = e.PositionInCategoryId
-                        
+                        Active = e.Active                        
                     };
                     try
                     {
@@ -301,8 +290,7 @@ namespace TeamGeneratorApp.Controllers
                         UserIId = e.UserId,
                         CategoryId = e.CategoryId,
                         Score = e.Score,
-                        Active = e.Active,
-                        PositionInCategoryId = e.PositionInCategoryId
+                        Active = e.Active
                     };
                     try
                     {
@@ -402,7 +390,7 @@ namespace TeamGeneratorApp.Controllers
             {
                 foreach (var e in res)
                 {
-                    var newPosition = new PositionInCategory
+                    var newPosition = new Position
                     {
                         Id = e.Id,
                         CategoryId = e.CategoryId,
@@ -435,7 +423,7 @@ namespace TeamGeneratorApp.Controllers
             {
                 foreach (var e in res)
                 {
-                    var newItem = new PositionInCategory
+                    var newItem = new Position
                     {
                         Id = e.Id,
                         CategoryId = e.CategoryId,
@@ -461,9 +449,9 @@ namespace TeamGeneratorApp.Controllers
 
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult PositionsGrid_Destroy([DataSourceRequest] DataSourceRequest request,
-         [Bind(Prefix = "models")]IEnumerable<PositionInCategory> res)
+         [Bind(Prefix = "models")]IEnumerable<Position> res)
         {
-            var list = new List<PositionInCategory>();
+            var list = new List<Position>();
             if (res != null && ModelState.IsValid)
             {
                 foreach (var e in res)

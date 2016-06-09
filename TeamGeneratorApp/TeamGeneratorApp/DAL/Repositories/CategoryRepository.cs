@@ -21,30 +21,30 @@ namespace TeamGeneratorApp.DAL.Repositories
             return context.Category.Where(c => c.GroupId == groupId);
         }
 
-        public IEnumerable<PositionInCategory> GetPositionsInCategory(int categoryId)
+        public IEnumerable<Position> GetPositionsInCategory(int categoryId)
         {
-            return context.PositionInCategory.Where(c => c.CategoryId == categoryId);
+            return context.Position.Where(c => c.CategoryId == categoryId);
         }
 
-        public void InsertPositionInCategory(PositionInCategory item)
+        public void InsertPositionInCategory(Position item)
         {
-            context.PositionInCategory.Add(item);
+            context.Position.Add(item);
         }
 
-        public void UpdatePositionInCategory(PositionInCategory item)
+        public void UpdatePositionInCategory(Position item)
         {
-            context.PositionInCategory.Attach(item);
+            context.Position.Attach(item);
             context.Entry(item).State = EntityState.Modified;
         }
 
         public void DeletePositionInCategory(int id)
         {
-            PositionInCategory item = context.PositionInCategory.Find(id);
+            Position item = context.Position.Find(id);
             if (context.Entry(item).State == EntityState.Detached)
             {
-                context.PositionInCategory.Attach(item);
+                context.Position.Attach(item);
             }
-            context.PositionInCategory.Remove(item);
+            context.Position.Remove(item);
         }
         
 

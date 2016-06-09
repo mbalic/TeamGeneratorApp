@@ -9,7 +9,8 @@
 </p>
 <h2>Voting</h2>
 <hr />
-<h4>@ViewBag.EventName</h4>
+<h4>Event: @ViewBag.EventName</h4>
+<h5>Category: @ViewBag.CategoryName</h5>
 <br />
 <center>
     <p>Who wins this duel?</p>
@@ -26,11 +27,11 @@
             <td>@Html.DisplayFor(model => model.User2_PersonalName)</td>
         </tr>
         <tr>
-            <td>@Html.ActionLink("Win", "Rate", new { userVotingId = Model.UserVotingId, votingId = Model.VotingId, winnerId = Model.User1_Id, loserId = Model.User2_Id })</td>
-            <td>@Html.ActionLink("Win", "Rate", new { userVotingId = Model.UserVotingId, votingId = Model.VotingId, winnerId = Model.User2_Id, loserId = Model.User1_Id })</td>
+            <td>@Html.ActionLink("Win", "Rate", new { categoryId = ViewBag.CategoryId, userVotingId = Model.UserVotingId, votingId = Model.VotingId, user1_Id = Model.User1_Id, user2_Id = Model.User2_Id, draw = false, firstWins = true })</td>
+            <td>@Html.ActionLink("Win", "Rate", new { categoryId = ViewBag.CategoryId, userVotingId = Model.UserVotingId, votingId = Model.VotingId, user1_Id = Model.User1_Id, user2_Id = Model.User2_Id, draw = false, firstWins = false })</td>
         </tr>
         <tr>
-            <td>@Html.ActionLink("Draw", "Rate", new { userVotingId = Model.UserVotingId, votingId = Model.VotingId, drawId1 = Model.User1_Id, drawId2 = Model.User2_Id })</td>
+            <td>@Html.ActionLink("Draw", "Rate", new { categoryId = ViewBag.CategoryId, userVotingId = Model.UserVotingId, votingId = Model.VotingId, user1_Id = Model.User1_Id, user2_Id = Model.User2_Id, draw = true, firstWins = false })</td>
         </tr>
     </table>
 </center>
