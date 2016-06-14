@@ -1,0 +1,74 @@
+﻿@model TeamGeneratorApp.Models.ViewModels.GeneratorDetailsVM
+
+@{
+    ViewBag.Title = "Details";
+}
+<br />
+<p>
+    @Html.ActionLink("< Back to event", "Details", "Events", new { id = Model.EventId }, null)
+</p>
+<h2>@Html.DisplayFor(model => model.Name)</h2>
+<hr />
+<h4>Generator</h4>
+<br />
+<div>
+    <dl class="dl-horizontal">
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EventName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EventName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CriteriaName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CriteriaName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NumberOfTeams)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NumberOfTeams)
+        </dd>
+
+        <br/>
+        <dt>
+           All users
+        </dt>
+
+        <dd>
+            @Html.Action("AllUsersGenerateGrid", "Events", new { generatorId = Model.Id})          
+        </dd>
+
+
+    </dl>
+</div>
+<br/>
+
+
+@if (!Model.IsGenerated)
+{
+    <button>@Html.ActionLink("Generate teams!", "GenerateTeams", new {generatorId = Model.Id })</button>
+}
+else
+{
+    @*<button>@Html.ActionLink("View generated teams", "ViewGeneratedTeams", new {generatorId = Model.Id })</button>*@
+}
+
+
+<div id="generatedGrids">
+@for (var i = 1; i <= Model.NumberOfTeams; i++)
+{
+    @*@Html.Action("GeneratedTeamsGrid", "Events", new { eventId = Model.Id })*@
+}
+
+</div>
+
+

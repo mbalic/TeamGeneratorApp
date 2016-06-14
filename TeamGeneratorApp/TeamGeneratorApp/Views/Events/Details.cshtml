@@ -39,11 +39,13 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.NumberOfTeams)
-        </dt>
 
+        </dt>
         <dd>
-            @Html.DisplayFor(model => model.NumberOfTeams)
+            @*@if (ViewBag.CanGenerate)
+            {
+                <button>@Html.ActionLink("Generate teams", "GenerateTeams", new { eventId = Model.Id })</button>
+            }*@
         </dd>
 
     </dl>
@@ -57,7 +59,7 @@
             <a href="#Votings" data-toggle="tab">Votings</a>
         </li>
         <li>
-            <a href="#GeneratedTeams" data-toggle="tab">Generated teams</a>
+            <a href="#Generators" data-toggle="tab">Generators</a>
         </li>
     </ul>
 
@@ -68,8 +70,8 @@
         <div class="tab-pane" id="Votings">
             @Html.Action("VotingsGrid", "Events", new { eventId = Model.Id })
         </div>
-        <div class="tab-pane" id="GeneratedTeams">
-            @*@Html.Action("VotingsGrid", "Events", new { eventId = Model.Id })*@
+        <div class="tab-pane" id="Generators">
+            @Html.Action("GeneratorsGrid", "Events", new { eventId = Model.Id })
         </div>
     </div>
 

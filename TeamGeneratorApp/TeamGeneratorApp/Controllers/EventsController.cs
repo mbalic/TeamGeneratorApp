@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Runtime.Remoting.Messaging;
 using System.Web;
 using System.Web.Mvc;
 using Kendo.Mvc.Extensions;
@@ -44,9 +45,16 @@ namespace TeamGeneratorApp.Controllers
                 Description = @event.Description,
                 Start = @event.Start,
                 Finish = @event.Finish,
-                Name = @event.Name,
-                NumberOfTeams = @event.NumberOfTeams
+                Name = @event.Name
             };
+
+            foreach (var voting in @event.Voting)
+            {
+                if (voting.Active)
+                    ViewBag.CanGenerate = false;
+                else
+                    ViewBag.CanGenerate = true;
+            }
 
             ViewBag.CategoryId = @event.CategoryId;
             return View(eventVm);
@@ -117,8 +125,8 @@ namespace TeamGeneratorApp.Controllers
                     UserId = e.UserId,
                     EventId = e.EventId,
                     UserPersonalName = e.AspNetUsers.Name,
-                    TeamId = e.TeamId,
-                    PositionId = e.PositionId
+                    PositionId = e.PositionId,
+                    Rating = unitOfWork.UserInCategoryRepository.GetByUserAndCategoryId(e.UserId, e.Event.CategoryId).Rating
                 };
                 list.Add(newItem);
             }
@@ -476,9 +484,9 @@ namespace TeamGeneratorApp.Controllers
 
                 //random pick 2 users
                 var random = new Random();
-                var choosenOnes = userList.OrderBy(x => random.Next()).Take(2);
-                var user1 = choosenOnes.ElementAt(0);
-                var user2 = choosenOnes.ElementAt(1);
+                var user1 = userList.OrderBy(x => random.Next()).Take(1).Single();
+                userList.Remove(user1);
+                var user2 = userList.OrderBy(x => random.Next()).Take(1).Single();
 
                 //voting process
                 var votingProcess = new VotingProcessVM
@@ -543,11 +551,11 @@ namespace TeamGeneratorApp.Controllers
             var user2 = unitOfWork.UserInCategoryRepository.GetByUserAndCategoryId(user2_Id, categoryId);
 
             //elo algorithm
-            var eloRating = new EloRating(Convert.ToDouble(user1.Score), Convert.ToDouble(user2.Score), draw, firstWins);
+            var eloRating = new EloRating(Convert.ToDouble(user1.Rating), Convert.ToDouble(user2.Rating), draw, firstWins);
 
-            //update score
-            user1.Score = Convert.ToInt32(eloRating.FinalRating1);
-            user2.Score = Convert.ToInt32(eloRating.FinalRating2);
+            //update rating
+            user1.Rating = Convert.ToInt32(eloRating.FinalRating1);
+            user2.Rating = Convert.ToInt32(eloRating.FinalRating2);
 
             unitOfWork.UserInCategoryRepository.Update(user1);
             unitOfWork.UserInCategoryRepository.Update(user1);
@@ -556,6 +564,341 @@ namespace TeamGeneratorApp.Controllers
             return RedirectToAction("Voting", new {id = votingId});
 
         }
+
+
+        public ActionResult GeneratorsGrid(int eventId = 0)
+        {
+            ViewData["criterias"] = unitOfWork.GeneratorRepository.GetCriterias().AsQueryable()
+                  .Select(e => new CriteriaddlVM()
+                  {
+                      Id = e.Id,
+                      Name = e.Name
+                  })
+                  .OrderBy(e => e.Name);
+
+            ViewBag.EventId = eventId;
+            return PartialView("_GeneratorsGrid");
+        }
+
+
+        #region GeneratorsGrid
+
+        public ActionResult GeneratorsGrid_Read([DataSourceRequest] DataSourceRequest request, int eventId)
+        {
+            var res = unitOfWork.GeneratorRepository.GetByEventId(eventId).ToList();
+
+            var list = new List<GeneratorVM>();
+            foreach (var e in res)
+            {
+                var newItem = new GeneratorVM
+                {
+                    Id = e.Id,
+                    Name = e.Name,
+                    EventId = e.EventId,
+                    CriteriaId = e.CriteriaId,
+                    NumberOfTeams = e.NumberOfTeams
+                };
+                list.Add(newItem);
+            }
+
+            return Json(list.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult GeneratorsGrid_Create([DataSourceRequest] DataSourceRequest request,
+          [Bind(Prefix = "models")]IEnumerable<GeneratorVM> res)
+        {
+            var list = new List<GeneratorVM>();
+            if (res != null && ModelState.IsValid)
+            {
+                foreach (var e in res)
+                {
+                    var newItem = new Generator
+                    {
+                        Id = e.Id,
+                        Name = e.Name,
+                        EventId = e.EventId,
+                        CriteriaId = e.CriteriaId,
+                        NumberOfTeams = e.NumberOfTeams
+                    };
+                 
+
+                    try
+                    {
+                        unitOfWork.GeneratorRepository.Insert(newItem);
+                        for(var i = 1; i<= e.NumberOfTeams; i++)
+                        {
+                            var newTeam = new Team
+                            {
+                                GeneratorId = e.Id,
+                                Name = "Team_" + i
+                            };
+                            unitOfWork.TeamRepository.Insert(newTeam);
+                        }
+
+                        unitOfWork.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        ViewBag.ConstraintError = "There was an error while adding rows in grid.";
+                    }
+                    list.Add(e);
+                }
+            }
+
+            return Json(list.ToDataSourceResult(request, ModelState));
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult GeneratorsGrid_Update([DataSourceRequest] DataSourceRequest request,
+        [Bind(Prefix = "models")]IEnumerable<GeneratorVM> res)
+        {
+            //var list = new List<UserOnEventVM>();
+            //if (res != null && ModelState.IsValid)
+            //{
+            //    foreach (var e in res)
+            //    {
+            //        var newUser = new UserOnEvent
+            //        {
+            //            Id = e.Id,
+            //            UserId = e.UserId,
+            //            EventId = e.EventId,
+            //            PositionId = e.PositionId
+            //        };
+            //        try
+            //        {
+            //            unitOfWork.UserOnEventRepository.Update(newUser);
+            //            unitOfWork.Commit();
+            //        }
+            //        catch (Exception)
+            //        {
+            //            ViewBag.ConstraintError = "There was an error while updating rows in grid.";
+            //        }
+            //        list.Add(e);
+            //    }
+            //}
+
+            return Json(res.ToDataSourceResult(request, ModelState));
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult GeneratorsGrid_Destroy([DataSourceRequest] DataSourceRequest request,
+         [Bind(Prefix = "models")]IEnumerable<GeneratorVM> res)
+        {
+            var list = new List<GeneratorVM>();
+            if (res != null && ModelState.IsValid)
+            {
+                foreach (var e in res)
+                {
+                    try
+                    {
+                        unitOfWork.GeneratorRepository.Delete(e.Id);
+                        unitOfWork.Commit();
+                        list.Add(e);
+                    }
+                    catch (Exception)
+                    {
+                        ViewBag.ConstraintError = "There was an error while deleting rows in grid.";
+                    }
+                }
+            }
+
+            return Json(list.ToDataSourceResult(request, ModelState));
+        }
+
+        #endregion
+
+
+
+        // GET: Events/GeneratorDetails/5
+        public ActionResult GeneratorDetails(int id = 0)
+        {
+            if (id == 0)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var generator = unitOfWork.GeneratorRepository.GetByID(id);
+
+            if (generator == null)
+            {
+                return HttpNotFound();
+            }
+
+            var generatorVm = new GeneratorDetailsVM
+            {
+                Id = generator.Id,
+                Name = generator.Name,
+                EventId = generator.EventId,
+                EventName = generator.Event.Name,
+                NumberOfTeams = generator.NumberOfTeams,
+                CriteriaName = generator.Criteria.Name, 
+                IsGenerated = generator.IsGenerated
+            };
+
+           
+            return View(generatorVm);
+        }
+
+
+
+        #region AllUsersGenerateGrid
+        public PartialViewResult AllUsersGenerateGrid(int generatorId = 0)
+        {
+            var generator = unitOfWork.GeneratorRepository.GetByID(generatorId);
+            var teams = unitOfWork.TeamRepository.GetByGeneratorId(generator.Id).ToList();
+            teams.Insert(0, new Team {Id = -1, Name = "", GeneratorId = -1});
+
+            ViewData["teams"] = teams.AsQueryable()
+                   .Select(e => new TeamddlVM
+                   {
+                       Id = e.Id,
+                       Name = e.Name
+                   })
+                   .OrderBy(e => e.Name);
+            
+
+            ViewBag.IsGenerated = generator.IsGenerated;
+            ViewBag.EventId = generator.EventId;
+            ViewBag.GeneratorId = generator.Id;
+            return PartialView("_AllUsersGenerateGrid");
+        }
+
+        public ActionResult AllUsersGenerateGrid_Read([DataSourceRequest] DataSourceRequest request, int eventId, int generatorId)
+        {
+            var res = unitOfWork.UserOnEventRepository.GetByEventId(eventId).ToList();
+
+            var list = new List<UserOnEventVM>();
+            foreach (var e in res)
+            {
+                var newItem = new UserOnEventVM
+                {
+                    Id = e.Id,
+                    UserId = e.UserId,
+                    EventId = e.EventId,
+                    UserPersonalName = e.AspNetUsers.Name,
+                    PositionId = e.PositionId,
+                    PositionName = e.Position.Name,
+                    Rating = unitOfWork.UserInCategoryRepository.GetByUserAndCategoryId(e.UserId, e.Event.CategoryId).Rating,
+                    TeamId = (unitOfWork.UserInTeamRepository.GetByUserOnEventAndGeneratorId(e.Id, generatorId) == null? null : (int?)unitOfWork.UserInTeamRepository.GetByUserOnEventAndGeneratorId(e.Id, generatorId).TeamId)
+                };
+                list.Add(newItem);
+            }
+
+            return Json(list.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
+        }
+
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult AllUsersGenerateGrid_Update([DataSourceRequest] DataSourceRequest request,
+       [Bind(Prefix = "models")]IEnumerable<UserOnEventVM> res, int generatorId)
+        {
+            var list = new List<UserOnEventVM>();
+            if (res != null && ModelState.IsValid)
+            {
+                foreach (var e in res)
+                {
+                    try
+                    {  
+                        //if null
+                        if (e.TeamId == -1)
+                        {
+                            //find if exists in userInTeam and delete it
+                            var existingItem = unitOfWork.UserInTeamRepository.GetByUserOnEventAndGeneratorId(e.Id,
+                                generatorId);
+                            if (existingItem != null)
+                            {
+                                unitOfWork.UserInTeamRepository.Delete(existingItem);
+                                unitOfWork.Commit();
+                            }
+                        }
+                        else
+                        {
+
+                            //automaticaly insert in userInTeam
+                            var newUserInTeam = new UserInTeam
+                            {
+                                UserOnEventId = e.Id,
+                                TeamId = (int)e.TeamId
+                            };
+
+                            var existingItem = unitOfWork.UserInTeamRepository.GetByUserOnEventAndGeneratorId(e.Id,
+                                generatorId);
+                            if (existingItem != null)
+                            {
+                                if (existingItem.TeamId != e.TeamId)
+                                {
+                                    //existingItem.TeamId = e.TeamId;
+                                    unitOfWork.UserInTeamRepository.Update(existingItem);
+                                    unitOfWork.Commit();
+                                }
+                            }
+                            else
+                            {
+                                unitOfWork.UserInTeamRepository.Insert(newUserInTeam);
+                                unitOfWork.Commit();
+                            }
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        ViewBag.ConstraintError = "There was an error while updating rows in grid.";
+                    }
+                    list.Add(e);
+                }
+            }
+
+            return Json(res.ToDataSourceResult(request, ModelState));
+        }
+
+       
+
+
+
+        #endregion
+
+
+
+
+
+        public ActionResult GenerateTeams(int generatorId = 0)
+        {
+            if (generatorId == 0)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var generator = unitOfWork.GeneratorRepository.GetByID(generatorId);
+
+            if (generator == null)
+            {
+                return HttpNotFound();
+            }
+
+            
+
+            return HttpNotFound();
+
+
+        }
+
+
+
+
+
+
+
+
+
+        public PartialViewResult GeneratedTeamsGrid(int generatorId = 0)
+        {
+            var generator = unitOfWork.GeneratorRepository.GetByID(generatorId);
+
+            ViewBag.GeneratorId = generatorId;
+            ViewBag.NumberOfTeams = generator.NumberOfTeams;
+            return PartialView("_GeneratedTeamsGrid");
+        }
+
+
+
 
 
     }

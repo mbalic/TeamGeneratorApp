@@ -71,6 +71,14 @@
     <NavigationProperty Name="Position" Relationship="Self.FK_PositionInCategory_Category" FromRole="Category" ToRole="Position" />
     <NavigationProperty Name="UserInCategory" Relationship="Self.FK_UserCategory_Category" FromRole="Category" ToRole="UserInCategory" />
   </EntityType>
+  <EntityType Name="Criteria">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Generator" Relationship="Self.FK_Generator_Criteria" FromRole="Criteria" ToRole="Generator" />
+  </EntityType>
   <EntityType Name="Event">
     <Key>
       <PropertyRef Name="Id" />
@@ -81,11 +89,24 @@
     <Property Name="Description" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
     <Property Name="Start" Type="DateTime" Precision="3" />
     <Property Name="Finish" Type="DateTime" Precision="3" />
-    <Property Name="NumberOfTeams" Type="Int32" Nullable="false" />
     <NavigationProperty Name="Category" Relationship="Self.FK_Event_Category" FromRole="Event" ToRole="Category" />
-    <NavigationProperty Name="Team" Relationship="Self.FK_Team_Event" FromRole="Event" ToRole="Team" />
+    <NavigationProperty Name="Generator" Relationship="Self.FK_Generator_Event" FromRole="Event" ToRole="Generator" />
     <NavigationProperty Name="UserOnEvent" Relationship="Self.FK_UserOnEvent_Event" FromRole="Event" ToRole="UserOnEvent" />
     <NavigationProperty Name="Voting" Relationship="Self.FK_Voting_Event" FromRole="Event" ToRole="Voting" />
+  </EntityType>
+  <EntityType Name="Generator">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="EventId" Type="Int32" Nullable="false" />
+    <Property Name="CriteriaId" Type="Int32" Nullable="false" />
+    <Property Name="NumberOfTeams" Type="Int32" Nullable="false" />
+    <Property Name="IsGenerated" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Criteria" Relationship="Self.FK_Generator_Criteria" FromRole="Generator" ToRole="Criteria" />
+    <NavigationProperty Name="Event" Relationship="Self.FK_Generator_Event" FromRole="Generator" ToRole="Event" />
+    <NavigationProperty Name="Team" Relationship="Self.FK_Team_Generator" FromRole="Generator" ToRole="Team" />
   </EntityType>
   <EntityType Name="Group">
     <Key>
@@ -129,9 +150,9 @@
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="Name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
     <Property Name="TeamScore" Type="Int32" />
-    <Property Name="EventId" Type="Int32" Nullable="false" />
-    <NavigationProperty Name="Event" Relationship="Self.FK_Team_Event" FromRole="Team" ToRole="Event" />
-    <NavigationProperty Name="UserOnEvent" Relationship="Self.FK_UserOnEvent_Team" FromRole="Team" ToRole="UserOnEvent" />
+    <Property Name="GeneratorId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Generator" Relationship="Self.FK_Team_Generator" FromRole="Team" ToRole="Generator" />
+    <NavigationProperty Name="UserInTeam" Relationship="Self.FK_UserInTeam_Team" FromRole="Team" ToRole="UserInTeam" />
   </EntityType>
   <EntityType Name="UserDetails">
     <Key>
@@ -151,7 +172,7 @@
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="UserIId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="CategoryId" Type="Int32" Nullable="false" />
-    <Property Name="Score" Type="Int32" />
+    <Property Name="Rating" Type="Int32" />
     <Property Name="Active" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_UserInCategory_AspNetUsers" FromRole="UserInCategory" ToRole="AspNetUsers" />
     <NavigationProperty Name="Category" Relationship="Self.FK_UserCategory_Category" FromRole="UserInCategory" ToRole="Category" />
@@ -167,19 +188,28 @@
     <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_UserInGroup_AspNetUsers" FromRole="UserInGroup" ToRole="AspNetUsers" />
     <NavigationProperty Name="Group" Relationship="Self.FK_UserInGroup_Group" FromRole="UserInGroup" ToRole="Group" />
   </EntityType>
+  <EntityType Name="UserInTeam">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TeamId" Type="Int32" Nullable="false" />
+    <Property Name="UserOnEventId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Team" Relationship="Self.FK_UserInTeam_Team" FromRole="UserInTeam" ToRole="Team" />
+    <NavigationProperty Name="UserOnEvent" Relationship="Self.FK_UserInTeam_UserOnEvent" FromRole="UserInTeam" ToRole="UserOnEvent" />
+  </EntityType>
   <EntityType Name="UserOnEvent">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="EventId" Type="Int32" Nullable="false" />
-    <Property Name="TeamId" Type="Int32" />
     <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="PositionId" Type="Int32" Nullable="false" />
     <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_UserOnEvent_AspNetUsers" FromRole="UserOnEvent" ToRole="AspNetUsers" />
     <NavigationProperty Name="Event" Relationship="Self.FK_UserOnEvent_Event" FromRole="UserOnEvent" ToRole="Event" />
     <NavigationProperty Name="Position" Relationship="Self.FK_UserOnEvent_Position" FromRole="UserOnEvent" ToRole="Position" />
-    <NavigationProperty Name="Team" Relationship="Self.FK_UserOnEvent_Team" FromRole="UserOnEvent" ToRole="Team" />
+    <NavigationProperty Name="UserInTeam" Relationship="Self.FK_UserInTeam_UserOnEvent" FromRole="UserOnEvent" ToRole="UserInTeam" />
   </EntityType>
   <EntityType Name="UserVoting">
     <Key>
@@ -194,6 +224,9 @@
     <Property Name="Draws" Type="Int32" />
     <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_UserVoting_AspNetUsers" FromRole="UserVoting" ToRole="AspNetUsers" />
     <NavigationProperty Name="Voting" Relationship="Self.FK_UserVoting_Voting" FromRole="UserVoting" ToRole="Voting" />
+    <NavigationProperty Name="VotingLog" Relationship="Self.FK_VotingLog_UserVoting" FromRole="UserVoting" ToRole="VotingLog" />
+    <NavigationProperty Name="VotingLog1" Relationship="Self.FK_VotingLog_UserVoting1" FromRole="UserVoting" ToRole="VotingLog" />
+    <NavigationProperty Name="VotingLog2" Relationship="Self.FK_VotingLog_UserVoting2" FromRole="UserVoting" ToRole="VotingLog" />
   </EntityType>
   <EntityType Name="Voting">
     <Key>
@@ -208,6 +241,18 @@
     <Property Name="VotesPerUser" Type="Int32" Nullable="false" />
     <NavigationProperty Name="Event" Relationship="Self.FK_Voting_Event" FromRole="Voting" ToRole="Event" />
     <NavigationProperty Name="UserVoting" Relationship="Self.FK_UserVoting_Voting" FromRole="Voting" ToRole="UserVoting" />
+  </EntityType>
+  <EntityType Name="VotingLog">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserVotingId" Type="Int32" Nullable="false" />
+    <Property Name="WinnerId" Type="Int32" Nullable="false" />
+    <Property Name="LoserId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="UserVoting" Relationship="Self.FK_VotingLog_UserVoting" FromRole="VotingLog" ToRole="UserVoting" />
+    <NavigationProperty Name="UserVoting1" Relationship="Self.FK_VotingLog_UserVoting1" FromRole="VotingLog" ToRole="UserVoting" />
+    <NavigationProperty Name="UserVoting2" Relationship="Self.FK_VotingLog_UserVoting2" FromRole="VotingLog" ToRole="UserVoting" />
   </EntityType>
   <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
     <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
@@ -369,14 +414,26 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_Team_Event">
+  <Association Name="FK_Generator_Criteria">
+    <End Role="Criteria" Type="Self.Criteria" Multiplicity="1" />
+    <End Role="Generator" Type="Self.Generator" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Criteria">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Generator">
+        <PropertyRef Name="CriteriaId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Generator_Event">
     <End Role="Event" Type="Self.Event" Multiplicity="1" />
-    <End Role="Team" Type="Self.Team" Multiplicity="*" />
+    <End Role="Generator" Type="Self.Generator" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Event">
         <PropertyRef Name="Id" />
       </Principal>
-      <Dependent Role="Team">
+      <Dependent Role="Generator">
         <PropertyRef Name="EventId" />
       </Dependent>
     </ReferentialConstraint>
@@ -402,6 +459,20 @@
       </Principal>
       <Dependent Role="Voting">
         <PropertyRef Name="EventId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Team_Generator">
+    <End Role="Generator" Type="Self.Generator" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Team" Type="Self.Team" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Generator">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Team">
+        <PropertyRef Name="GeneratorId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -441,15 +512,29 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_UserOnEvent_Team">
-    <End Role="Team" Type="Self.Team" Multiplicity="0..1" />
-    <End Role="UserOnEvent" Type="Self.UserOnEvent" Multiplicity="*" />
+  <Association Name="FK_UserInTeam_Team">
+    <End Role="Team" Type="Self.Team" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="UserInTeam" Type="Self.UserInTeam" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Team">
         <PropertyRef Name="Id" />
       </Principal>
-      <Dependent Role="UserOnEvent">
+      <Dependent Role="UserInTeam">
         <PropertyRef Name="TeamId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserInTeam_UserOnEvent">
+    <End Role="UserOnEvent" Type="Self.UserOnEvent" Multiplicity="1" />
+    <End Role="UserInTeam" Type="Self.UserInTeam" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserOnEvent">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserInTeam">
+        <PropertyRef Name="UserOnEventId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -467,6 +552,42 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_VotingLog_UserVoting">
+    <End Role="UserVoting" Type="Self.UserVoting" Multiplicity="1" />
+    <End Role="VotingLog" Type="Self.VotingLog" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserVoting">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="VotingLog">
+        <PropertyRef Name="UserVotingId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VotingLog_UserVoting1">
+    <End Role="UserVoting" Type="Self.UserVoting" Multiplicity="1" />
+    <End Role="VotingLog" Type="Self.VotingLog" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserVoting">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="VotingLog">
+        <PropertyRef Name="WinnerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VotingLog_UserVoting2">
+    <End Role="UserVoting" Type="Self.UserVoting" Multiplicity="1" />
+    <End Role="VotingLog" Type="Self.VotingLog" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserVoting">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="VotingLog">
+        <PropertyRef Name="LoserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="AspNetUserRoles">
     <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="*" />
     <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="*" />
@@ -477,7 +598,9 @@
     <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" />
     <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" />
     <EntitySet Name="Category" EntityType="Self.Category" />
+    <EntitySet Name="Criteria" EntityType="Self.Criteria" />
     <EntitySet Name="Event" EntityType="Self.Event" />
+    <EntitySet Name="Generator" EntityType="Self.Generator" />
     <EntitySet Name="Group" EntityType="Self.Group" />
     <EntitySet Name="Invitaton" EntityType="Self.Invitaton" />
     <EntitySet Name="Position" EntityType="Self.Position" />
@@ -485,9 +608,11 @@
     <EntitySet Name="UserDetails" EntityType="Self.UserDetails" />
     <EntitySet Name="UserInCategory" EntityType="Self.UserInCategory" />
     <EntitySet Name="UserInGroup" EntityType="Self.UserInGroup" />
+    <EntitySet Name="UserInTeam" EntityType="Self.UserInTeam" />
     <EntitySet Name="UserOnEvent" EntityType="Self.UserOnEvent" />
     <EntitySet Name="UserVoting" EntityType="Self.UserVoting" />
     <EntitySet Name="Voting" EntityType="Self.Voting" />
+    <EntitySet Name="VotingLog" EntityType="Self.VotingLog" />
     <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
       <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
@@ -540,9 +665,13 @@
       <End Role="Category" EntitySet="Category" />
       <End Role="UserInCategory" EntitySet="UserInCategory" />
     </AssociationSet>
-    <AssociationSet Name="FK_Team_Event" Association="Self.FK_Team_Event">
+    <AssociationSet Name="FK_Generator_Criteria" Association="Self.FK_Generator_Criteria">
+      <End Role="Criteria" EntitySet="Criteria" />
+      <End Role="Generator" EntitySet="Generator" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Generator_Event" Association="Self.FK_Generator_Event">
       <End Role="Event" EntitySet="Event" />
-      <End Role="Team" EntitySet="Team" />
+      <End Role="Generator" EntitySet="Generator" />
     </AssociationSet>
     <AssociationSet Name="FK_UserOnEvent_Event" Association="Self.FK_UserOnEvent_Event">
       <End Role="Event" EntitySet="Event" />
@@ -551,6 +680,10 @@
     <AssociationSet Name="FK_Voting_Event" Association="Self.FK_Voting_Event">
       <End Role="Event" EntitySet="Event" />
       <End Role="Voting" EntitySet="Voting" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Team_Generator" Association="Self.FK_Team_Generator">
+      <End Role="Generator" EntitySet="Generator" />
+      <End Role="Team" EntitySet="Team" />
     </AssociationSet>
     <AssociationSet Name="FK_UserInGroup_Group" Association="Self.FK_UserInGroup_Group">
       <End Role="Group" EntitySet="Group" />
@@ -564,13 +697,29 @@
       <End Role="Position" EntitySet="Position" />
       <End Role="UserOnEvent" EntitySet="UserOnEvent" />
     </AssociationSet>
-    <AssociationSet Name="FK_UserOnEvent_Team" Association="Self.FK_UserOnEvent_Team">
+    <AssociationSet Name="FK_UserInTeam_Team" Association="Self.FK_UserInTeam_Team">
       <End Role="Team" EntitySet="Team" />
+      <End Role="UserInTeam" EntitySet="UserInTeam" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserInTeam_UserOnEvent" Association="Self.FK_UserInTeam_UserOnEvent">
       <End Role="UserOnEvent" EntitySet="UserOnEvent" />
+      <End Role="UserInTeam" EntitySet="UserInTeam" />
     </AssociationSet>
     <AssociationSet Name="FK_UserVoting_Voting" Association="Self.FK_UserVoting_Voting">
       <End Role="Voting" EntitySet="Voting" />
       <End Role="UserVoting" EntitySet="UserVoting" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VotingLog_UserVoting" Association="Self.FK_VotingLog_UserVoting">
+      <End Role="UserVoting" EntitySet="UserVoting" />
+      <End Role="VotingLog" EntitySet="VotingLog" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VotingLog_UserVoting1" Association="Self.FK_VotingLog_UserVoting1">
+      <End Role="UserVoting" EntitySet="UserVoting" />
+      <End Role="VotingLog" EntitySet="VotingLog" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VotingLog_UserVoting2" Association="Self.FK_VotingLog_UserVoting2">
+      <End Role="UserVoting" EntitySet="UserVoting" />
+      <End Role="VotingLog" EntitySet="VotingLog" />
     </AssociationSet>
     <AssociationSet Name="AspNetUserRoles" Association="Self.AspNetUserRoles">
       <End Role="AspNetRoles" EntitySet="AspNetRoles" />

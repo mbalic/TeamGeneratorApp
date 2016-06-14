@@ -10,42 +10,40 @@
 @Scripts.Render("~/bundles/modernizr")
 @Scripts.Render("~/bundles/kendo")
 
-<script type="text/javascript">
-    function viewUser(e) {
-        e.preventDefault();
-        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        var userId = dataItem.Id;
 
-        @*window.location.href = "@Url.Action("Details","AdminUser")?id=" + eventId;*@
-    };
+@*<script type="text/javascript">
+    function onSave(e) {
+        //If current value is null
+        if (!e.model.TeamId) {
+            //change the model value
+            e.model.TeamId = 0;
+            //get the currently selected value from the DDL
+            var currentlySelectedValue = $(e.container.find('[data-role=dropdownlist]')[0]).data().kendoDropDownList.value();
+            //set the value to the model
+            e.model.set('TeamId', currentlySelectedValue);
+        }
+    }
 
-    function db() {
-        this.table.find(".k-grid-edit").hide();
-    }; 
-
-</script>
+</script>*@
 
 
-@* if voting started, only read, else create and delete *@
-@if (!ViewBag.VotingStarted)
+
+@if (!ViewBag.IsGenerated)
 {
-
     @(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.UserOnEventVM>()
-          .Name("usersGrid1")
+          .Name("grid1")
           .Columns(columns =>
           {
-              columns.ForeignKey(p => p.UserId, (System.Collections.IEnumerable)ViewData["users"], "Id", "Name").Title("User").Width(200);
-              columns.ForeignKey(p => p.PositionId, (System.Collections.IEnumerable)ViewData["positions"], "Id", "Name").Title("Position").Width(200);
+              columns.Bound(p => p.UserPersonalName).Title("User");
+              columns.Bound(p => p.PositionName);
               columns.Bound(p => p.Rating);
+              columns.ForeignKey(p => p.TeamId, (System.Collections.IEnumerable) ViewData["teams"], "Id", "Name").Title("Preordered team").Width(200);
               columns.Command(command =>
               {
                   command.Edit();
-                  command.Destroy();
               });
-              columns.Command(command => command.Custom("Details").Click("viewUser"));
           })
-          .Events(e => e.DataBound("db"))
-          .ToolBar(toolbar => toolbar.Create())
+          //.Events(e => e.Save("onSave"))
           .Editable(editable => editable.Mode(GridEditMode.InLine))
           .Pageable()
           .Sortable()
@@ -61,12 +59,15 @@
               {
                   model.Id(p => p.Id);
                   model.Field(p => p.EventId).DefaultValue(ViewBag.EventId);
-                  model.Field(p => p.Rating).DefaultValue(1500).Editable(false);
+                  model.Field(p => p.UserPersonalName).Editable(false);
+                  model.Field(p => p.PositionName).Editable(false);
+                  model.Field(p => p.Rating).Editable(false);
+
               })
-              .Create(update => update.Action("UsersGrid_Create", "Events"))
-              .Read(read => read.Action("UsersGrid_Read", "Events", new {eventId = ViewBag.EventId}))
-              .Update(update => update.Action("UsersGrid_Update", "Events"))
-             .Destroy(update => update.Action("UsersGrid_Destroy", "Events"))
+              //.Create(update => update.Action("AllUsersGenerateGrid_Create", "Events"))
+              .Read(read => read.Action("AllUsersGenerateGrid_Read", "Events", new {eventId = ViewBag.EventId, generatorId = ViewBag.GeneratorId}))
+              .Update(update => update.Action("AllUsersGenerateGrid_Update", "Events", new { generatorId = ViewBag.GeneratorId }))
+          //.Destroy(update => update.Action("AllUsersGenerateGrid_Destroy", "Events"))
           )
 
           )
@@ -74,14 +75,14 @@
 else
 {
     @(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.UserOnEventVM>()
-          .Name("usersGrid2")
+          .Name("grid2")
           .Columns(columns =>
           {
               columns.Bound(p => p.UserPersonalName).Title("User");
-              columns.Command(command => command.Custom("Details").Click("viewUser"));
+              columns.Bound(p => p.PositionName);
+              columns.Bound(p => p.Rating);
+              columns.ForeignKey(p => p.TeamId, (System.Collections.IEnumerable)ViewData["teams"], "Id", "Name").Title("Preordered team").Width(200);
           })
-          //.ToolBar(toolbar => toolbar.Create())
-          //.Editable(editable => editable.Mode(GridEditMode.InLine))
           .Pageable()
           .Sortable()
           .Scrollable()
@@ -91,21 +92,24 @@ else
               .Batch(true)
               .ServerOperation(false)
               .PageSize(20)
-              .Events(events => events.Error("error_handler"))
+              .Events(events => events.Error("error_handler").Sync("sync_handler"))
               .Model(model =>
               {
                   model.Id(p => p.Id);
-                  model.Field(p => p.EventId).DefaultValue(ViewBag.EventId);
+                  //model.Field(p => p.EventId).DefaultValue(ViewBag.EventId);
+                  //model.Field(p => p.UserPersonalName).Editable(false);
+                  //model.Field(p => p.PositionName).Editable(false);
+                  //model.Field(p => p.Rating).Editable(false);
+
               })
               //.Create(update => update.Action("UsersGrid_Create", "Events"))
-              .Read(read => read.Action("UsersGrid_Read", "Events", new { eventId = ViewBag.EventId }))
-          //.Update(update => update.Action("EventsGrid_Update", "Events"))
+              .Read(read => read.Action("AllUsersGenerateGrid_Read", "Events", new { eventId = ViewBag.EventId }))
+          //.Update(update => update.Action("AllUsersGenerateGrid_Update", "Events"))
           //.Destroy(update => update.Action("UsersGrid_Destroy", "Events"))
           )
 
     )
 }
-
 
 <script type="text/javascript">
     function error_handler(e) {
@@ -125,4 +129,3 @@ else
         this.read();
     };
 </script>
-

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using TeamGeneratorApp.Models;
@@ -17,8 +19,6 @@ namespace TeamGeneratorApp.DAL.Repositories
         {
             return context.Event.Where(c => c.CategoryId == categoryId);
         }
-
-
 
 
     }

@@ -237,7 +237,6 @@ namespace TeamGeneratorApp.Controllers.Admin
                     Description = e.Description,
                     Start = e.Start,
                     Finish = e.Finish,
-                    NumberOfTeams = e.NumberOfTeams,
                     CategoryId = e.CategoryId
                 };
                 list.Add(eventVm);
@@ -261,7 +260,6 @@ namespace TeamGeneratorApp.Controllers.Admin
                         Description = e.Description,
                         Start = e.Start,
                         Finish = e.Finish,
-                        NumberOfTeams = e.NumberOfTeams,
                         CategoryId = e.CategoryId
                     };
                     try
@@ -296,7 +294,6 @@ namespace TeamGeneratorApp.Controllers.Admin
                         Description = e.Description,
                         Start = e.Start,
                         Finish = e.Finish,
-                        NumberOfTeams = e.NumberOfTeams,
                         CategoryId = e.CategoryId
                     };
                     try
@@ -331,7 +328,6 @@ namespace TeamGeneratorApp.Controllers.Admin
                         Description = e.Description,
                         Start = e.Start,
                         Finish = e.Finish,
-                        NumberOfTeams = e.NumberOfTeams,
                         CategoryId = e.CategoryId
                     };
                     try

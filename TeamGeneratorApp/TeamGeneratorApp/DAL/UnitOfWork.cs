@@ -26,6 +26,8 @@ namespace TeamGeneratorApp.DAL
         private UserOnEventRepository userOnEventRepository;
         private VotingRepository votingRepository;
         private UserVotingRepository userVotingRepository;
+        private GeneratorRepository generatorRepository;
+        private UserInTeamRepository userInTeamRepository;
 
 
         public UserRepository UserRepository
@@ -178,7 +180,29 @@ namespace TeamGeneratorApp.DAL
             }
         }
 
+        public GeneratorRepository GeneratorRepository
+        {
+            get
+            {
+                if (this.generatorRepository == null)
+                {
+                    this.generatorRepository = new GeneratorRepository(context);
+                }
+                return generatorRepository;
+            }
+        }
 
+        public UserInTeamRepository UserInTeamRepository
+        {
+            get
+            {
+                if (this.userInTeamRepository == null)
+                {
+                    this.userInTeamRepository = new UserInTeamRepository(context);
+                }
+                return userInTeamRepository;
+            }
+        }
 
         public void SetModified<T>(T item) where T : class
         {

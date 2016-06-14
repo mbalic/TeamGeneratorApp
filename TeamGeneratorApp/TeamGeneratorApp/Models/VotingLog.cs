@@ -12,15 +12,15 @@ namespace TeamGeneratorApp.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class UserInCategory
+    public partial class VotingLog
     {
         public int Id { get; set; }
-        public string UserIId { get; set; }
-        public int CategoryId { get; set; }
-        public Nullable<int> Rating { get; set; }
-        public bool Active { get; set; }
+        public int UserVotingId { get; set; }
+        public int WinnerId { get; set; }
+        public int LoserId { get; set; }
     
-        public virtual AspNetUsers AspNetUsers { get; set; }
-        public virtual Category Category { get; set; }
+        public virtual UserVoting UserVoting { get; set; }
+        public virtual UserVoting UserVoting1 { get; set; }
+        public virtual UserVoting UserVoting2 { get; set; }
     }
 }

@@ -78,7 +78,6 @@ namespace TeamGeneratorApp.Controllers
                     Description = e.Description,
                     Start = e.Start,
                     Finish = e.Finish,
-                    NumberOfTeams = e.NumberOfTeams,
                     CategoryId = e.CategoryId
                 };
                 list.Add(eventVm);
@@ -102,7 +101,6 @@ namespace TeamGeneratorApp.Controllers
                         Description = e.Description,
                         Start = e.Start,
                         Finish = e.Finish,
-                        NumberOfTeams = e.NumberOfTeams,
                         CategoryId = e.CategoryId
                     };
                     try
@@ -137,7 +135,6 @@ namespace TeamGeneratorApp.Controllers
                         Description = e.Description,
                         Start = e.Start,
                         Finish = e.Finish,
-                        NumberOfTeams = e.NumberOfTeams,
                         CategoryId = e.CategoryId
                     };
                     try
@@ -172,7 +169,6 @@ namespace TeamGeneratorApp.Controllers
                         Description = e.Description,
                         Start = e.Start,
                         Finish = e.Finish,
-                        NumberOfTeams = e.NumberOfTeams,
                         CategoryId = e.CategoryId
                     };
                     try
@@ -228,7 +224,7 @@ namespace TeamGeneratorApp.Controllers
                     UserId = e.UserIId,
                     CategoryId = e.CategoryId,
                     UserPersonalName = e.AspNetUsers.Name,
-                    Score = e.Score,
+                    Rating = e.Rating,
                     Active = e.Active                 
 
                     //PositionName = e.PositionInCategory == null? null : e.PositionInCategory.Name
@@ -256,7 +252,7 @@ namespace TeamGeneratorApp.Controllers
                         Id = e.Id,
                         UserIId = e.UserId,
                         CategoryId = e.CategoryId,
-                        Score = e.Score,
+                        Rating = e.Rating,
                         Active = e.Active                        
                     };
                     try
@@ -289,7 +285,7 @@ namespace TeamGeneratorApp.Controllers
                         Id = e.Id,
                         UserIId = e.UserId,
                         CategoryId = e.CategoryId,
-                        Score = e.Score,
+                        Rating = e.Rating,
                         Active = e.Active
                     };
                     try

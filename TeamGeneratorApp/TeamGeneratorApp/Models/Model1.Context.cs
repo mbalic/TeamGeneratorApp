@@ -30,7 +30,9 @@ namespace TeamGeneratorApp.Models
         public virtual DbSet<AspNetUserLogins> AspNetUserLogins { get; set; }
         public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<Category> Category { get; set; }
+        public virtual DbSet<Criteria> Criteria { get; set; }
         public virtual DbSet<Event> Event { get; set; }
+        public virtual DbSet<Generator> Generator { get; set; }
         public virtual DbSet<Group> Group { get; set; }
         public virtual DbSet<Invitaton> Invitaton { get; set; }
         public virtual DbSet<Position> Position { get; set; }
@@ -38,8 +40,10 @@ namespace TeamGeneratorApp.Models
         public virtual DbSet<UserDetails> UserDetails { get; set; }
         public virtual DbSet<UserInCategory> UserInCategory { get; set; }
         public virtual DbSet<UserInGroup> UserInGroup { get; set; }
+        public virtual DbSet<UserInTeam> UserInTeam { get; set; }
         public virtual DbSet<UserOnEvent> UserOnEvent { get; set; }
         public virtual DbSet<UserVoting> UserVoting { get; set; }
         public virtual DbSet<Voting> Voting { get; set; }
+        public virtual DbSet<VotingLog> VotingLog { get; set; }
     }
 }

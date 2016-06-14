@@ -14,15 +14,21 @@ namespace TeamGeneratorApp.Models
     
     public partial class UserOnEvent
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public UserOnEvent()
+        {
+            this.UserInTeam = new HashSet<UserInTeam>();
+        }
+    
         public int Id { get; set; }
         public int EventId { get; set; }
-        public Nullable<int> TeamId { get; set; }
         public string UserId { get; set; }
         public int PositionId { get; set; }
     
         public virtual AspNetUsers AspNetUsers { get; set; }
         public virtual Event Event { get; set; }
         public virtual Position Position { get; set; }
-        public virtual Team Team { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserInTeam> UserInTeam { get; set; }
     }
 }

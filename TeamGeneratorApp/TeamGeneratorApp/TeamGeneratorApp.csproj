@@ -177,9 +177,11 @@
   <ItemGroup>
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\EventsController.cs" />
+    <Compile Include="DAL\Repositories\GeneratorRepository.cs" />
     <Compile Include="DAL\Repositories\InvitationRepository.cs" />
     <Compile Include="DAL\Repositories\UserInCategoryRepository.cs" />
     <Compile Include="DAL\Repositories\UserInGroupRepository.cs" />
+    <Compile Include="DAL\Repositories\UserInTeamRepository.cs" />
     <Compile Include="DAL\Repositories\UserOnEventRepository.cs" />
     <Compile Include="DAL\Repositories\UserVotingRepository.cs" />
     <Compile Include="DAL\Repositories\VotingRepository.cs" />
@@ -204,7 +206,13 @@
     <Compile Include="Models\Category.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Criteria.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Event.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Generator.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Group.cs">
@@ -243,6 +251,9 @@
     <Compile Include="Models\UserInGroup.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\UserInTeam.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\UserOnEvent.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -252,7 +263,10 @@
     <Compile Include="Models\ViewModels\AdminGroupsIndexVM.cs" />
     <Compile Include="Models\ViewModels\AdminUserEditVM.cs" />
     <Compile Include="Models\ViewModels\CategoryVM.cs" />
+    <Compile Include="Models\ViewModels\CriteriaddlVM.cs" />
     <Compile Include="Models\ViewModels\EventVM.cs" />
+    <Compile Include="Models\ViewModels\GeneratorDetailsVM.cs" />
+    <Compile Include="Models\ViewModels\GeneratorVM.cs" />
     <Compile Include="Models\ViewModels\GroupDetailsVM.cs" />
     <Compile Include="Models\ViewModels\GroupListVM.cs" />
     <Compile Include="Models\ViewModels\InvitationRequestVM.cs" />
@@ -260,6 +274,7 @@
     <Compile Include="Models\ViewModels\OwnerVM.cs" />
     <Compile Include="Models\ViewModels\PositionddlVM.cs" />
     <Compile Include="Models\ViewModels\PositionVM.cs" />
+    <Compile Include="Models\ViewModels\TeamddlVM.cs" />
     <Compile Include="Models\ViewModels\UserCategoryVM.cs" />
     <Compile Include="Models\ViewModels\UserddlVM.cs" />
     <Compile Include="Models\ViewModels\UserDetailsVM.cs" />
@@ -269,6 +284,9 @@
     <Compile Include="Models\ViewModels\VotingProcessVM.cs" />
     <Compile Include="Models\ViewModels\VotingVM.cs" />
     <Compile Include="Models\Voting.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\VotingLog.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Services\Implementations\AdminService.cs" />
@@ -2070,6 +2088,11 @@
     <Content Include="Views\Events\ErrorVoting.cshtml" />
     <Content Include="Views\Events\Voting.cshtml" />
     <Content Include="Views\Events\VotingDetails.cshtml" />
+    <Content Include="Views\Events\GenerateTeams.cshtml" />
+    <Content Include="Views\Events\_AllUsersGenerateGrid.cshtml" />
+    <Content Include="Views\Events\_GeneratorsGrid.cshtml" />
+    <Content Include="Views\Events\GeneratorDetails.cshtml" />
+    <Content Include="Views\Events\_GeneratedTeamsGrid.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,17 @@
+﻿@model TeamGeneratorApp.Models.ViewModels.GeneratorVM
+@{
+    ViewBag.Title = "GenerateTeams";
+}
+<br />
+<p>
+    @Html.ActionLink("< Back to event", "Details", "Events", new { id = Model.EventId }, null)
+</p>
+<h2>@Html.DisplayFor(model => model.EventName)</h2>
+<hr />
+<h4>Generate teams</h4>
+<br/>
+
+<div>
+    @Html.Action("AllUsersGenerateGrid", "Events", new { eventId = Model.EventId })
+</div>
+

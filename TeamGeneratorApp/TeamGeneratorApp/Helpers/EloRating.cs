@@ -14,7 +14,7 @@ namespace TeamGeneratorApp.Helpers
         public double FinalRating1 { get; set; }
         public double FinalRating2 { get; set; }
 
-        public EloRating(double CurrentRating1, double CurrentRating2, bool draw, bool firstWins, double diff = 400, double kFactor = 32)
+        public EloRating(double CurrentRating1, double CurrentRating2, bool draw, bool firstWins, double diff = 400, double kFactor = 50)
         {
             /*
             double CurrentR1 = 1500.0;

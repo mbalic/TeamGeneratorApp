@@ -19,8 +19,12 @@ namespace TeamGeneratorApp.Models.ViewModels
 
         [Required]
         public int PositionId { get; set; }
+        
+        [Display(Name = "Position")]
+        public string PositionName { get; set; }
 
         public string UserPersonalName { get; set; }
-        //public string TeamName { get; set; }
+        public Nullable<int> Rating { get; set; }
+
     }
 }

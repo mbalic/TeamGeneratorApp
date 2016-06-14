@@ -61,7 +61,6 @@
           .HtmlAttributes(new { data_bind = "value:Finish" })
           .ToClientTemplate().ToString()
           ).Format("{0:dd/MM/yyyy HH:mm}").Width(200);
-        columns.Bound(p => p.NumberOfTeams);
         columns.Command(command => { command.Edit(); command.Destroy(); }).Width(200);
         columns.Command(command => command.Custom("Details").Click("viewEvent"));
     })

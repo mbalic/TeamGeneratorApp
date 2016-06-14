@@ -17,16 +17,16 @@ namespace TeamGeneratorApp.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Team()
         {
-            this.UserOnEvent = new HashSet<UserOnEvent>();
+            this.UserInTeam = new HashSet<UserInTeam>();
         }
     
         public int Id { get; set; }
         public string Name { get; set; }
         public Nullable<int> TeamScore { get; set; }
-        public int EventId { get; set; }
+        public int GeneratorId { get; set; }
     
-        public virtual Event Event { get; set; }
+        public virtual Generator Generator { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserOnEvent> UserOnEvent { get; set; }
+        public virtual ICollection<UserInTeam> UserInTeam { get; set; }
     }
 }

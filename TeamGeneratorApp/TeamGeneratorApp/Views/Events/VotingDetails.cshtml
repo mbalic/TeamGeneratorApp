@@ -54,12 +54,17 @@
             @Html.DisplayFor(model => model.Active)
         </dd>
 
+        <dt>
+
+        </dt>
+
+        <dd>
+            @if (ViewBag.UserCanVote)
+            {
+                <button>@Html.ActionLink("Vote!", "Voting", new { id = Model.Id })</button>
+            }
+        </dd>
     </dl>
 </div>
 <br/>
-@if(ViewBag.UserCanVote)
-{
-    <p>
-        <button>@Html.ActionLink("Vote!", "Voting", new { id = Model.Id })</button>
-    </p>
-}
+

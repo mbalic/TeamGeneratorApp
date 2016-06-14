@@ -13,6 +13,10 @@ namespace TeamGeneratorApp.DAL.Repositories
         {
         }
 
+        public IEnumerable<Team> GetByGeneratorId(int generatorId)
+        {
+            return context.Team.Where(p => p.GeneratorId == generatorId);
+        } 
 
     }
 }
