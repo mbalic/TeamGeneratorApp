@@ -275,6 +275,7 @@
     <Compile Include="Models\ViewModels\PositionddlVM.cs" />
     <Compile Include="Models\ViewModels\PositionVM.cs" />
     <Compile Include="Models\ViewModels\TeamddlVM.cs" />
+    <Compile Include="Models\ViewModels\TeamVM.cs" />
     <Compile Include="Models\ViewModels\UserCategoryVM.cs" />
     <Compile Include="Models\ViewModels\UserddlVM.cs" />
     <Compile Include="Models\ViewModels\UserDetailsVM.cs" />

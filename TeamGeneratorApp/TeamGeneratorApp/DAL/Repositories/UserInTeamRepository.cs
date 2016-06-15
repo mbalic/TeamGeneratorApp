@@ -22,5 +22,10 @@ namespace TeamGeneratorApp.DAL.Repositories
         {
             return context.UserInTeam.Where(p => p.UserOnEventId == userOnEventId && p.Team.GeneratorId == generatorId).FirstOrDefault();
         }
+
+        public IEnumerable<UserInTeam> GetByGeneratorId(int generatorId)
+        {
+            return context.UserInTeam.Where(p => p.Team.GeneratorId == generatorId);
+        } 
     }
 }

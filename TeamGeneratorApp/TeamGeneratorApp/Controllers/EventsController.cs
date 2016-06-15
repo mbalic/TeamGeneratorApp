@@ -779,12 +779,12 @@ namespace TeamGeneratorApp.Controllers
                     PositionId = e.PositionId,
                     PositionName = e.Position.Name,
                     Rating = unitOfWork.UserInCategoryRepository.GetByUserAndCategoryId(e.UserId, e.Event.CategoryId).Rating,
-                    TeamId = (unitOfWork.UserInTeamRepository.GetByUserOnEventAndGeneratorId(e.Id, generatorId) == null? null : (int?)unitOfWork.UserInTeamRepository.GetByUserOnEventAndGeneratorId(e.Id, generatorId).TeamId)
+                    TeamId = (unitOfWork.UserInTeamRepository.GetByUserOnEventAndGeneratorId(e.Id, generatorId) == null? -1 : unitOfWork.UserInTeamRepository.GetByUserOnEventAndGeneratorId(e.Id, generatorId).TeamId)
                 };
                 list.Add(newItem);
             }
 
-            return Json(list.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
+            return Json(list.OrderByDescending(p => p.Rating).ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
         }
 
 
@@ -827,7 +827,7 @@ namespace TeamGeneratorApp.Controllers
                             {
                                 if (existingItem.TeamId != e.TeamId)
                                 {
-                                    //existingItem.TeamId = e.TeamId;
+                                    existingItem.TeamId = (int)e.TeamId;
                                     unitOfWork.UserInTeamRepository.Update(existingItem);
                                     unitOfWork.Commit();
                                 }
@@ -847,7 +847,7 @@ namespace TeamGeneratorApp.Controllers
                 }
             }
 
-            return Json(res.ToDataSourceResult(request, ModelState));
+            return Json(res.OrderByDescending(p => p.Rating).ToDataSourceResult(request, ModelState));
         }
 
        
@@ -873,9 +873,95 @@ namespace TeamGeneratorApp.Controllers
                 return HttpNotFound();
             }
 
+            //get all users on event 
+            var allUsersOnEventList = unitOfWork.UserOnEventRepository.GetByEventId(generator.EventId);
+            
+            //remove users that are preordered in teams
+            var usersWithoutTeam = new List<UserOnEvent>();
+            var usersInTeam = new List<UserOnEvent>();
+
+            foreach (var userOnEvent in allUsersOnEventList)
+            {
+                var userInTeam = unitOfWork.UserInTeamRepository.GetByUserOnEventAndGeneratorId(userOnEvent.Id,
+                    generatorId);
+                if (userInTeam == null)
+                {
+                    usersWithoutTeam.Add(userOnEvent);
+                }
+                else
+                {
+                    usersInTeam.Add(userOnEvent);
+                }
+
+            }
+            //usersWithoutTeam = usersWithoutTeam.OrderByDescending(p => p.)
+
+
+
+            //create teamList which has teamHelpers with ratingSum and list of users inside it
+
+            var teams = unitOfWork.TeamRepository.GetByGeneratorId(generatorId);
+            var teamList = new List<TeamHelper>();
+
+            foreach (var t in teams)
+            {
+                var team = new TeamHelper();
+                team.Id = t.Id;
+
+                var list1 = new List<UserOnEvent>();
+                foreach (var u in t.UserInTeam)
+                {
+                    var userOnEvent = unitOfWork.UserOnEventRepository.GetByID(u.UserOnEventId);
+                    list1.Add(userOnEvent);   
+                }
+                //if (list1.Any())
+                //    team.Users = list1;
+                //else
+                //    team.Users = null;
+                team.Users = list1;
+
+                teamList.Add(team);
+            }
+
+
+            //parameters for generating
+            var criteria = generator.Criteria;
+
+            int smallestTeam = 0;
+            //balanced teams
+            if (criteria.Name == "Balanced")
+            {
+                while (usersWithoutTeam.Any())
+                {
+                    teamList = teamList.OrderBy(p => p.Users.Count).OrderBy(p => p.SumRating).ToList();
+                    smallestTeam = teamList.First().Users.Count;
+
+                    foreach (var team in teamList)
+                    {
+                        if (team.Users.Count == smallestTeam)
+                        {
+                               
+                        }
+                        
+                    }
+                }
+
+
+            }
+
+            //teams by strength
+            else
+            {
+                
+            }
+
             
 
+
+
             return HttpNotFound();
+
+
 
 
         }
@@ -903,3 +989,6 @@ namespace TeamGeneratorApp.Controllers
 
     }
 }
+
+
+
