@@ -14,7 +14,7 @@ namespace TeamGeneratorApp.Models.ViewModels
         public int TeamId { get; set; }
 
         [Required]
-        public string UserId { get; set; }
+        public int UserInCategoryId { get; set; }
         public Nullable<int> VoteCounter { get; set; }
 
         [Required]

@@ -186,6 +186,7 @@
     <Compile Include="DAL\Repositories\UserVotingRepository.cs" />
     <Compile Include="DAL\Repositories\VotingRepository.cs" />
     <Compile Include="Helpers\EloRating.cs" />
+    <Compile Include="Helpers\TeamHelper.cs" />
     <Compile Include="Migrations\201606022212480_Name.cs" />
     <Compile Include="Migrations\201606022212480_Name.Designer.cs">
       <DependentUpon>201606022212480_Name.cs</DependentUpon>
@@ -281,13 +282,12 @@
     <Compile Include="Models\ViewModels\UserDetailsVM.cs" />
     <Compile Include="Models\ViewModels\UserInGroupVM.cs" />
     <Compile Include="Models\ViewModels\UserIndexVM.cs" />
+    <Compile Include="Models\ViewModels\UserInTeamVM.cs" />
     <Compile Include="Models\ViewModels\UserOnEventVM.cs" />
+    <Compile Include="Models\ViewModels\UserVotingVM.cs" />
     <Compile Include="Models\ViewModels\VotingProcessVM.cs" />
     <Compile Include="Models\ViewModels\VotingVM.cs" />
     <Compile Include="Models\Voting.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\VotingLog.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Services\Implementations\AdminService.cs" />
@@ -2094,6 +2094,7 @@
     <Content Include="Views\Events\_GeneratorsGrid.cshtml" />
     <Content Include="Views\Events\GeneratorDetails.cshtml" />
     <Content Include="Views\Events\_GeneratedTeamsGrid.cshtml" />
+    <Content Include="Views\Events\_UserVotingsGrid.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

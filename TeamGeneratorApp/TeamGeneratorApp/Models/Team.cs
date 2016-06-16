@@ -22,8 +22,9 @@ namespace TeamGeneratorApp.Models
     
         public int Id { get; set; }
         public string Name { get; set; }
-        public Nullable<int> TeamScore { get; set; }
         public int GeneratorId { get; set; }
+        public int Strength { get; set; }
+        public Nullable<double> SuccessPercentage { get; set; }
     
         public virtual Generator Generator { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

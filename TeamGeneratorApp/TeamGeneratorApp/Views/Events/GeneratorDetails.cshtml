@@ -52,16 +52,19 @@
 </div>
 <br/>
 
-
-@if (!Model.IsGenerated)
+@if (!ViewBag.AllUsersEmpty)
 {
-    <button>@Html.ActionLink("Generate teams!", "GenerateTeams", new {generatorId = Model.Id })</button>
+   
+    if (!Model.IsGenerated)
+    {
+        <button>@Html.ActionLink("Generate teams!", "GenerateTeams", new {generatorId = Model.Id })</button>
+    }
+    else
+    {
+        @*<button>@Html.ActionLink("View generated teams", "ViewGeneratedTeams", new {generatorId = Model.Id })</button>*@
+    }
+    
 }
-else
-{
-    @*<button>@Html.ActionLink("View generated teams", "ViewGeneratedTeams", new {generatorId = Model.Id })</button>*@
-}
-
 
 <div id="generatedGrids">
 @for (var i = 1; i <= Model.NumberOfTeams; i++)

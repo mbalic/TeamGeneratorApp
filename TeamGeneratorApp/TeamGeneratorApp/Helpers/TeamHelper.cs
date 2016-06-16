@@ -10,7 +10,7 @@ namespace TeamGeneratorApp.Helpers
     public class TeamHelper
     {
         public int Id { get; set; }
-        public int SumRating { get; set; }
+        public int Strength { get; set; }
         public List<UserOnEvent> Users { get; set; }
     }
 }

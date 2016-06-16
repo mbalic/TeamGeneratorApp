@@ -11,12 +11,12 @@ namespace TeamGeneratorApp.Models.ViewModels
         public string VotingId { get; set; }
         public int UserVotingId { get; set; }
 
-        public string User1_Id { get; set; }
+        public int UserOnEvent1_Id { get; set; }
         public string User1_PersonalName { get; set; }
         public string User1_Image { get; set; }
         public int User1_Score { get; set; }
 
-        public string User2_Id { get; set; }
+        public int UserOnEvent2_Id { get; set; }
         public string User2_PersonalName { get; set; }
         public string User2_Image { get; set; }
         public int User2_Score { get; set; }

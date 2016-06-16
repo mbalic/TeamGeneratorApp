@@ -26,15 +26,15 @@
 </script>
 
 
-@* if voting started, only read, else create and delete *@
-@if (!ViewBag.VotingStarted)
-{
+@* if voting started, only read, else create and delete (ipak ne, odustalo se od toga jer sustav koristi administratorska osoba koja bi trebala moci sve mijenjati)*@
+@*@if (!ViewBag.VotingStarted)
+{*@
 
     @(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.UserOnEventVM>()
           .Name("usersGrid1")
           .Columns(columns =>
           {
-              columns.ForeignKey(p => p.UserId, (System.Collections.IEnumerable)ViewData["users"], "Id", "Name").Title("User").Width(200);
+              columns.ForeignKey(p => p.UserInCategoryId, (System.Collections.IEnumerable)ViewData["users"], "Id", "Name").Title("User").Width(200);
               columns.ForeignKey(p => p.PositionId, (System.Collections.IEnumerable)ViewData["positions"], "Id", "Name").Title("Position").Width(200);
               columns.Bound(p => p.Rating);
               columns.Command(command =>
@@ -70,7 +70,7 @@
           )
 
           )
-}
+@*}
 else
 {
     @(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.UserOnEventVM>()
@@ -104,7 +104,7 @@ else
           )
 
     )
-}
+}*@
 
 
 <script type="text/javascript">

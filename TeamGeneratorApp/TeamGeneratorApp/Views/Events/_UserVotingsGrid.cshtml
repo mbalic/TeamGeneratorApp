@@ -1,0 +1,63 @@
+﻿@using Kendo.Mvc.UI
+@{
+    Layout = null;
+}
+
+@Styles.Render("~/Content/css")
+@Styles.Render("~/Content/kendo/css")
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+@Scripts.Render("~/bundles/modernizr")
+@Scripts.Render("~/bundles/kendo")
+
+
+
+@(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.UserVotingVM>()
+    .Name("userVotingsGrid")
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.UserPersonalName);
+        columns.Bound(p => p.VoteCounter).Title("Has voted");
+        columns.Bound(p => p.Wins);
+        columns.Bound(p => p.Draws);
+        columns.Bound(p => p.Loses);
+        //columns.Command(command => command.Custom("Details").Click("viewCategory"));
+    })
+    .Pageable()
+    .Sortable()
+    .Scrollable()
+    .HtmlAttributes(new { style = "height:550px;" })
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Batch(true)
+        .ServerOperation(false)
+        .PageSize(20)
+        .Events(events => events.Error("error_handler"))
+         .Model(model =>
+         {
+             model.Id(p => p.Id);
+         })
+        //.Create(update => update.Action("UsersInGroupGrid_Create", "AdminGroups"))
+        .Read(read => read.Action("UserVOtingsGrid_Read", "Events", new { votingId = ViewBag.VotingId }))
+    //.Update(update => update.Action("UsersInGroupGrid_Update", "Groups"))
+    //.Destroy(update => update.Action("UsersInGroupGrid_Destroy", "AdminGroups"))
+    )
+
+)
+<script type="text/javascript">
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function() {
+                        message += this + "\n";
+                    });
+                }
+            });
+            alert(message);
+        }
+    };
+
+  
+</script>

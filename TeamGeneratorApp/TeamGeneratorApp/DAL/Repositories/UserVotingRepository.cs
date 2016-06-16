@@ -13,9 +13,22 @@ namespace TeamGeneratorApp.DAL.Repositories
         {
         }
 
-         public UserVoting GetUserVoting(string userId, string votingId)
+         public UserVoting GetByUserOnEventAndVotingId(int userOnEventId, string votingId)
         {
-            return context.UserVoting.Where(p => p.UserId == userId && p.VotingId == votingId).Single();
+             var rez = context.UserVoting.Where(p => p.UserOnEventId == userOnEventId && p.VotingId == votingId);
+             if (rez.Any())
+             {
+                 return rez.Single();
+             }
+             else
+             {
+                 return null;
+             }
         }
+
+        public IEnumerable<UserVoting> GetByVotingId(string votingId)
+        {
+            return context.UserVoting.Where(p => p.VotingId == votingId);
+        } 
     }
 }

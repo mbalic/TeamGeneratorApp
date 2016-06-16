@@ -27,11 +27,11 @@
             <td>@Html.DisplayFor(model => model.User2_PersonalName)</td>
         </tr>
         <tr>
-            <td>@Html.ActionLink("Win", "Rate", new { categoryId = ViewBag.CategoryId, userVotingId = Model.UserVotingId, votingId = Model.VotingId, user1_Id = Model.User1_Id, user2_Id = Model.User2_Id, draw = false, firstWins = true })</td>
-            <td>@Html.ActionLink("Win", "Rate", new { categoryId = ViewBag.CategoryId, userVotingId = Model.UserVotingId, votingId = Model.VotingId, user1_Id = Model.User1_Id, user2_Id = Model.User2_Id, draw = false, firstWins = false })</td>
+            <td>@Html.ActionLink("Win", "Rate", new { categoryId = ViewBag.CategoryId, userVotingId = Model.UserVotingId, votingId = Model.VotingId, userOnEvent1_Id = Model.UserOnEvent1_Id, userOnEvent2_Id = Model.UserOnEvent2_Id, draw = false, firstWins = true })</td>
+            <td>@Html.ActionLink("Win", "Rate", new { categoryId = ViewBag.CategoryId, userVotingId = Model.UserVotingId, votingId = Model.VotingId, userOnEvent1_Id = Model.UserOnEvent1_Id, userOnEvent2_Id = Model.UserOnEvent2_Id, draw = false, firstWins = false })</td>
         </tr>
         <tr>
-            <td>@Html.ActionLink("Draw", "Rate", new { categoryId = ViewBag.CategoryId, userVotingId = Model.UserVotingId, votingId = Model.VotingId, user1_Id = Model.User1_Id, user2_Id = Model.User2_Id, draw = true, firstWins = false })</td>
+            <td>@Html.ActionLink("Draw", "Rate", new { categoryId = ViewBag.CategoryId, userVotingId = Model.UserVotingId, votingId = Model.VotingId, userOnEvent1_Id = Model.UserOnEvent1_Id, userOnEvent2_Id = Model.UserOnEvent2_Id, draw = true, firstWins = false })</td>
         </tr>
     </table>
 </center>

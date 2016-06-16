@@ -73,28 +73,29 @@ namespace TeamGeneratorApp.Controllers
         public PartialViewResult UsersGrid(int eventId = 0)
         {
             var @event = unitOfWork.EventRepository.GetByID(eventId);
-            var votings = @event.Voting;
+            
+            //var votings = @event.Voting;
 
-            if (votings.Count == 0)
-            {
-                ViewBag.VotingStarted = false;
-            }
-            else
-            {
-                foreach (var voting in @event.Voting)
-                {
-                    if (voting.StartVoting < DateTime.Now || voting.Active)
-                        ViewBag.VotingStarted = true;
-                    else
-                        ViewBag.VotingStarted = false;
-                }
-            }
+            //if (votings.Count == 0)
+            //{
+            //    ViewBag.VotingStarted = false;
+            //}
+            //else
+            //{
+            //    foreach (var voting in @event.Voting)
+            //    {
+            //        if (voting.StartVoting < DateTime.Now || voting.Active)
+            //            ViewBag.VotingStarted = true;
+            //        else
+            //            ViewBag.VotingStarted = false;
+            //    }
+            //}
 
-            ViewData["users"] = unitOfWork.UserInCategoryRepository.GetByCategoryId(@event.CategoryId).AsQueryable()
+            ViewData["users"] = unitOfWork.UserInCategoryRepository.GetByCategoryIdAndActivity(@event.CategoryId, true).AsQueryable()
                   .Select(e => new UserddlVM
                   {
-                      Id = e.AspNetUsers.Id,
-                      Name = e.AspNetUsers.Name
+                      Id = e.Id,
+                      Name = e.UserInGroup.AspNetUsers.Name
                   })
                   .OrderBy(e => e.Name);
 
@@ -122,11 +123,11 @@ namespace TeamGeneratorApp.Controllers
                 var newItem = new UserOnEventVM
                 {
                     Id = e.Id,
-                    UserId = e.UserId,
+                    UserInCategoryId = e.UserInCategoryId,
                     EventId = e.EventId,
-                    UserPersonalName = e.AspNetUsers.Name,
+                    UserPersonalName = e.UserInCategory.UserInGroup.AspNetUsers.Name,
                     PositionId = e.PositionId,
-                    Rating = unitOfWork.UserInCategoryRepository.GetByUserAndCategoryId(e.UserId, e.Event.CategoryId).Rating
+                    Rating = unitOfWork.UserInCategoryRepository.GetByID(e.UserInCategoryId).Rating
                 };
                 list.Add(newItem);
             }
@@ -146,7 +147,7 @@ namespace TeamGeneratorApp.Controllers
                     var newUser = new UserOnEvent
                     {
                         Id = e.Id,
-                        UserId = e.UserId,
+                        UserInCategoryId = e.UserInCategoryId,
                         EventId = e.EventId,
                         PositionId = e.PositionId
                     };
@@ -159,7 +160,7 @@ namespace TeamGeneratorApp.Controllers
                         var userVoting = new UserVoting
                         {
                             VotingId = voting.Id,
-                            UserId = newUser.UserId,
+                            UserOnEventId = newUser.Id,
                             Wins = 0,
                             Loses = 0,
                             VoteCounter = 0
@@ -311,7 +312,7 @@ namespace TeamGeneratorApp.Controllers
                         var userVoting = new UserVoting
                         {
                             VotingId = newVoting.Id,
-                            UserId = user.UserId,
+                            UserOnEventId = user.Id,
                             Wins = 0,
                             Loses = 0,
                             Draws = 0,
@@ -414,7 +415,8 @@ namespace TeamGeneratorApp.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Voting voting = unitOfWork.VotingRepository.GetByID(id);
+
+            var voting = unitOfWork.VotingRepository.GetByID(id);
 
             if (voting == null)
             {
@@ -433,16 +435,66 @@ namespace TeamGeneratorApp.Controllers
                 VotesPerUser = voting.VotesPerUser
             };
 
-            var userVoting = unitOfWork.UserVotingRepository.GetUserVoting(User.Identity.GetUserId(), voting.Id);
+            var userOnEvent = unitOfWork.UserOnEventRepository.GetByUserId(User.Identity.GetUserId());
+            var userVoting = unitOfWork.UserVotingRepository.GetByUserOnEventAndVotingId(userOnEvent.Id, voting.Id);
             if (userVoting == null)
                 ViewBag.UserCanVote = false;
             else
                 ViewBag.UserCanVote = true;
 
 
+            if (voting.Event.Category.Group.OwnerId == User.Identity.GetUserId())
+            {
+                ViewBag.UserIsOwner = true;
+            }
+            else
+            {
+                ViewBag.UserIsOwner = false;
+            }
+
+
             ViewBag.EventId = voting.EventId;
             return View(votingVm);
         }
+
+
+        #region UserVotingsGrid
+
+        public PartialViewResult UserVotingsGrid(string votingId)
+        {
+
+            ViewBag.VotingId = votingId;
+            return PartialView("_UserVotingsGrid");
+        }
+
+
+
+        public ActionResult UserVotingsGrid_Read([DataSourceRequest] DataSourceRequest request, string votingId)
+        {
+            var res = unitOfWork.UserVotingRepository.GetByVotingId(votingId);
+
+            var list = new List<UserVotingVM>();
+            foreach (var e in res)
+            {
+                var newItem = new UserVotingVM
+                {
+                    Id = e.Id,
+                    UserPersonalName = e.UserOnEvent.UserInCategory.UserInGroup.AspNetUsers.Name,
+                    VoteCounter = e.VoteCounter,
+                    Wins = e.Wins,
+                    Draws = e.Draws,
+                    Loses = e.Loses,
+                    UserOnEventId = e.UserOnEventId,
+                    VotingId = e.VotingId
+                };
+                list.Add(newItem);
+            }
+
+            return Json(list.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
+        }
+
+        
+        #endregion
 
 
 
@@ -468,14 +520,14 @@ namespace TeamGeneratorApp.Controllers
 
             if (userOnEvent != null)
             {
-                var userVoting = unitOfWork.UserVotingRepository.GetUserVoting(userId, id);
+                var userVoting = unitOfWork.UserVotingRepository.GetByUserOnEventAndVotingId(userOnEvent.Id, voting.Id);
                 if (userVoting.VoteCounter > voting.VotesPerUser)
                 {
                     ViewBag.Message = "You have voted maximum times on this voting.";
                     return View("ErrorVoting");
                 }
 
-                //fetche all users on this event
+                //fetch all users on this event
                 var userList = unitOfWork.UserOnEventRepository.GetByEventId(userOnEvent.EventId).ToList();
 
                 //remove current user from list
@@ -493,12 +545,12 @@ namespace TeamGeneratorApp.Controllers
                 {
                     VotingId = id,
                     UserVotingId = userVoting.Id,
-                    User1_Id = user1.UserId,
-                    User1_PersonalName = user1.AspNetUsers.Name,
-                    User1_Image = user1.AspNetUsers.ImageUrl,
-                    User2_Id = user2.UserId,
-                    User2_PersonalName = user2.AspNetUsers.Name,
-                    User2_Image = user2.AspNetUsers.ImageUrl
+                    UserOnEvent1_Id =  user1.Id,
+                    User1_PersonalName = user1.UserInCategory.UserInGroup.AspNetUsers.Name,
+                    User1_Image = user1.UserInCategory.UserInGroup.AspNetUsers.ImageUrl,
+                    UserOnEvent2_Id = user2.Id,
+                    User2_PersonalName = user2.UserInCategory.UserInGroup.AspNetUsers.Name,
+                    User2_Image = user2.UserInCategory.UserInGroup.AspNetUsers.ImageUrl
                 };
 
                 ViewBag.CategoryId = userOnEvent.Event.CategoryId;
@@ -516,17 +568,18 @@ namespace TeamGeneratorApp.Controllers
            
         }
 
-        public ActionResult Rate(int categoryId, string votingId, int userVotingId, string user1_Id, string user2_Id, bool draw, bool firstWins)
+        public ActionResult Rate(int categoryId, string votingId, int userVotingId, int userOnEvent1_Id, int userOnEvent2_Id, bool draw, bool firstWins)
         {
             var userId = User.Identity.GetUserId();
+            var userOnEvent = unitOfWork.UserOnEventRepository.GetByUserId(userId);
 
             //+1 vote for this user
-            var userVoting = unitOfWork.UserVotingRepository.GetUserVoting(userId, votingId);
+            var userVoting = unitOfWork.UserVotingRepository.GetByUserOnEventAndVotingId(userOnEvent.Id, votingId);
             userVoting.VoteCounter++;
             unitOfWork.UserVotingRepository.Update(userVoting);
 
-            var userVoting1 = unitOfWork.UserVotingRepository.GetUserVoting(user1_Id, votingId);
-            var userVoting2 = unitOfWork.UserVotingRepository.GetUserVoting(user2_Id, votingId);
+            var userVoting1 = unitOfWork.UserVotingRepository.GetByUserOnEventAndVotingId(userOnEvent1_Id, votingId);
+            var userVoting2 = unitOfWork.UserVotingRepository.GetByUserOnEventAndVotingId(userOnEvent2_Id, votingId);
 
             if (!draw)
             {
@@ -538,7 +591,7 @@ namespace TeamGeneratorApp.Controllers
                 else
                 {
                     userVoting2.Wins++;
-                    userVoting1.Loses++;
+                    userVoting1.Loses++;                 
                 }
             }
             else
@@ -547,8 +600,8 @@ namespace TeamGeneratorApp.Controllers
                 userVoting2.Draws++;
             }
 
-            var user1 = unitOfWork.UserInCategoryRepository.GetByUserAndCategoryId(user1_Id, categoryId);
-            var user2 = unitOfWork.UserInCategoryRepository.GetByUserAndCategoryId(user2_Id, categoryId);
+            var user1 = unitOfWork.UserInCategoryRepository.GetByID(userVoting1.UserOnEvent.UserInCategory.Id);
+            var user2 = unitOfWork.UserInCategoryRepository.GetByID(userVoting2.UserOnEvent.UserInCategory.Id);
 
             //elo algorithm
             var eloRating = new EloRating(Convert.ToDouble(user1.Rating), Convert.ToDouble(user2.Rating), draw, firstWins);
@@ -631,7 +684,8 @@ namespace TeamGeneratorApp.Controllers
                             var newTeam = new Team
                             {
                                 GeneratorId = e.Id,
-                                Name = "Team_" + i
+                                Name = "Team_" + i,
+                                Strength = 0
                             };
                             unitOfWork.TeamRepository.Insert(newTeam);
                         }
@@ -735,7 +789,17 @@ namespace TeamGeneratorApp.Controllers
                 IsGenerated = generator.IsGenerated
             };
 
-           
+            var allUsers = unitOfWork.UserOnEventRepository.GetByEventId(generator.EventId).ToList();
+            if (allUsers.Any())
+            {
+                ViewBag.AllUsersEmpty = false;
+            }
+            else
+            {
+                ViewBag.AllUsersEmpty = true;
+            }
+
+
             return View(generatorVm);
         }
 
@@ -773,12 +837,11 @@ namespace TeamGeneratorApp.Controllers
                 var newItem = new UserOnEventVM
                 {
                     Id = e.Id,
-                    UserId = e.UserId,
                     EventId = e.EventId,
-                    UserPersonalName = e.AspNetUsers.Name,
+                    UserPersonalName = e.UserInCategory.UserInGroup.AspNetUsers.Name,
                     PositionId = e.PositionId,
                     PositionName = e.Position.Name,
-                    Rating = unitOfWork.UserInCategoryRepository.GetByUserAndCategoryId(e.UserId, e.Event.CategoryId).Rating,
+                    Rating = unitOfWork.UserInCategoryRepository.GetByID(e.UserInCategory.Id).Rating,
                     TeamId = (unitOfWork.UserInTeamRepository.GetByUserOnEventAndGeneratorId(e.Id, generatorId) == null? -1 : unitOfWork.UserInTeamRepository.GetByUserOnEventAndGeneratorId(e.Id, generatorId).TeamId)
                 };
                 list.Add(newItem);
@@ -894,7 +957,9 @@ namespace TeamGeneratorApp.Controllers
                 }
 
             }
-            //usersWithoutTeam = usersWithoutTeam.OrderByDescending(p => p.)
+            //need them ordered for generating loop
+            usersWithoutTeam = usersWithoutTeam.OrderByDescending(p => p.UserInCategory.Rating).ToList();
+            
 
 
 
@@ -907,17 +972,16 @@ namespace TeamGeneratorApp.Controllers
             {
                 var team = new TeamHelper();
                 team.Id = t.Id;
+                team.Strength = 0;
 
                 var list1 = new List<UserOnEvent>();
                 foreach (var u in t.UserInTeam)
                 {
                     var userOnEvent = unitOfWork.UserOnEventRepository.GetByID(u.UserOnEventId);
-                    list1.Add(userOnEvent);   
+                    list1.Add(userOnEvent);
+                    team.Strength += userOnEvent.UserInCategory.Rating;
                 }
-                //if (list1.Any())
-                //    team.Users = list1;
-                //else
-                //    team.Users = null;
+
                 team.Users = list1;
 
                 teamList.Add(team);
@@ -926,37 +990,73 @@ namespace TeamGeneratorApp.Controllers
 
             //parameters for generating
             var criteria = generator.Criteria;
-
             int smallestTeam = 0;
+
             //balanced teams
             if (criteria.Name == "Balanced")
             {
                 while (usersWithoutTeam.Any())
                 {
-                    teamList = teamList.OrderBy(p => p.Users.Count).OrderBy(p => p.SumRating).ToList();
+                    teamList = teamList.OrderBy(p => p.Strength).OrderBy(p => p.Users.Count).ToList();
                     smallestTeam = teamList.First().Users.Count;
 
                     foreach (var team in teamList)
                     {
-                        if (team.Users.Count == smallestTeam)
+                        if (team.Users.Count == smallestTeam)                                                     //skipping teams with more users
                         {
-                               
+                            team.Users.Add(usersWithoutTeam.First());
+                            team.Strength += usersWithoutTeam.First().UserInCategory.Rating;
+
+                            usersWithoutTeam.Remove(usersWithoutTeam.First());
+                            break;
+
                         }
-                        
+                       
+                    }
+                }
+            }
+
+            //criteria: strongest
+            else
+            {
+                var usersPerTeam = allUsersOnEventList.Count()/generator.NumberOfTeams;
+                teamList = teamList.OrderByDescending(p => p.Strength).ToList();
+
+                foreach (var team in teamList)
+                {
+
+                    while (team.Users.Count < usersPerTeam)                                         //every team should have same number of users
+                    {
+                        team.Users.Add(usersWithoutTeam.First());
+                        team.Strength += usersWithoutTeam.First().UserInCategory.Rating;
+
+                        usersWithoutTeam.Remove(usersWithoutTeam.First());
                     }
                 }
 
-
             }
 
-            //teams by strength
-            else
+            //save userInTeam and teams to db
+            foreach (var team in teamList)
             {
-                
+                var teamDb = unitOfWork.TeamRepository.GetByID(team.Id);
+                teamDb.Strength = team.Strength;
+
+                foreach (var user in team.Users)
+                {
+                    var userInTeam = new UserInTeam
+                    {
+                        UserOnEventId = user.Id,
+                        TeamId = team.Id
+                    };
+                    unitOfWork.UserInTeamRepository.Insert(userInTeam);
+                }             
             }
 
-            
+            unitOfWork.Commit();
 
+
+            //povratak iz funkcije
 
 
             return HttpNotFound();

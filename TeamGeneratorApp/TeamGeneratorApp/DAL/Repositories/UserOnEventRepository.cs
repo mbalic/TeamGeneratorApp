@@ -20,7 +20,15 @@ namespace TeamGeneratorApp.DAL.Repositories
 
         public UserOnEvent GetByUserId(string userId)
         {
-            return context.UserOnEvent.Where(p => p.UserId == userId).Single();
+            var rez = context.UserOnEvent.Where(p => p.UserInCategory.UserInGroup.AspNetUsers.Id == userId);
+            if (rez.Any())
+            {
+                return rez.Single();
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

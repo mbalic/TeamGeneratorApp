@@ -18,17 +18,20 @@ namespace TeamGeneratorApp.Models
         public UserOnEvent()
         {
             this.UserInTeam = new HashSet<UserInTeam>();
+            this.UserVoting = new HashSet<UserVoting>();
         }
     
         public int Id { get; set; }
+        public int UserInCategoryId { get; set; }
         public int EventId { get; set; }
-        public string UserId { get; set; }
         public int PositionId { get; set; }
     
-        public virtual AspNetUsers AspNetUsers { get; set; }
         public virtual Event Event { get; set; }
         public virtual Position Position { get; set; }
+        public virtual UserInCategory UserInCategory { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserInTeam> UserInTeam { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserVoting> UserVoting { get; set; }
     }
 }

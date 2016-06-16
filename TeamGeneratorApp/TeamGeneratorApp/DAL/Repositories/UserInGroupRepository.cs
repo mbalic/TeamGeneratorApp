@@ -18,6 +18,11 @@ namespace TeamGeneratorApp.DAL.Repositories
             return context.UserInGroup.Where(c => c.GroupId == groupId);
         }
 
+        public IEnumerable<UserInGroup> GetByGroupIdAndActivity(int groupId, bool active)
+        {
+            return context.UserInGroup.Where(c => c.GroupId == groupId && c.Active == active);
+        }
+
 
     }
 }

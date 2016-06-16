@@ -193,11 +193,11 @@ namespace TeamGeneratorApp.Controllers
         public PartialViewResult UsersGrid(int categoryId = 0)
         {
             var category = unitOfWork.CategoryRepository.GetByID(categoryId);
-            //var userInGroup = unitOfWork.UserInGroupRepository.GetByGroupId(category.GroupId);
-            ViewData["users"] = unitOfWork.UserInGroupRepository.GetByGroupId(category.GroupId).AsQueryable()
+
+            ViewData["users"] = unitOfWork.UserInGroupRepository.GetByGroupIdAndActivity(category.GroupId, true).AsQueryable()
                   .Select(e => new UserddlVM
                   {
-                      Id = e.UserId,
+                      Id = e.Id,
                       Name = e.AspNetUsers.Name
                   })
                   .OrderBy(e => e.Name);
@@ -221,9 +221,9 @@ namespace TeamGeneratorApp.Controllers
                 var newItem = new UserCategoryVM
                 {
                     Id = e.Id,
-                    UserId = e.UserIId,
+                    UserInGroupId = e.UserInGroupId,
                     CategoryId = e.CategoryId,
-                    UserPersonalName = e.AspNetUsers.Name,
+                    UserPersonalName = e.UserInGroup.AspNetUsers.Name,
                     Rating = e.Rating,
                     Active = e.Active                 
 
@@ -250,7 +250,7 @@ namespace TeamGeneratorApp.Controllers
                     var newUser = new UserInCategory
                     {
                         Id = e.Id,
-                        UserIId = e.UserId,
+                        UserInGroupId = e.UserInGroupId,
                         CategoryId = e.CategoryId,
                         Rating = e.Rating,
                         Active = e.Active                        
@@ -283,7 +283,7 @@ namespace TeamGeneratorApp.Controllers
                     var newUser = new UserInCategory
                     {
                         Id = e.Id,
-                        UserIId = e.UserId,
+                        UserInGroupId = e.UserInGroupId,
                         CategoryId = e.CategoryId,
                         Rating = e.Rating,
                         Active = e.Active
@@ -314,15 +314,6 @@ namespace TeamGeneratorApp.Controllers
             {
                 foreach (var e in res)
                 {
-                    //var newEvent = new UserInCategory
-                    //{
-                    //    Id = e.Id,
-                    //    UserIId = e.UserId,
-                    //    CategoryId = e.CategoryId,
-                    //    Score = e.Score,
-                    //    Active = e.Active,
-                    //    PositionInCategoryId = e.PositionInCategoryId
-                    //};
                     try
                     {
                         unitOfWork.UserInCategoryRepository.Delete(e.Id);
@@ -452,15 +443,6 @@ namespace TeamGeneratorApp.Controllers
             {
                 foreach (var e in res)
                 {
-                    //var newEvent = new UserInCategory
-                    //{
-                    //    Id = e.Id,
-                    //    UserIId = e.UserId,
-                    //    CategoryId = e.CategoryId,
-                    //    Score = e.Score,
-                    //    Active = e.Active,
-                    //    PositionInCategoryId = e.PositionInCategoryId
-                    //};
                     try
                     {
                         unitOfWork.CategoryRepository.DeletePositionInCategory(e.Id);

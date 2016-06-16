@@ -14,29 +14,15 @@ namespace TeamGeneratorApp.Models
     
     public partial class UserVoting
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public UserVoting()
-        {
-            this.VotingLog = new HashSet<VotingLog>();
-            this.VotingLog1 = new HashSet<VotingLog>();
-            this.VotingLog2 = new HashSet<VotingLog>();
-        }
-    
         public int Id { get; set; }
         public string VotingId { get; set; }
-        public string UserId { get; set; }
-        public Nullable<int> VoteCounter { get; set; }
-        public Nullable<int> Wins { get; set; }
-        public Nullable<int> Loses { get; set; }
-        public Nullable<int> Draws { get; set; }
+        public int VoteCounter { get; set; }
+        public int Wins { get; set; }
+        public int Loses { get; set; }
+        public int Draws { get; set; }
+        public int UserOnEventId { get; set; }
     
-        public virtual AspNetUsers AspNetUsers { get; set; }
+        public virtual UserOnEvent UserOnEvent { get; set; }
         public virtual Voting Voting { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<VotingLog> VotingLog { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<VotingLog> VotingLog1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<VotingLog> VotingLog2 { get; set; }
     }
 }

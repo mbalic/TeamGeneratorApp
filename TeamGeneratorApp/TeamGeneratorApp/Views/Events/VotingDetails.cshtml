@@ -53,7 +53,7 @@
         <dd>
             @Html.DisplayFor(model => model.Active)
         </dd>
-
+        <br/>
         <dt>
 
         </dt>
@@ -61,9 +61,22 @@
         <dd>
             @if (ViewBag.UserCanVote)
             {
-                <button>@Html.ActionLink("Vote!", "Voting", new { id = Model.Id })</button>
+                <button>@Html.ActionLink("Vote!", "Voting", new {id = Model.Id})</button>
             }
         </dd>
+        <br/><br/>
+@if (ViewBag.UserIsOwner)
+{
+        <dt>
+            Statistics
+        </dt>
+
+        <dd>
+
+            @Html.Action("UserVotingsGrid", "Events", new {votingId = Model.Id})
+
+        </dd>
+}
     </dl>
 </div>
 <br/>

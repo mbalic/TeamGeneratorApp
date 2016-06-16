@@ -18,9 +18,16 @@ namespace TeamGeneratorApp.DAL.Repositories
             return context.UserInCategory.Where(c => c.CategoryId == categoryId);
         }
 
-        public UserInCategory GetByUserAndCategoryId(string userId, int categoryId)
+        public IEnumerable<UserInCategory> GetByCategoryIdAndActivity(int categoryId, bool active)
         {
-            return context.UserInCategory.Where(c => c.CategoryId == categoryId && c.UserIId == userId).Single();
+            return context.UserInCategory.Where(c => c.CategoryId == categoryId && c.Active == active);
         }
+
+        //public UserInCategory GetByUserAndCategoryId(string userId, int categoryId)
+        //{
+        //    return context.UserInCategory.Where(c => c.CategoryId == categoryId && c.UserIId == userId).Single();
+        //}
+
+
     }
 }

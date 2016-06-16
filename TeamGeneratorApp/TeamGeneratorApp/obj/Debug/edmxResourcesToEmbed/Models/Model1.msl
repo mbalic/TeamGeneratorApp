@@ -125,8 +125,9 @@
         <MappingFragment StoreEntitySet="Team">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
-          <ScalarProperty Name="TeamScore" ColumnName="TeamScore" />
           <ScalarProperty Name="GeneratorId" ColumnName="GeneratorId" />
+          <ScalarProperty Name="Strength" ColumnName="Strength" />
+          <ScalarProperty Name="SuccessPercentage" ColumnName="SuccessPercentage" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -145,7 +146,7 @@
       <EntityTypeMapping TypeName="TeamDb6Model.UserInCategory">
         <MappingFragment StoreEntitySet="UserInCategory">
           <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="UserIId" ColumnName="UserIId" />
+          <ScalarProperty Name="UserInGroupId" ColumnName="UserInGroupId" />
           <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
           <ScalarProperty Name="Rating" ColumnName="Rating" />
           <ScalarProperty Name="Active" ColumnName="Active" />
@@ -175,8 +176,8 @@
       <EntityTypeMapping TypeName="TeamDb6Model.UserOnEvent">
         <MappingFragment StoreEntitySet="UserOnEvent">
           <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="UserInCategoryId" ColumnName="UserInCategoryId" />
           <ScalarProperty Name="EventId" ColumnName="EventId" />
-          <ScalarProperty Name="UserId" ColumnName="UserId" />
           <ScalarProperty Name="PositionId" ColumnName="PositionId" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -186,11 +187,11 @@
         <MappingFragment StoreEntitySet="UserVoting">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="VotingId" ColumnName="VotingId" />
-          <ScalarProperty Name="UserId" ColumnName="UserId" />
           <ScalarProperty Name="VoteCounter" ColumnName="VoteCounter" />
           <ScalarProperty Name="Wins" ColumnName="Wins" />
           <ScalarProperty Name="Loses" ColumnName="Loses" />
           <ScalarProperty Name="Draws" ColumnName="Draws" />
+          <ScalarProperty Name="UserOnEventId" ColumnName="UserOnEventId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -204,16 +205,6 @@
           <ScalarProperty Name="FinishVoting" ColumnName="FinishVoting" />
           <ScalarProperty Name="Active" ColumnName="Active" />
           <ScalarProperty Name="VotesPerUser" ColumnName="VotesPerUser" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="VotingLog">
-      <EntityTypeMapping TypeName="TeamDb6Model.VotingLog">
-        <MappingFragment StoreEntitySet="VotingLog">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="UserVotingId" ColumnName="UserVotingId" />
-          <ScalarProperty Name="WinnerId" ColumnName="WinnerId" />
-          <ScalarProperty Name="LoserId" ColumnName="LoserId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
