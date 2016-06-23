@@ -1,0 +1,73 @@
+﻿@using Kendo.Mvc.UI
+@{
+    Layout = null;
+}
+@Styles.Render("~/Content/css")
+@Styles.Render("~/Content/kendo/css")
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+@Scripts.Render("~/bundles/modernizr")
+@Scripts.Render("~/bundles/kendo")
+
+<script type="text/javascript">
+    function viewDetails(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var votingId = dataItem.Id;
+
+        window.location.href = "@Url.Action("VotingDetails","Events")?id=" + votingId;
+
+    };
+</script>
+
+
+@(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.VotingIndexVM>()
+    .Name("votingsGrid")
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.Id).Visible(false);
+        columns.Bound(p => p.Name);
+        columns.Bound(p => p.EventName);
+        columns.Bound(p => p.StartVoting);
+        columns.Bound(p => p.FinishVoting);
+        columns.Bound(p => p.VotesLeft);
+        columns.Command(command => command.Custom("Details").Click("viewDetails"));
+    })
+    //.Editable(editable => editable.Mode(GridEditMode.InLine))
+    .Pageable()
+    .Sortable()
+    .Scrollable()
+    .HtmlAttributes(new { style = "height:200px;" })
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Batch(true)
+        .ServerOperation(false)
+        .PageSize(20)
+        .Events(events => events.Error("error_handler").Sync("sync_handler"))
+         .Model(model =>
+         {
+             model.Id(p => p.Id);
+         })
+        .Read(read => read.Action("VotingsGrid_Read", "Home", new { userId = ViewBag.UserId }))
+    )
+
+)
+
+<script type="text/javascript">
+ function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function(key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function() {
+                        message += this + "\n";
+                    });
+                }
+            });
+            alert(message);
+        }
+ };
+ function sync_handler(e) {
+     this.read();
+ };
+</script>

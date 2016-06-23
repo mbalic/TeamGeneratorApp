@@ -14,11 +14,12 @@
     function viewUser(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        var userId = dataItem.Id;
+        var userId = dataItem.UserId;
 
-        @*window.location.href = "@Url.Action("Details","AdminUser")?id=" + eventId;*@
+        window.location.href = "@Url.Action("Profile","Users")?id=" + userId;
     };
 
+   
     function db() {
         this.table.find(".k-grid-edit").hide();
     }; 
@@ -42,7 +43,7 @@
                   command.Edit();
                   command.Destroy();
               });
-              columns.Command(command => command.Custom("Details").Click("viewUser"));
+              columns.Command(command => command.Custom("Profile").Click("viewUser"));
           })
           .Events(e => e.DataBound("db"))
           .ToolBar(toolbar => toolbar.Create())

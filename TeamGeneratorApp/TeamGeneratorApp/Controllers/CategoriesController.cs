@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using TeamGeneratorApp.DAL;
+using TeamGeneratorApp.Helpers;
 using TeamGeneratorApp.Models;
 using TeamGeneratorApp.Models.ViewModels;
 
@@ -218,22 +219,23 @@ namespace TeamGeneratorApp.Controllers
             var list = new List<UserCategoryVM>();
             foreach (var e in res)
             {
-                var newItem = new UserCategoryVM
-                {
-                    Id = e.Id,
-                    UserInGroupId = e.UserInGroupId,
-                    CategoryId = e.CategoryId,
-                    UserPersonalName = e.UserInGroup.AspNetUsers.Name,
-                    Rating = e.Rating,
-                    Active = e.Active                 
+                var newItem = new UserCategoryVM();
+                newItem.Id = e.Id;
+                newItem.UserInGroupId = e.UserInGroupId;
+                newItem.CategoryId = e.CategoryId;
+                newItem.UserPersonalName = e.UserInGroup.AspNetUsers.Name;
+                newItem.Rating = e.Rating;
+                newItem.Active = e.Active;
+                newItem.UserId = e.UserInGroup.UserId;
 
-                    //PositionName = e.PositionInCategory == null? null : e.PositionInCategory.Name
+                var pair = CountSuccessPercentageForUser(e);
+                newItem.SuccessPercentage = pair.Value;
+                newItem.Appereances = pair.Key;           
 
-                };
                 list.Add(newItem);
             }
 
-            return Json(list.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
+            return Json(list.OrderByDescending(p => p.UserPersonalName).ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
         }
         
 
@@ -280,14 +282,17 @@ namespace TeamGeneratorApp.Controllers
             {
                 foreach (var e in res)
                 {
-                    var newUser = new UserInCategory
-                    {
-                        Id = e.Id,
-                        UserInGroupId = e.UserInGroupId,
-                        CategoryId = e.CategoryId,
-                        Rating = e.Rating,
-                        Active = e.Active
-                    };
+                    //var newUser = new UserInCategory
+                    //{
+                    //    Id = e.Id,
+                    //    UserInGroupId = e.UserInGroupId,
+                    //    CategoryId = e.CategoryId,
+                    //    Rating = e.Rating,
+                    //    Active = e.Active
+                    //};
+                    var newUser = unitOfWork.UserInCategoryRepository.GetByID(e.Id);
+                    newUser.Rating = e.Rating;
+                    newUser.Active = e.Active;
                     try
                     {
                         unitOfWork.UserInCategoryRepository.Update(newUser);
@@ -383,8 +388,8 @@ namespace TeamGeneratorApp.Controllers
                         CategoryId = e.CategoryId,
                         Name = e.Name,
                         Value = e.Value
-
                     };
+
                     try
                     {
                         unitOfWork.CategoryRepository.InsertPositionInCategory(newPosition);
@@ -460,6 +465,113 @@ namespace TeamGeneratorApp.Controllers
         }
 
         #endregion
+
+
+        public KeyValuePair<int, double?> CountSuccessPercentageForUser(UserInCategory user)
+        {
+            double? succesPercentage = 0;
+            var teamCounter = 0;
+            foreach (var userOnEvent in user.UserOnEvent)
+            {
+                foreach (var userInTeam in userOnEvent.UserInTeam)
+                {
+                    if (userInTeam.Team.SuccessPercentage != null)
+                    {
+                        succesPercentage += userInTeam.Team.SuccessPercentage;
+                        teamCounter++;
+                    }
+                }
+                if (teamCounter > 0)
+                    succesPercentage = succesPercentage/teamCounter;
+               
+            }
+
+            return new KeyValuePair<int, double?>(teamCounter, succesPercentage); ;
+        }
+
+
+        public ActionResult Cooperation(int userInCategoryId)
+        {
+            var user = unitOfWork.UserInCategoryRepository.GetByID(userInCategoryId);
+            var userInCategoryVm = new UserCategoryVM();
+
+            userInCategoryVm.Id = userInCategoryId;
+            userInCategoryVm.CategoryId = user.CategoryId;
+            userInCategoryVm.UserPersonalName = user.UserInGroup.AspNetUsers.Name;
+            userInCategoryVm.GroupName = user.UserInGroup.Group.Name;
+            userInCategoryVm.CategoryName = user.Category.Name;
+            userInCategoryVm.Rating = user.Rating;
+
+            var pair = CountSuccessPercentageForUser(user);
+            userInCategoryVm.SuccessPercentage = pair.Value;
+            userInCategoryVm.Appereances = pair.Key;
+
+            ViewBag.UserInCategoryId = userInCategoryId;
+
+            return View(userInCategoryVm);
+        }
+
+
+        public PartialViewResult CooperationGrid(int userInCategoryId = 0)
+        {
+
+            ViewBag.UserInCategoryId = userInCategoryId;
+            return PartialView("_CooperationGrid");
+        }
+
+
+        public ActionResult CooperationGrid_Read([DataSourceRequest] DataSourceRequest request, int userInCategoryId)
+        {
+            var user = unitOfWork.UserInCategoryRepository.GetByID(userInCategoryId);
+            var userInTeamList = unitOfWork.UserInTeamRepository.GetByUserInCategoryId(userInCategoryId);
+            var userTeams = new List<Team>();
+            foreach (var userInTeam in userInTeamList)
+            {
+                if(userInTeam.Team.SuccessPercentage != null)
+                    userTeams.Add(userInTeam.Team);
+            }
+
+            //get all users from category
+            var allUsers = unitOfWork.UserInCategoryRepository.Get().ToList();
+            allUsers.Remove(user);
+            
+            var cooperations = new List<CooperationVM>();
+            //count cooperation factor for every user
+            foreach (var userInCategory in allUsers)
+            {
+                var newUser = new CooperationVM
+                {
+                    UserId = userInCategory.Id,
+                    UserPersonalName = userInCategory.UserInGroup.AspNetUsers.Name,
+                    SuccessPercentage = 0
+                };
+                var teamCount = 0; 
+                foreach (var userOnEvent in userInCategory.UserOnEvent)
+                {
+                    foreach (var userInTeam in userOnEvent.UserInTeam)
+                    {   
+                        //check if users were in same team
+                        if (userTeams.Contains(userInTeam.Team))
+                        {
+                           newUser.SuccessPercentage += userInTeam.Team.SuccessPercentage;
+                            teamCount++;
+                        }
+                    }
+                }
+                if (teamCount > 0)
+                    newUser.SuccessPercentage = newUser.SuccessPercentage/teamCount;
+               
+
+                newUser.Appereances = teamCount;
+
+                cooperations.Add(newUser);
+            }
+            
+            return Json(cooperations.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
+
+        }
+
+      
 
 
     }

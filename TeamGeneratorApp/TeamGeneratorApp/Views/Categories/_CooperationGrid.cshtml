@@ -1,0 +1,60 @@
+﻿@using Kendo.Mvc.UI
+@{
+    Layout = null;
+}
+
+@Styles.Render("~/Content/css")
+@Styles.Render("~/Content/kendo/css")
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+@Scripts.Render("~/bundles/modernizr")
+@Scripts.Render("~/bundles/kendo")
+
+
+@(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.CooperationVM>()
+    .Name("cooperationGrid")
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.UserPersonalName);
+        columns.Bound(p => p.SuccessPercentage).Title("Success % with this user (in this category)");
+        columns.Bound(p => p.Appereances).Title("Appereances together (in this category)");
+    })
+    .Pageable()
+    .Sortable()
+    .Scrollable()
+    .HtmlAttributes(new { style = "height:550px;" })
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Batch(true)
+        .ServerOperation(false)
+        .PageSize(20)
+        .Events(events => events.Error("error_handler"))
+        .Model(model =>
+        {
+            model.Id(p => p.UserId);
+        })
+        .Read(read => read.Action("CooperationGrid_Read", "Categories", new { userInCategoryId = ViewBag.UserInCategoryId }))
+        .Sort(sort =>
+        { 
+            sort.Add("SuccessPercentage").Descending();
+            sort.Add("Appereances").Descending();
+        })
+    )
+
+)
+<script type="text/javascript">
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function() {
+                        message += this + "\n";
+                    });
+                }
+            });
+            alert(message);
+        }
+    }
+</script>
+

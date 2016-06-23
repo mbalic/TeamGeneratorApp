@@ -10,16 +10,23 @@
 @Scripts.Render("~/bundles/modernizr")
 @Scripts.Render("~/bundles/kendo")
 
-@*<script type="text/javascript">
+<script type="text/javascript">
     function viewUser(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        var categoryId = dataItem.Id
+        var userId = dataItem.UserId;
 
-        window.location.href = "@Url.Action("Details","AdminUsers")?id=" + userId;
+        window.location.href = "@Url.Action("Profile","Users")?id=" + userId;
+    };
 
-    }
-</script>*@
+    function viewCooperation(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var userInCategory = dataItem.Id;
+
+        window.location.href = "@Url.Action("Cooperation","Groups")?userInGroupId=" + userInCategory;
+    };
+</script>
 
 
 @(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.UserInGroupVM>()
@@ -28,11 +35,14 @@
     {
         columns.Bound(p => p.Name);
         columns.Bound(p => p.Email);
+        columns.Bound(p => p.SuccessPercentage).Title("Success % in group").Width(200);
+        columns.Bound(p => p.Appereances);
         columns.Bound(p => p.Active)
             .ClientTemplate("<input type='checkbox' #= Active ? checked='checked': '' # class='chkbx' />")
             .HtmlAttributes(new {style = "text-align: center"});
         columns.Command(command => command.Edit()).Width(200);
-        //columns.Command(command => command.Custom("Details").Click("viewCategory"));
+        columns.Command(command => command.Custom("Profile").Click("viewUser"));
+        columns.Command(command => command.Custom("Cooperation").Click("viewCooperation"));
     })
     //.ToolBar(toolbar => toolbar.Create())
     .Editable(editable => editable.Mode(GridEditMode.InLine))

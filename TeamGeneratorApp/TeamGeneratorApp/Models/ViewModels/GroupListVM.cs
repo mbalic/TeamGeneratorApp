@@ -15,5 +15,8 @@ namespace TeamGeneratorApp.Models.ViewModels
         public string Name { get; set; }
         public string Description { get; set; }
         public string OwnerId { get; set; }
+
+        [Display(Name = "Owner")]
+        public string OwnerName { get; set; }
     }
 }

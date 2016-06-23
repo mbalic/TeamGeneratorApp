@@ -1,0 +1,99 @@
+﻿@model TeamGeneratorApp.Models.ViewModels.UserEditVM
+
+@{
+    ViewBag.Title = "My profile";
+}
+<style>
+#parent {
+  display: flex;
+}
+#right {
+  width: 300px;
+  padding-top: 30px;
+  /* Just so it's visible */
+}
+#left {
+  flex: 1;
+  /* Grow to rest of container */
+  /* Just so it's visible */
+}
+</style>
+
+<div id="parent">
+    <div id="left"><h2>Profile</h2></div>
+    <div id="right">
+        @if (ViewBag.Owner)
+        {
+            <a class="btn btn-default" style="width: 70px" href="@Url.Action("EditProfile", "Users")"><span>Edit</span></a>
+        }
+    </div>
+</div>
+<div style="height: 350px">
+    <div class="form-horizontal">
+        <hr />
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            <div class="text-center">
+                <img id="user_img" src="@ViewBag.ImageUrl" class="avatar img-circle img-thumbnail" style="width: 200px; height: 250px" alt="avatar">
+            </div>
+        </div>
+        <br /><br />
+        <div class="col-md-8 col-sm-6 col-xs-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+                </div>
+            </div>
+
+          
+        </div>
+    </div>
+</div>
+<br/>
+<p><b>Groups</b></p>
+<div>
+    <div id="tabs">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#GroupsMember" data-toggle="tab">Member</a>
+            </li>
+            <li>
+                <a href="#GroupsOwner" data-toggle="tab">Owner</a>
+            </li>
+                @*<li>
+                    <a href="#Positions" data-toggle="tab">Positions</a>
+                </li>*@
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane active" id="GroupsMember">
+                @Html.Action("GroupsMemberGrid", "Users")
+            </div>
+            <div class="tab-pane" id="GroupsOwner">
+                @Html.Action("GroupsOwnerGrid", "Users")
+            </div>
+                @*<div class="tab-pane active" id="Positions">
+                    @Html.Action("PositionsGrid", "Categories", new { categoryId = Model.Id })
+                </div>*@
+        </div>
+
+    </div>
+</div>
+

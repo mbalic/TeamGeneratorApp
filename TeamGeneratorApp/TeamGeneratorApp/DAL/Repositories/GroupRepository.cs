@@ -13,9 +13,19 @@ namespace TeamGeneratorApp.DAL.Repositories
         {
         }
 
-        public IEnumerable<Group> GetByUserId(string id)
+        public IEnumerable<Group> GetByOwnerId(string id)
         {
             return context.Group.Where(p => p.OwnerId == id);
+        }
+
+        public IEnumerable<Group> GetByUserId(string id)
+        {
+            var q = from g in context.Group
+                join uig in context.UserInGroup on g.Id equals uig.GroupId
+                where uig.UserId == id 
+                select g;
+
+            return q;
         }
 
     }

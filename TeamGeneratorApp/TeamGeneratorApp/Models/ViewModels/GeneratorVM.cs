@@ -23,5 +23,11 @@ namespace TeamGeneratorApp.Models.ViewModels
 
         [Display(Name = "Criteria")]
         public string CriteriaName { get; set; }
+
+        [Display(Name = "Has generated")]
+        public bool IsGenerated { get; set; }
+
+        [Display(Name = "Is locked")]
+        public bool IsLocked { get; set; }
     }
 }

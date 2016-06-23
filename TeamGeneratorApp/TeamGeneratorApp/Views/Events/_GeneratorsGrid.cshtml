@@ -33,6 +33,8 @@
               columns.Bound(p => p.Name);
               columns.ForeignKey(p => p.CriteriaId, (System.Collections.IEnumerable)ViewData["criterias"], "Id", "Name").Title("Criteria").Width(200);
               columns.Bound(p => p.NumberOfTeams);
+              columns.Bound(p => p.IsGenerated);
+              columns.Bound(p => p.IsLocked);
               columns.Command(command => { command.Edit(); command.Destroy(); }).Width(200);
               columns.Command(command => command.Custom("Details").Click("viewGenerator"));
           })
@@ -53,6 +55,8 @@
               {
                   model.Id(p => p.Id);
                   model.Field(p => p.EventId).DefaultValue(ViewBag.EventId);
+                  model.Field(p => p.IsGenerated).DefaultValue(false).Editable(false);
+                  model.Field(p => p.IsLocked).DefaultValue(false).Editable(false);
               })
               .Create(update => update.Action("GeneratorsGrid_Create", "Events"))
               .Read(read => read.Action("GeneratorsGrid_Read", "Events", new { eventId = ViewBag.EventId }))

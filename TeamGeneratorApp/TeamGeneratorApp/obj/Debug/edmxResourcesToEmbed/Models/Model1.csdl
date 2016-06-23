@@ -101,6 +101,7 @@
     <Property Name="CriteriaId" Type="Int32" Nullable="false" />
     <Property Name="NumberOfTeams" Type="Int32" Nullable="false" />
     <Property Name="IsGenerated" Type="Boolean" Nullable="false" />
+    <Property Name="IsLocked" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="Criteria" Relationship="Self.FK_Generator_Criteria" FromRole="Generator" ToRole="Criteria" />
     <NavigationProperty Name="Event" Relationship="Self.FK_Generator_Event" FromRole="Generator" ToRole="Event" />
     <NavigationProperty Name="Team" Relationship="Self.FK_Team_Generator" FromRole="Generator" ToRole="Team" />

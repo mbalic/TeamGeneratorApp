@@ -11,34 +11,40 @@
 @Scripts.Render("~/bundles/kendo")
 
 <script type="text/javascript">
-    function viewUser(e) {
+    function viewItem(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        var userId = dataItem.Id;
+        var userId = dataItem.UserId;
 
-        @*window.location.href = "@Url.Action("Details","AdminUser")?id=" + eventId;*@
-
+        window.location.href = "@Url.Action("Profile","Users")?id=" + userId;
     };
 
-    //function db(e) {
-    //    this.table.find(".k-grid-edit").hide();
-    //};
+    function viewCooperation(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var userInCategory = dataItem.Id;
+
+        window.location.href = "@Url.Action("Cooperation","Categories")?userInCategoryId=" + userInCategory;
+    };
+
 
 </script>
 
 
 @(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.UserCategoryVM>()
-    .Name("grid2")
+    .Name("usersGrid")
     .Columns(columns =>
     {
         columns.ForeignKey(p => p.UserInGroupId, (System.Collections.IEnumerable) ViewData["users"], "Id", "Name").Title("User").Width(200);
         columns.Bound(p => p.Rating);
+        columns.Bound(p => p.SuccessPercentage).Title("Success % in category").Width(200);
+        columns.Bound(p => p.Appereances);
         columns.Bound(p => p.Active)
             .ClientTemplate("<input type='checkbox' #= Active ? checked='checked': '' # class='chkbx' />")
             .HtmlAttributes(new { style = "text-align: center" });
-        //columns.Bound(p => p.Weight);
         columns.Command(command => { command.Edit(); command.Destroy(); }).Width(200);
-        columns.Command(command => command.Custom("Details").Click("viewUser"));
+        columns.Command(command => command.Custom("Profile").Click("viewItem"));
+        columns.Command(command => command.Custom("Cooperation").Click("viewCooperation"));
     })
     //.Events(e => e.DataBound("db"))
     .ToolBar(toolbar => toolbar.Create())
@@ -81,6 +87,14 @@
             alert(message);
         }
     }
+    $(function () {
+        $('#usersGrid').on('click', '.chkbx', function () {
+            var checked = $(this).is(':checked');
+            var grid = $('#usersGrid').data().kendoGrid;
+            var dataItem = grid.dataItem($(this).closest('tr'));
+            dataItem.set('Active', checked);
+        });
+    });
     function sync_handler(e) {
         this.read();
     };

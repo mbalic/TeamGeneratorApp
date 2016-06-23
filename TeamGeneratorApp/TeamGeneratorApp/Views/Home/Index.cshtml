@@ -6,10 +6,18 @@
     <hr/>
 </p>
 
+<h3><u>ToDo</u></h3>
+
+
+
+<p>You have <b>@ViewBag.Votings</b> pending votings and <b>@ViewBag.Invitations</b> invitations.
+</p>
+
+<br/>
 <div id="tabs">
     <ul class="nav nav-tabs">
         <li class="active">
-            <a href="#Votings" data-toggle="tab">Votings</a>
+            <a href="#Votings" data-toggle="tab">To vote</a>
         </li>
         <li>
             <a href="#Invitations" data-toggle="tab">Invitations</a>
@@ -17,12 +25,37 @@
     </ul>
 
     <div class="tab-content">
-        <div class="tab-pane active" id="Categories">
-            @*@Html.Action("VotingsGrid", "Groups", new { userId = ViewBag.UserId })*@
+        <div class="tab-pane active" id="Votings">
+            @Html.Action("VotingsGrid", "Home", new {userId = ViewBag.UserId})
         </div>
         <div class="tab-pane" id="Invitations">
-            @Html.Action("InvitationsGrid", "Home", new { userId = ViewBag.UserId })
+            @Html.Action("InvitationsGrid", "Home", new {userId = ViewBag.UserId})
         </div>
     </div>
 
 </div>
+    
+
+<br/><br /><hr />
+<h3><u>Your active votings</u></h3>
+
+   
+<p>You own <b>@ViewBag.MyVotings</b> active votings.
+</p>
+
+<br/>
+<div id="tabs">
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a href="#MyVotings" data-toggle="tab">My votings</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane active" id="MyVotings">
+            @Html.Action("MyVotingsGrid", "Home", new {userId = ViewBag.UserId})
+        </div>
+    </div>
+
+</div>
+    

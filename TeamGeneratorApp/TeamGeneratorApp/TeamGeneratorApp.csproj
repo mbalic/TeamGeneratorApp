@@ -177,6 +177,7 @@
   <ItemGroup>
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\EventsController.cs" />
+    <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="DAL\Repositories\GeneratorRepository.cs" />
     <Compile Include="DAL\Repositories\InvitationRepository.cs" />
     <Compile Include="DAL\Repositories\UserInCategoryRepository.cs" />
@@ -185,6 +186,7 @@
     <Compile Include="DAL\Repositories\UserOnEventRepository.cs" />
     <Compile Include="DAL\Repositories\UserVotingRepository.cs" />
     <Compile Include="DAL\Repositories\VotingRepository.cs" />
+    <Compile Include="Models\ViewModels\CooperationVM.cs" />
     <Compile Include="Helpers\EloRating.cs" />
     <Compile Include="Helpers\TeamHelper.cs" />
     <Compile Include="Migrations\201606022212480_Name.cs" />
@@ -280,11 +282,13 @@
     <Compile Include="Models\ViewModels\UserCategoryVM.cs" />
     <Compile Include="Models\ViewModels\UserddlVM.cs" />
     <Compile Include="Models\ViewModels\UserDetailsVM.cs" />
+    <Compile Include="Models\ViewModels\UserEditVM.cs" />
     <Compile Include="Models\ViewModels\UserInGroupVM.cs" />
     <Compile Include="Models\ViewModels\UserIndexVM.cs" />
     <Compile Include="Models\ViewModels\UserInTeamVM.cs" />
     <Compile Include="Models\ViewModels\UserOnEventVM.cs" />
     <Compile Include="Models\ViewModels\UserVotingVM.cs" />
+    <Compile Include="Models\ViewModels\VotingIndexVM.cs" />
     <Compile Include="Models\ViewModels\VotingProcessVM.cs" />
     <Compile Include="Models\ViewModels\VotingVM.cs" />
     <Compile Include="Models\Voting.cs">
@@ -2089,12 +2093,23 @@
     <Content Include="Views\Events\ErrorVoting.cshtml" />
     <Content Include="Views\Events\Voting.cshtml" />
     <Content Include="Views\Events\VotingDetails.cshtml" />
-    <Content Include="Views\Events\GenerateTeams.cshtml" />
     <Content Include="Views\Events\_AllUsersGenerateGrid.cshtml" />
     <Content Include="Views\Events\_GeneratorsGrid.cshtml" />
     <Content Include="Views\Events\GeneratorDetails.cshtml" />
-    <Content Include="Views\Events\_GeneratedTeamsGrid.cshtml" />
     <Content Include="Views\Events\_UserVotingsGrid.cshtml" />
+    <Content Include="Views\Events\GeneratedTeams.cshtml" />
+    <Content Include="Views\Events\_TeamsGrid.cshtml" />
+    <Content Include="Views\Home\_VotingsGrid.cshtml" />
+    <Content Include="Views\Users\Edit.cshtml" />
+    <Content Include="Views\Users\Profile.cshtml" />
+    <Content Include="Views\Users\_GroupsMemberGrid.cshtml" />
+    <Content Include="Views\Users\EditProfile.cshtml" />
+    <Content Include="Views\Users\_GroupsOwnerGrid.cshtml" />
+    <Content Include="Views\Home\_MyVotingsGrid.cshtml" />
+    <Content Include="Views\Categories\Cooperation.cshtml" />
+    <Content Include="Views\Categories\_CooperationGrid.cshtml" />
+    <Content Include="Views\Groups\_CooperationGrid.cshtml" />
+    <Content Include="Views\Groups\Cooperation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

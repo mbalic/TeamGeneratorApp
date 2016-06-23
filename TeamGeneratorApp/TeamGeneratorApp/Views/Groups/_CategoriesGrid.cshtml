@@ -14,7 +14,7 @@
     function viewCategory(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        var categoryId = dataItem.Id
+        var categoryId = dataItem.Id;
 
         window.location.href = "@Url.Action("Details","Categories")?id=" + categoryId;
 

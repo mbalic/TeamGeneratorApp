@@ -87,6 +87,7 @@
           <ScalarProperty Name="CriteriaId" ColumnName="CriteriaId" />
           <ScalarProperty Name="NumberOfTeams" ColumnName="NumberOfTeams" />
           <ScalarProperty Name="IsGenerated" ColumnName="IsGenerated" />
+          <ScalarProperty Name="IsLocked" ColumnName="IsLocked" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -23,6 +23,15 @@ namespace TeamGeneratorApp.DAL.Repositories
         {
             context.UserVoting.Add(item);
         }
-        
+
+        public IEnumerable<Voting> GetByOwnerIdAndActivity(string userId, bool? active)
+        {
+            if(active != null)
+                return context.Voting.Where(p => p.Event.Category.Group.OwnerId == userId && p.Active == active);
+            else
+                return context.Voting.Where(p => p.Event.Category.Group.OwnerId == userId);
+        }
+
+
     }
 }

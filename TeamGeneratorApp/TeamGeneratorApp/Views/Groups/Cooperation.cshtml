@@ -1,0 +1,52 @@
+﻿@model TeamGeneratorApp.Models.ViewModels.UserInGroupVM
+
+@{
+    ViewBag.Title = "Cooperation";
+}
+<br />
+<p>
+    @Html.ActionLink("< Back to group", "Details", "Groups", new { id = Model.GroupId }, null)
+</p>
+<h2>@Html.DisplayFor(model => model.Name)</h2>
+<hr />
+<h4>Cooperation with others in this group</h4>
+<br />
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            Group
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GroupName)
+        </dd>
+        
+        <dt>
+            Appereances in group
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Appereances)
+        </dd>
+        <dt>
+            Success % in group
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SuccessPercentage)
+        </dd>
+        <br />
+        <dt>
+            Cooperation
+        </dt>
+
+        <dd>
+            @Html.Action("CooperationGrid", "Groups", new { userInGroupId = Model.Id })
+        </dd>
+
+
+
+
+    </dl>
+</div>
+

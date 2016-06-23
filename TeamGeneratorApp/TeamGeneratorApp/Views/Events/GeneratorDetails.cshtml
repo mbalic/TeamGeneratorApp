@@ -10,7 +10,24 @@
 <h2>@Html.DisplayFor(model => model.Name)</h2>
 <hr />
 <h4>Generator</h4>
-<br />
+
+@if (!ViewBag.AllUsersEmpty)
+{
+    @*if (!Model.IsLocked)
+    {*@
+        <br />
+
+        if (!Model.IsGenerated)
+        {
+            <button>@Html.ActionLink("Generate teams!", "GenerateTeams", new { generatorId = Model.Id })</button>
+        }
+        @*else
+        {
+            <button>@Html.ActionLink("Lock generator", "LockGenerator", new { generatorId = Model.Id })</button>
+        }*@
+    //}
+
+}
 <div>
     <dl class="dl-horizontal">
 
@@ -39,39 +56,34 @@
         </dd>
 
         <br/>
+
         <dt>
-           All users
+            Users
         </dt>
 
         <dd>
-            @Html.Action("AllUsersGenerateGrid", "Events", new { generatorId = Model.Id})          
+            @Html.Action("AllUsersGenerateGrid", "Events", new {generatorId = Model.Id})
         </dd>
 
+        <br/>
+        
+        @if (Model.IsGenerated)
+        {
+            <dt>
+                Teams
+            </dt>
 
-    </dl>
+            <dd>
+                @Html.Action("TeamsGrid", "Events", new { generatorId = Model.Id })
+            </dd>
+        }
+
+
+
+
+</dl>
 </div>
-<br/>
 
-@if (!ViewBag.AllUsersEmpty)
-{
-   
-    if (!Model.IsGenerated)
-    {
-        <button>@Html.ActionLink("Generate teams!", "GenerateTeams", new {generatorId = Model.Id })</button>
-    }
-    else
-    {
-        @*<button>@Html.ActionLink("View generated teams", "ViewGeneratedTeams", new {generatorId = Model.Id })</button>*@
-    }
-    
-}
 
-<div id="generatedGrids">
-@for (var i = 1; i <= Model.NumberOfTeams; i++)
-{
-    @*@Html.Action("GeneratedTeamsGrid", "Events", new { eventId = Model.Id })*@
-}
-
-</div>
 
 

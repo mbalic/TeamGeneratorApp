@@ -236,7 +236,7 @@ namespace TeamGeneratorApp.Controllers
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
-                return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
+                return RedirectToAction("EditMyProfile", "Users", new { id = user.Id, message = "Your passhword has been changed" });
             }
             AddErrors(result);
             return View(model);

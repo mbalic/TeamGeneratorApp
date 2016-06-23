@@ -90,6 +90,7 @@
     <Property Name="CriteriaId" Type="int" Nullable="false" />
     <Property Name="NumberOfTeams" Type="int" Nullable="false" />
     <Property Name="IsGenerated" Type="bit" Nullable="false" />
+    <Property Name="IsLocked" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Group">
     <Key>

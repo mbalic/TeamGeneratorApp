@@ -5,7 +5,7 @@
 
 <br />
 <p>
-    @Html.ActionLink("< Back to event", "Details", new {id = ViewBag.EventId})
+    @Html.ActionLink("< Back to voting details", "VotingDetails", new {id = Model.VotingId})
 </p>
 <h2>Voting</h2>
 <hr />
@@ -19,19 +19,23 @@
 
     <table>
         <tr>
-            <td><img id="user1_img" style="height: 200px;width: 150px" src="@Html.DisplayFor(model => model.User1_Image)" class="avatar img-circle img-thumbnail" alt="avatar"></td>
-            <td><img id="user2_img" style="height: 200px;width: 150px" src="@Html.DisplayFor(model => model.User2_Image)" class="avatar img-circle img-thumbnail" alt="avatar"></td>
+            <td style="padding-left: 65px">@Html.DisplayFor(model => model.User1_PersonalName)</td>
+            <td style="width: 100px"></td>
+            <td style="padding-left: 65px">@Html.DisplayFor(model => model.User2_PersonalName)</td>
         </tr>
         <tr>
-            <td>@Html.DisplayFor(model => model.User1_PersonalName)</td>
-            <td>@Html.DisplayFor(model => model.User2_PersonalName)</td>
+            <td><img id="user1_img" style="height: 250px; width: 200px" src="@Html.DisplayFor(model => model.User1_Image)" class="avatar img-circle img-thumbnail" alt="avatar"></td>
+            <td style="width: 100px;padding-left: 45px">vs</td>
+            <td><img id="user2_img" style="height: 250px;width: 200px" src="@Html.DisplayFor(model => model.User2_Image)" class="avatar img-circle img-thumbnail" alt="avatar"></td>
         </tr>
         <tr>
-            <td>@Html.ActionLink("Win", "Rate", new { categoryId = ViewBag.CategoryId, userVotingId = Model.UserVotingId, votingId = Model.VotingId, userOnEvent1_Id = Model.UserOnEvent1_Id, userOnEvent2_Id = Model.UserOnEvent2_Id, draw = false, firstWins = true })</td>
-            <td>@Html.ActionLink("Win", "Rate", new { categoryId = ViewBag.CategoryId, userVotingId = Model.UserVotingId, votingId = Model.VotingId, userOnEvent1_Id = Model.UserOnEvent1_Id, userOnEvent2_Id = Model.UserOnEvent2_Id, draw = false, firstWins = false })</td>
+            <td style="padding-left: 80px;padding-top: 20px">@Html.ActionLink("WIN", "Rate", new { categoryId = ViewBag.CategoryId, userVotingId = Model.UserVotingId, votingId = Model.VotingId, userOnEvent1_Id = Model.UserOnEvent1_Id, userOnEvent2_Id = Model.UserOnEvent2_Id, draw = false, firstWins = true })</td>
+            <td style="width: 100px"></td>
+            <td style="padding-left: 80px;padding-top: 20px">@Html.ActionLink("WIN", "Rate", new { categoryId = ViewBag.CategoryId, userVotingId = Model.UserVotingId, votingId = Model.VotingId, userOnEvent1_Id = Model.UserOnEvent1_Id, userOnEvent2_Id = Model.UserOnEvent2_Id, draw = false, firstWins = false })</td>
         </tr>
-        <tr>
-            <td>@Html.ActionLink("Draw", "Rate", new { categoryId = ViewBag.CategoryId, userVotingId = Model.UserVotingId, votingId = Model.VotingId, userOnEvent1_Id = Model.UserOnEvent1_Id, userOnEvent2_Id = Model.UserOnEvent2_Id, draw = true, firstWins = false })</td>
+        <tr><td></td>
+            <td style="padding-left: 30px;padding-top: 20px">@Html.ActionLink("DRAW", "Rate", new { categoryId = ViewBag.CategoryId, userVotingId = Model.UserVotingId, votingId = Model.VotingId, userOnEvent1_Id = Model.UserOnEvent1_Id, userOnEvent2_Id = Model.UserOnEvent2_Id, draw = true, firstWins = false })</td>
+            <td></td>
         </tr>
     </table>
 </center>

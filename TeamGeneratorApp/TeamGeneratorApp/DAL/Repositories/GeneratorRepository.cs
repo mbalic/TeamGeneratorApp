@@ -20,7 +20,16 @@ namespace TeamGeneratorApp.DAL.Repositories
         public IEnumerable<Generator> GetByEventId(int eventId)
         {
             return context.Generator.Where(p => p.EventId == eventId);
-        } 
+        }
+
+        public bool IsOwner(string userId, int generatorId)
+        {
+            var res = context.Generator.Where(p => p.Id == generatorId && p.Event.Category.Group.OwnerId == userId);
+            if (res.Any())
+                return true;
+            else
+                return false;
+        }
 
     }
 }

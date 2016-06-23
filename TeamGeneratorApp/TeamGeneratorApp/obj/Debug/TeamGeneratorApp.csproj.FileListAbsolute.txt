@@ -16,6 +16,7 @@ E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\Tea
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\Antlr3.Runtime.dll
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\EntityFramework.dll
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\EntityFramework.SqlServer.dll
+E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\Kendo.Mvc.dll
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\Microsoft.AspNet.Identity.Core.dll
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\Microsoft.AspNet.Identity.EntityFramework.dll
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\Microsoft.AspNet.Identity.Owin.dll
@@ -32,6 +33,8 @@ E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\Mic
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\Microsoft.Web.Infrastructure.dll
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\Newtonsoft.Json.dll
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\Owin.dll
+E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\PagedList.dll
+E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\PagedList.Mvc.dll
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\System.Web.Helpers.dll
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\System.Web.Mvc.dll
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\System.Web.Optimization.dll
@@ -40,7 +43,10 @@ E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\Sys
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\System.Web.WebPages.dll
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\System.Web.WebPages.Razor.dll
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\WebGrease.dll
+E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\Kendo.Mvc.xml
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\PagedList.xml
+E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\PagedList.Mvc.xml
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\System.Web.Helpers.xml
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\System.Web.Mvc.xml
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\System.Web.Optimization.xml
@@ -64,15 +70,6 @@ E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\Mic
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\Microsoft.Owin.Security.Google.xml
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\Microsoft.Owin.Security.Twitter.xml
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
-E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\obj\Debug\TeamGeneratorApp.csprojResolveAssemblyReference.cache
-E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\obj\Debug\TeamGeneratorApp.dll
-E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\obj\Debug\TeamGeneratorApp.pdb
-E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\PagedList.dll
-E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\PagedList.Mvc.dll
-E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\PagedList.xml
-E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\PagedList.Mvc.xml
-E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\Kendo.Mvc.dll
-E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\Kendo.Mvc.xml
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\bg-BG\Kendo.Mvc.resources.dll
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\cs-CZ\Kendo.Mvc.resources.dll
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\da-DK\Kendo.Mvc.resources.dll
@@ -92,5 +89,8 @@ E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\sv-
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\tr-TR\Kendo.Mvc.resources.dll
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\uk-UA\Kendo.Mvc.resources.dll
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\bin\zh-CN\Kendo.Mvc.resources.dll
+E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\obj\Debug\TeamGeneratorApp.csprojResolveAssemblyReference.cache
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\obj\Debug\TeamGeneratorApp.Migrations.Name.resources
 E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\obj\Debug\TeamGeneratorApp.csproj.GenerateResource.Cache
+E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\obj\Debug\TeamGeneratorApp.dll
+E:\PROJEKT\TeamGenerator_official_ver2\TeamGeneratorApp\TeamGeneratorApp\obj\Debug\TeamGeneratorApp.pdb

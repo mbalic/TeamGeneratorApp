@@ -20,12 +20,35 @@ namespace TeamGeneratorApp.DAL.Repositories
 
         public UserInTeam GetByUserOnEventAndGeneratorId(int userOnEventId, int generatorId)
         {
-            return context.UserInTeam.Where(p => p.UserOnEventId == userOnEventId && p.Team.GeneratorId == generatorId).FirstOrDefault();
+            var rez =
+                context.UserInTeam.Where(p => p.UserOnEventId == userOnEventId && p.Team.GeneratorId == generatorId);
+            if (rez.Any())
+            {
+                return rez.Single();
+            }
+            else
+            {
+                return null;
+            }
+            
         }
 
         public IEnumerable<UserInTeam> GetByGeneratorId(int generatorId)
         {
             return context.UserInTeam.Where(p => p.Team.GeneratorId == generatorId);
-        } 
+        }
+
+        public IEnumerable<UserInTeam> GetByUserInCategoryId(int userInCategoryId)
+        {
+            return context.UserInTeam.Where(p => p.UserOnEvent.UserInCategoryId == userInCategoryId);
+        }
+
+        public IEnumerable<UserInTeam> GetByUserInGroupId(int userInGroupId)
+        {
+            return context.UserInTeam.Where(p => p.UserOnEvent.UserInCategory.UserInGroupId == userInGroupId);
+        }
+
+
+
     }
 }

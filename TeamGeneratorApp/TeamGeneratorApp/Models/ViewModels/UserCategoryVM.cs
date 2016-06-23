@@ -10,12 +10,16 @@ namespace TeamGeneratorApp.Models.ViewModels
     public class UserCategoryVM
     {
         public int Id { get; set; }
-        //public string UserId { get; set; }
+        public string UserId { get; set; }
         public int UserInGroupId { get; set; }
+        public string GroupName { get; set; }
         public string UserPersonalName { get; set; }
         public int CategoryId { get; set; }
+        public string CategoryName { get; set; }  
         public int Rating { get; set; }
         public bool Active { get; set; }
+        public double? SuccessPercentage { get; set; }
+        public int Appereances { get; set; }
 
 
         //public UserVM User { get; set; }

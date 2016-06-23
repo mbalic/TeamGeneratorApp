@@ -1,0 +1,66 @@
+﻿@model TeamGeneratorApp.Models.ViewModels.UserCategoryVM
+
+@{
+    ViewBag.Title = "Cooperation";
+}
+<br />
+<p>
+    @Html.ActionLink("< Back to category", "Details", "Categories", new { id = Model.CategoryId }, null)
+</p>
+<h2>@Html.DisplayFor(model => model.UserPersonalName)</h2>
+<hr />
+<h4>Cooperation with others in this category</h4>
+<br />
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            Group
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GroupName)
+        </dd>
+        <dt>
+            Category
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CategoryName)
+        </dd>
+        <dt>
+            Rating in category
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Rating)
+        </dd>
+        <dt>
+            Appereances in category
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Appereances)
+        </dd>
+
+        <dt>
+            Success % in category
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SuccessPercentage)
+        </dd>
+        <br/>
+        <dt>
+            Cooperation
+        </dt>
+
+        <dd>
+            @Html.Action("CooperationGrid", "Categories", new { userInCategoryId = Model.Id })
+        </dd>
+       
+
+
+
+    </dl>
+</div>
+

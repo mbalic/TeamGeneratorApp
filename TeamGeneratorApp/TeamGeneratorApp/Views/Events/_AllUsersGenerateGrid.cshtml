@@ -11,25 +11,19 @@
 @Scripts.Render("~/bundles/kendo")
 
 
-@*<script type="text/javascript">
+<script type="text/javascript">
     function onSave(e) {
-        //If current value is null
-        if (!e.model.TeamId) {
-            //change the model value
-            e.model.TeamId = 0;
-            //get the currently selected value from the DDL
-            var currentlySelectedValue = $(e.container.find('[data-role=dropdownlist]')[0]).data().kendoDropDownList.value();
-            //set the value to the model
-            e.model.set('TeamId', currentlySelectedValue);
-        }
-    }
+        $('#teamsGrid').data('kendoGrid').dataSource.read();
+        $('#teamsGrid').data('kendoGrid').refresh();
+    };
+   
 
-</script>*@
+</script>
 
 
 
-@if (!ViewBag.IsGenerated)
-{
+@*@if (!ViewBag.IsLocked)
+{*@
     @(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.UserOnEventVM>()
           .Name("grid1")
           .Columns(columns =>
@@ -37,13 +31,13 @@
               columns.Bound(p => p.UserPersonalName).Title("User");
               columns.Bound(p => p.PositionName);
               columns.Bound(p => p.Rating);
-              columns.ForeignKey(p => p.TeamId, (System.Collections.IEnumerable) ViewData["teams"], "Id", "Name").Title("Preordered team").Width(200);
+              columns.ForeignKey(p => p.TeamId, (System.Collections.IEnumerable) ViewData["teams"], "Id", "Name").Title("Team").Width(200);
               columns.Command(command =>
               {
                   command.Edit();
               });
           })
-          //.Events(e => e.Save("onSave"))
+          .Events(e => e.DataBound("onSave"))
           .Editable(editable => editable.Mode(GridEditMode.InLine))
           .Pageable()
           .Sortable()
@@ -71,7 +65,7 @@
           )
 
           )
-}
+@*}
 else
 {
     @(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.UserOnEventVM>()
@@ -81,7 +75,7 @@ else
               columns.Bound(p => p.UserPersonalName).Title("User");
               columns.Bound(p => p.PositionName);
               columns.Bound(p => p.Rating);
-              columns.ForeignKey(p => p.TeamId, (System.Collections.IEnumerable)ViewData["teams"], "Id", "Name").Title("Preordered team").Width(200);
+              columns.ForeignKey(p => p.TeamId, (System.Collections.IEnumerable)ViewData["teams"], "Id", "Name").Title("Team").Width(200);
           })
           .Pageable()
           .Sortable()
@@ -103,13 +97,13 @@ else
 
               })
               //.Create(update => update.Action("UsersGrid_Create", "Events"))
-              .Read(read => read.Action("AllUsersGenerateGrid_Read", "Events", new { eventId = ViewBag.EventId }))
+              .Read(read => read.Action("AllUsersGenerateGrid_Read", "Events", new { eventId = ViewBag.EventId, generatorId = ViewBag.GeneratorId }))
           //.Update(update => update.Action("AllUsersGenerateGrid_Update", "Events"))
           //.Destroy(update => update.Action("UsersGrid_Destroy", "Events"))
           )
 
     )
-}
+}*@
 
 <script type="text/javascript">
     function error_handler(e) {
@@ -124,7 +118,8 @@ else
             });
             alert(message);
         }
-    }
+    };
+
     function sync_handler(e) {
         this.read();
     };

@@ -16,7 +16,7 @@
     .Name("userVotingsGrid")
     .Columns(columns =>
     {
-        columns.Bound(p => p.UserPersonalName);
+        columns.Bound(p => p.UserPersonalName).Title("User");
         columns.Bound(p => p.VoteCounter).Title("Has voted");
         columns.Bound(p => p.Wins);
         columns.Bound(p => p.Draws);

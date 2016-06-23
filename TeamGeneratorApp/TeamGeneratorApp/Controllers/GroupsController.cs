@@ -22,18 +22,18 @@ namespace TeamGeneratorApp.Controllers
     {
         private UnitOfWork unitOfWork = new UnitOfWork();
         
-        // GET: Pools
+        // GET: Groups
         public ActionResult Index()
         {
             ViewBag.UserId = User.Identity.GetUserId();
-            return View();
+            return View("Index");
         }
 
         #region GroupsGrid
 
         public ActionResult GroupsGrid_Read([DataSourceRequest] DataSourceRequest request, string userId)
         {
-            var res = unitOfWork.GroupRepository.GetByUserId(userId).ToList();
+            var res = unitOfWork.GroupRepository.GetByOwnerId(userId).ToList();
 
             var list = new List<GroupListVM>();
             foreach (var e in res)
@@ -43,7 +43,7 @@ namespace TeamGeneratorApp.Controllers
                     Id = e.Id,
                     Name = e.Name,
                     Description = e.Description,
-                    OwnerId = e.OwnerId
+                    OwnerName = e.AspNetUsers.Name
                 };
 
                 list.Add(newVm);
@@ -52,37 +52,7 @@ namespace TeamGeneratorApp.Controllers
             return Json(list.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
         }
 
-        [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult GroupsGrid_Create([DataSourceRequest] DataSourceRequest request,
-           [Bind(Prefix = "models")]IEnumerable<GroupListVM> list)
-        {
-            var results = new List<GroupListVM>();
-            if (list != null && ModelState.IsValid)
-            {
-                foreach (var e in list)
-                {
-                    var newModel = new Group
-                    {
-                        Id = e.Id,
-                        Name = e.Name,
-                        Description = e.Description,
-                        OwnerId = e.OwnerId
-                    };
-                    try
-                    {
-                        unitOfWork.GroupRepository.Insert(newModel);
-                        unitOfWork.Commit();
-                    }
-                    catch (Exception)
-                    {
-                        ViewBag.ConstraintError = "There was an error while adding rows in grid.";
-                    }
-                    results.Add(e);
-                }
-            }
 
-            return Json(results.ToDataSourceResult(request, ModelState));
-        }
 
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult GroupsGrid_Update([DataSourceRequest] DataSourceRequest request,
@@ -93,16 +63,13 @@ namespace TeamGeneratorApp.Controllers
             {
                 foreach (var e in list)
                 {
-                    var newModel = new Group
-                    {
-                        Id = e.Id,
-                        Name = e.Name,
-                        Description = e.Description,
-                        OwnerId = e.OwnerId
-                    };
+                    var group = unitOfWork.GroupRepository.GetByID(e.Id);
+                    group.Name = e.Name;
+                    group.Description = e.Description;
+
                     try
                     {
-                        unitOfWork.GroupRepository.Update(newModel);
+                        unitOfWork.GroupRepository.Update(group);
                         unitOfWork.Commit();
                     }
                     catch (Exception)
@@ -148,7 +115,7 @@ namespace TeamGeneratorApp.Controllers
         }
 
 
-#endregion
+        #endregion
 
 
 
@@ -327,15 +294,19 @@ namespace TeamGeneratorApp.Controllers
             var list = new List<UserInGroupVM>();
             foreach (var e in userInGroupRepo)
             {
-                var userInGroupVm = new UserInGroupVM
-                {
-                    Id = e.Id,
-                    Name = e.AspNetUsers.Name,
-                    UserId = e.UserId,
-                    Email = e.AspNetUsers.Email,
-                    GroupId = e.GroupId,
-                    Active = e.Active
-                };
+                var userInGroupVm = new UserInGroupVM();
+
+                userInGroupVm.Id = e.Id;
+                userInGroupVm.Name = e.AspNetUsers.Name;
+                userInGroupVm.UserId = e.UserId;
+                userInGroupVm.Email = e.AspNetUsers.Email;
+                userInGroupVm.GroupId = e.GroupId;
+                userInGroupVm.Active = e.Active;
+                
+                var pair = CountSuccessPercentageForUser(e);
+                userInGroupVm.Appereances = pair.Key;
+                userInGroupVm.SuccessPercentage = pair.Value;
+
                 list.Add(userInGroupVm);
             }
 
@@ -383,13 +354,15 @@ namespace TeamGeneratorApp.Controllers
             {
                 foreach (var e in list)
                 {
-                    var newUserInGroup = new UserInGroup
-                    {
-                        Id = e.Id,
-                        UserId = e.UserId,
-                        GroupId = e.GroupId,
-                        Active = e.Active
-                    };
+                    //var newUserInGroup = new UserInGroup
+                    //{
+                    //    Id = e.Id,
+                    //    UserId = e.UserId,
+                    //    GroupId = e.GroupId,
+                    //    Active = e.Active
+                    //};
+                    var newUserInGroup = unitOfWork.UserInGroupRepository.GetByID(e.Id);
+                    newUserInGroup.Active = e.Active;
                     try
                     {
                         unitOfWork.UserInGroupRepository.Update(newUserInGroup);
@@ -552,6 +525,115 @@ namespace TeamGeneratorApp.Controllers
 
         }
 
-       
+
+        public KeyValuePair<int, double?> CountSuccessPercentageForUser(UserInGroup user)
+        {
+            double? succesPercentage = 0;
+            var teamCounter = 0;
+            foreach (var user1 in user.UserInCategory)
+            {
+                foreach (var userOnEvent in user1.UserOnEvent)
+                {
+                    foreach (var userInTeam in userOnEvent.UserInTeam)
+                    {
+                        if (userInTeam.Team.SuccessPercentage != null)
+                        {
+                            succesPercentage += userInTeam.Team.SuccessPercentage;
+                            teamCounter++;
+                        }
+                    }
+                    if (teamCounter > 0)
+                        succesPercentage = succesPercentage / teamCounter;
+                }
+            }
+
+            return new KeyValuePair<int, double?>(teamCounter, succesPercentage); ;
+        }
+
+        public ActionResult Cooperation(int userInGroupId)
+        {
+            var user = unitOfWork.UserInGroupRepository.GetByID(userInGroupId);
+            var userInGroupVm = new UserInGroupVM();
+
+            userInGroupVm.Id = userInGroupId;
+            userInGroupVm.GroupId = user.GroupId;
+            userInGroupVm.GroupName = user.Group.Name;
+            userInGroupVm.Name = user.AspNetUsers.Name;
+
+            var pair = CountSuccessPercentageForUser(user);
+            userInGroupVm.SuccessPercentage = pair.Value;
+            userInGroupVm.Appereances = pair.Key;
+
+            ViewBag.UserInCategoryId = userInGroupId;
+
+            return View(userInGroupVm);
+        }
+
+
+
+        public PartialViewResult CooperationGrid(int userInGroupId = 0)
+        {
+
+            ViewBag.UserInGroupId = userInGroupId;
+            return PartialView("_CooperationGrid");
+        }
+
+
+        public ActionResult CooperationGrid_Read([DataSourceRequest] DataSourceRequest request, int userInGroupId)
+        {
+            var user = unitOfWork.UserInGroupRepository.GetByID(userInGroupId);
+            var userInTeamList = unitOfWork.UserInTeamRepository.GetByUserInGroupId(userInGroupId);
+            var userTeams = new List<Team>();
+            foreach (var userInTeam in userInTeamList)
+            {
+                if (userInTeam.Team.SuccessPercentage != null)
+                    userTeams.Add(userInTeam.Team);
+            }
+
+            //get all users from category
+            var allUsers = unitOfWork.UserInGroupRepository.Get().ToList();
+            allUsers.Remove(user);
+
+            var cooperations = new List<CooperationVM>();
+            //count cooperation factor for every user
+            foreach (var userInGroup in allUsers)
+            {
+                var newUser = new CooperationVM
+                {
+                    UserId = userInGroup.Id,
+                    UserPersonalName = userInGroup.AspNetUsers.Name,
+                    SuccessPercentage = 0
+                };
+                var teamCount = 0;
+
+                foreach (var userInCategory in userInGroup.UserInCategory)
+                {
+                    foreach (var userOnEvent in userInCategory.UserOnEvent)
+                    {
+                        foreach (var userInTeam in userOnEvent.UserInTeam)
+                        {
+                            //check if users were in same team
+                            if (userTeams.Contains(userInTeam.Team))
+                            {
+                                newUser.SuccessPercentage += userInTeam.Team.SuccessPercentage;
+                                teamCount++;
+                            }
+                        }
+                    }
+                    if (teamCount > 0)
+                        newUser.SuccessPercentage = newUser.SuccessPercentage/teamCount;
+
+
+                    newUser.Appereances = teamCount;
+
+                    cooperations.Add(newUser);
+                }
+            }
+
+            return Json(cooperations.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
+
+        }
+
+
     }
 }
