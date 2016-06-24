@@ -12,45 +12,80 @@
 
 
 
-@(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.TeamVM>()
-        .Name("teamsGrid")
-        .Columns(columns =>
-        {
-            columns.Bound(p => p.Name);
-            columns.Bound(p => p.Strength);
-            columns.Bound(p => p.SuccessPercentage);
-            columns.Command(command =>
+@if (ViewBag.IsOwner)
+{
+    @(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.TeamVM>()
+          .Name("teamsGrid")
+          .Columns(columns =>
+          {
+              columns.Bound(p => p.Name);
+              columns.Bound(p => p.Strength);
+              columns.Bound(p => p.SuccessPercentage);
+              columns.Command(command =>
               {
                   command.Edit();
               });
-        })
-        //.ToolBar(toolbar => toolbar.Create())
-        //.Editable(editable => editable.Mode(GridEditMode.InLine))
-        .Pageable()
-        .Sortable()
-        .Scrollable()
-        .HtmlAttributes(new { style = "height:550px;" })
-        .DataSource(dataSource => dataSource
-            .Ajax()
-            .Batch(true)
-            .ServerOperation(false)
-            .PageSize(20)
-            .Events(events => events.Error("error_handler"))
-            .Model(model =>
+          })
+          .ColumnMenu()
+          .Pageable()
+          .Sortable()
+          .Scrollable()
+          .Resizable(resize => resize.Columns(true))
+          .HtmlAttributes(new {style = "height:550px;"})
+          .DataSource(dataSource => dataSource
+              .Ajax()
+              .Batch(true)
+              .ServerOperation(false)
+              .PageSize(20)
+              .Events(events => events.Error("error_handler"))
+              .Model(model =>
+              {
+                  model.Id(p => p.Id);
+                  model.Field(p => p.GeneratorId).DefaultValue(ViewBag.GeneratorId);
+                  model.Field(p => p.Strength).Editable(false);
+              })
+              .Read(read => read.Action("TeamsGrid_Read", "Events", new {generatorId = ViewBag.GeneratorId}))
+              .Update(update => update.Action("TeamsGrid_Update", "Events"))
+          )
+
+          )
+}
+else
+{
+    @(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.TeamVM>()
+            .Name("teamsGrid")
+            .Columns(columns =>
             {
-                model.Id(p => p.Id);
-                model.Field(p => p.GeneratorId).DefaultValue(ViewBag.GeneratorId);
-                model.Field(p => p.Strength).Editable(false);
+                columns.Bound(p => p.Name);
+                //columns.Bound(p => p.Strength);
+                columns.Bound(p => p.SuccessPercentage);
             })
-            //.Create(update => update.Action("UsersGrid_Create", "Events"))
-            .Read(read => read.Action("TeamsGrid_Read", "Events", new { generatorId = ViewBag.GeneratorId }))
-            .Update(update => update.Action("TeamsGrid_Update", "Events"))
-        //.Destroy(update => update.Action("UsersGrid_Destroy", "Events"))
-        )
+            .ColumnMenu()
+            .Pageable()
+            .Sortable()
+            .Scrollable()
+            .Resizable(resize => resize.Columns(true))
+            .HtmlAttributes(new { style = "height:550px;" })
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .Batch(true)
+                .ServerOperation(false)
+                .PageSize(20)
+                .Events(events => events.Error("error_handler"))
+                .Model(model =>
+                {
+                    model.Id(p => p.Id);
+                    model.Field(p => p.GeneratorId).DefaultValue(ViewBag.GeneratorId);
+                    model.Field(p => p.Strength).Editable(false);
+                })
+                .Read(read => read.Action("TeamsGrid_Read", "Events", new { generatorId = ViewBag.GeneratorId }))
+            )
 
-)
+    )
+}
 
-    <script type="text/javascript">
+
+<script type="text/javascript">
     function error_handler(e) {
         if (e.errors) {
             var message = "Errors:\n";

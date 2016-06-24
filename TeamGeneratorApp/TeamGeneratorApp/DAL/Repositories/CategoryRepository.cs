@@ -21,6 +21,19 @@ namespace TeamGeneratorApp.DAL.Repositories
             return context.Category.Where(c => c.GroupId == groupId);
         }
 
+        public IEnumerable<Category> GetByUserId(string id)
+        {
+            var q = from c in context.Category
+                    join g in context.Group on c.GroupId equals g.Id
+                    join uig in context.UserInGroup on g.Id equals uig.GroupId
+                    where uig.UserId == id
+                    select c;
+            
+            return q;
+        }
+
+
+
         public IEnumerable<Position> GetPositionsInCategory(int categoryId)
         {
             return context.Position.Where(c => c.CategoryId == categoryId);

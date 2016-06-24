@@ -53,10 +53,11 @@
         columns.Bound(p => p.DateCreated).Title("Date sent");
         columns.Command(command => command.Destroy()).Width(200);
     })
-    //.Editable(editable => editable.Mode(GridEditMode.InLine))
+    .ColumnMenu()
     .Pageable()
     .Sortable()
     .Scrollable()
+    .Resizable(resize => resize.Columns(true))
     .HtmlAttributes(new { style = "height:550px;" })
     .DataSource(dataSource => dataSource
         .Ajax()
@@ -68,9 +69,7 @@
          {
              model.Id(p => p.Id);
          })
-        //.Create(update => update.Action("UsersInGroupGrid_Create", "AdminGroups"))
         .Read(read => read.Action("InvitationsGrid_Read", "Groups", new { groupId = ViewBag.GroupId }))
-        //.Update(update => update.Action("UsersInGroupGrid_Update", "AdminGroups"))
         .Destroy(update => update.Action("InvitationsGrid_Destroy", "Groups"))
     )
 

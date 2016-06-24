@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using Microsoft.AspNet.Identity;
 using TeamGeneratorApp.DAL;
 using TeamGeneratorApp.Helpers;
 using TeamGeneratorApp.Models;
@@ -30,15 +31,38 @@ namespace TeamGeneratorApp.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Category category = unitOfWork.CategoryRepository.GetByID(id);
+            var category = unitOfWork.CategoryRepository.GetByID(id);
 
             if (category == null)
             {
                 return HttpNotFound();
             }
 
-            ViewBag.GroupId = category.GroupId;
-            return View(category);
+            string userId = User.Identity.GetUserId();
+
+            if (category.Group.OwnerId == userId)
+                ViewBag.IsOwner = true;
+            else
+            {
+                if (unitOfWork.CategoryRepository.GetByUserId(userId).Contains(category))
+                {
+                    ViewBag.IsOwner = false;
+                }
+                else
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                }
+            }
+            var categoryVm = new CategoryVM
+            {
+                Id = category.Id,
+                GroupId = category.GroupId,
+                Description = category.Description,
+                GroupName = category.Group.Name,
+                Name = category.Name
+            };
+
+            return View(categoryVm);
         }
 
 
@@ -54,9 +78,9 @@ namespace TeamGeneratorApp.Controllers
 
 
 
-        public PartialViewResult EventsGrid(int categoryId = 0)
+        public PartialViewResult EventsGrid(int categoryId = 0, bool isOwner = false)
         {
-
+            ViewBag.IsOwner = isOwner;
             ViewBag.CategoryId = categoryId;
             return PartialView("_EventsGrid");
         }
@@ -191,7 +215,7 @@ namespace TeamGeneratorApp.Controllers
 
 
 
-        public PartialViewResult UsersGrid(int categoryId = 0)
+        public PartialViewResult UsersGrid(int categoryId = 0, bool isOwner = false)
         {
             var category = unitOfWork.CategoryRepository.GetByID(categoryId);
 
@@ -203,7 +227,7 @@ namespace TeamGeneratorApp.Controllers
                   })
                   .OrderBy(e => e.Name);
 
-
+            ViewBag.IsOwner = isOwner;
             ViewBag.CategoryId = categoryId;
             return PartialView("_UsersGrid");
         }
@@ -282,14 +306,6 @@ namespace TeamGeneratorApp.Controllers
             {
                 foreach (var e in res)
                 {
-                    //var newUser = new UserInCategory
-                    //{
-                    //    Id = e.Id,
-                    //    UserInGroupId = e.UserInGroupId,
-                    //    CategoryId = e.CategoryId,
-                    //    Rating = e.Rating,
-                    //    Active = e.Active
-                    //};
                     var newUser = unitOfWork.UserInCategoryRepository.GetByID(e.Id);
                     newUser.Rating = e.Rating;
                     newUser.Active = e.Active;
@@ -339,9 +355,9 @@ namespace TeamGeneratorApp.Controllers
 
 
 
-        public PartialViewResult PositionsGrid(int categoryId = 0)
+        public PartialViewResult PositionsGrid(int categoryId = 0, bool isOwner = false)
         {
-
+            ViewBag.IsOwner = isOwner;
             ViewBag.CategoryId = categoryId;
             return PartialView("_PositionsGrid");
         }
@@ -422,6 +438,7 @@ namespace TeamGeneratorApp.Controllers
                         Name = e.Name,
                         Value = e.Value
                     };
+
                     try
                     {
                         unitOfWork.CategoryRepository.UpdatePositionInCategory(newItem);
@@ -467,7 +484,7 @@ namespace TeamGeneratorApp.Controllers
         #endregion
 
 
-        public KeyValuePair<int, double?> CountSuccessPercentageForUser(UserInCategory user)
+        private KeyValuePair<int, double?> CountSuccessPercentageForUser(UserInCategory user)
         {
             double? succesPercentage = 0;
             var teamCounter = 0;
@@ -492,7 +509,25 @@ namespace TeamGeneratorApp.Controllers
 
         public ActionResult Cooperation(int userInCategoryId)
         {
+            string userId = User.Identity.GetUserId();
             var user = unitOfWork.UserInCategoryRepository.GetByID(userInCategoryId);
+
+            var group = user.Category.Group;
+
+            if (group.OwnerId == userId)
+                ViewBag.IsOwner = true;
+            else
+            {
+                if (unitOfWork.CategoryRepository.GetByUserId(userId).Contains(user.Category))
+                {
+                    ViewBag.IsOwner = false;
+                }
+                else
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                }
+            }
+
             var userInCategoryVm = new UserCategoryVM();
 
             userInCategoryVm.Id = userInCategoryId;

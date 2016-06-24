@@ -3,16 +3,17 @@
 @{
     ViewBag.Title = "My profile - Edit";
 }
-
+<br/>
+<p>@Html.ActionLink("< Back", "Profile", new { id = Model.Id }, null)</p>
 <h2>Edit profile</h2>
 
 
-@using (Html.BeginForm("EditMyProfile", "Users", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("EditProfile", "Users", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
 <div style="height: 550px">
     <div class="form-horizontal">
-        <p>@Html.ActionLink("< Back", "MyProfile")</p>
+
         <hr/>
         @Html.ValidationSummary(true, "", new {@class = "text-danger"})
         @Html.HiddenFor(model => model.Id)

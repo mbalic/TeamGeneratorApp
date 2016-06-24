@@ -10,99 +10,117 @@
 @Scripts.Render("~/bundles/modernizr")
 @Scripts.Render("~/bundles/kendo")
 
-<script type="text/javascript">
-    
-    function viewVoting(e) {
-        e.preventDefault();
-        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        var votingId = dataItem.Id;
 
-        window.location.href = "@Url.Action("VotingDetails","Events")?id=" + votingId;
-    }
-    function db(e) {
-        //this.table.find(".k-grid-edit").hide();
+@if (ViewBag.IsOwner)
+{
+    @(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.VotingVM>()
+          .Name("votingsGrid")
+          .Columns(columns =>
+          {
+              columns.Bound(p => p.Name).Title("Name");
+              columns.Bound(p => p.StartVoting).HtmlAttributes(new
+              {
+                  @class = "templateCell"
 
-        var grid = this;
-        $(".templateCell").each(function () {
-            eval($(this).children("script").last().html());
-            var tr = $(this).closest('tr');
-            var item = grid.dataItem(tr);
-            kendo.bind($(this), item);
-        });
-        
-    };
-</script>
+              }).ClientTemplate(
+                  Html.Kendo().DatePicker()
+                      .Name("FDPicker_#=Id#1")
+                      .Format("{0:dd/MM/yyyy HH:mm}")
+                      .HtmlAttributes(new {data_bind = "value:StartVoting"})
+                      .ToClientTemplate().ToString()
 
+                  ).Format("{0:dd/MM/yyyy HH:mm}").Width(200);
+              columns.Bound(p => p.FinishVoting).HtmlAttributes(new
+              {
+                  @class = "templateCell"
 
-
-@(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.VotingVM>()
-        .Name("votingsGrid")
-        .Columns(columns =>
-        {
-            columns.Bound(p => p.Name).Title("Name");
-            columns.Bound(p => p.StartVoting).HtmlAttributes(new
-            {
-                @class = "templateCell"
-
-            }).ClientTemplate(
-                Html.Kendo().DatePicker()
-                 .Name("FDPicker_#=Id#1")
-                 .Format("{0:dd/MM/yyyy HH:mm}")
-                 .HtmlAttributes(new { data_bind = "value:StartVoting" })
-                 .ToClientTemplate().ToString()
-
-                 ).Format("{0:dd/MM/yyyy HH:mm}").Width(200);
-            columns.Bound(p => p.FinishVoting).HtmlAttributes(new
-            {
-                @class = "templateCell"
-
-            }).ClientTemplate(
-                     Html.Kendo().DatePicker()
+              }).ClientTemplate(
+                  Html.Kendo().DatePicker()
                       .Name("FDPicker_#=Id#2")
                       .Format("{0:dd/MM/yyyy HH:mm}")
-                      .HtmlAttributes(new { data_bind = "value:FinishVoting" })
+                      .HtmlAttributes(new {data_bind = "value:FinishVoting"})
                       .ToClientTemplate().ToString()
-                      ).Format("{0:dd/MM/yyyy HH:mm}").Width(200);
-            columns.Bound(p => p.VotesPerUser).Title("Votes per user");
-            columns.Bound(p => p.Active)
-                   .ClientTemplate("<input type='checkbox' #= Active ? checked='checked': '' # class='chkbx' />")
-                   .HtmlAttributes(new { style = "text-align: center" }).Width(100);
-            columns.Command(command =>
-            {
-                command.Edit();
-                command.Destroy();
-            });
-            columns.Command(command => command.Custom("Details").Click("viewVoting"));
-        })
-        .Events(e => e.DataBound("db"))
-        .ToolBar(toolbar => toolbar.Create())
-        .Editable(editable => editable.Mode(GridEditMode.InLine))
-        .Pageable()
-        .Sortable()
-        .Scrollable()
-        .HtmlAttributes(new { style = "height:550px;" })
-        .DataSource(dataSource => dataSource
-            .Ajax()
-            .Batch(true)
-            .ServerOperation(false)
-            .PageSize(20)
-            .Events(events => events.Error("error_handler").Sync("sync_handler"))
-            .Model(model =>
-            {
-                model.Id(p => p.Id);
-                model.Field(p => p.EventId).DefaultValue(ViewBag.EventId);
-                model.Field(p => p.Active).DefaultValue(false);
-                model.Field(p => p.VotesPerUser).DefaultValue(50);
-            })
-            .Create(update => update.Action("VotingsGrid_Create", "Events"))
-            .Read(read => read.Action("VotingsGrid_Read", "Events", new { eventId = ViewBag.EventId }))
-            .Update(update => update.Action("VotingsGrid_Update", "Events"))
-            .Destroy(update => update.Action("VotingsGrid_Destroy", "Events"))
+                  ).Format("{0:dd/MM/yyyy HH:mm}").Width(200);
+              columns.Bound(p => p.VotesPerUser).Title("Votes per user");
+              columns.Bound(p => p.Active)
+                  .ClientTemplate("<input type='checkbox' #= Active ? checked='checked': '' # class='chkbx' />")
+                  .HtmlAttributes(new {style = "text-align: center"}).Width(100);
+              columns.Command(command =>
+              {
+                  command.Edit();
+                  command.Destroy();
+              });
+              columns.Command(command => command.Custom("Details").Click("viewVoting"));
+          })
+          .ColumnMenu()
+          .Events(e => e.DataBound("db"))
+          .ToolBar(toolbar => toolbar.Create())
+          .Editable(editable => editable.Mode(GridEditMode.InLine))
+          .Pageable()
+          .Sortable()
+          .Scrollable()
+          .Resizable(resize => resize.Columns(true))
+          .HtmlAttributes(new {style = "height:550px;"})
+          .DataSource(dataSource => dataSource
+              .Ajax()
+              .Batch(true)
+              .ServerOperation(false)
+              .PageSize(20)
+              .Events(events => events.Error("error_handler").Sync("sync_handler"))
+              .Model(model =>
+              {
+                  model.Id(p => p.Id);
+                  model.Field(p => p.EventId).DefaultValue(ViewBag.EventId);
+                  model.Field(p => p.Active).DefaultValue(false);
+                  model.Field(p => p.VotesPerUser).DefaultValue(50);
+              })
+              .Create(update => update.Action("VotingsGrid_Create", "Events"))
+              .Read(read => read.Action("VotingsGrid_Read", "Events", new {eventId = ViewBag.EventId}))
+              .Update(update => update.Action("VotingsGrid_Update", "Events"))
+              .Destroy(update => update.Action("VotingsGrid_Destroy", "Events"))
 
-        )
+          )
 
-)
+          )
+}
+else
+{
+    @(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.VotingVM>()
+          .Name("votingsGrid")
+          .Columns(columns =>
+          {
+              columns.Bound(p => p.Name).Title("Name");
+              columns.Bound(p => p.StartVoting).Format("{0:dd/MM/yyyy HH:mm}");
+              columns.Bound(p => p.FinishVoting).Format("{0:dd/MM/yyyy HH:mm}");
+              columns.Bound(p => p.VotesPerUser).Title("Votes per user");
+              columns.Bound(p => p.Active);
+              columns.Command(command => command.Custom("Details").Click("viewVoting"));
+          })
+          .ColumnMenu()
+          .Pageable()
+          .Sortable()
+          .Scrollable()
+          .Resizable(resize => resize.Columns(true))
+          .HtmlAttributes(new {style = "height:550px;"})
+          .DataSource(dataSource => dataSource
+              .Ajax()
+              .Batch(true)
+              .ServerOperation(false)
+              .PageSize(20)
+              .Events(events => events.Error("error_handler").Sync("sync_handler"))
+              .Model(model =>
+              {
+                  model.Id(p => p.Id);
+                  model.Field(p => p.EventId).DefaultValue(ViewBag.EventId);
+                  model.Field(p => p.Active).DefaultValue(false);
+                  model.Field(p => p.VotesPerUser).DefaultValue(50);
+              })
+              .Read(read => read.Action("VotingsGrid_Read", "Events", new {eventId = ViewBag.EventId}))
 
+          )
+
+          )
+}
 
 
 <script type="text/javascript">
@@ -121,6 +139,24 @@
     }
     function sync_handler(e) {
         this.read();
+    };
+
+    function viewVoting(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var votingId = dataItem.Id;
+
+        window.location.href = "@Url.Action("VotingDetails","Events")?id=" + votingId;
+    }
+    function db(e) {
+        var grid = this;
+        $(".templateCell").each(function () {
+            eval($(this).children("script").last().html());
+            var tr = $(this).closest('tr');
+            var item = grid.dataItem(tr);
+            kendo.bind($(this), item);
+        });
+        
     };
 </script>
 

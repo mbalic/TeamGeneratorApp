@@ -4,30 +4,28 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="1570b0965f794fb09affca1a3ee20493" Name="Diagram1">
-        <EntityTypeShape EntityType="TeamDb6Model.AspNetRoles" Width="1.5" PointX="0.75" PointY="16.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb6Model.AspNetUserClaims" Width="1.5" PointX="5.25" PointY="10.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb6Model.AspNetUserLogins" Width="1.5" PointX="5.25" PointY="13.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb6Model.AspNetUsers" Width="1.5" PointX="3" PointY="15" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb6Model.Category" Width="1.5" PointX="7.5" PointY="17.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb6Model.Criteria" Width="1.5" PointX="9.75" PointY="22.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb6Model.Event" Width="1.5" PointX="9.75" PointY="15.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb6Model.Generator" Width="1.5" PointX="12" PointY="15.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb6Model.Group" Width="1.5" PointX="5.25" PointY="17.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb6Model.Invitaton" Width="1.5" PointX="7.5" PointY="14.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb6Model.Position" Width="1.5" PointX="9.75" PointY="19.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb6Model.Team" Width="1.5" PointX="14.25" PointY="14.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb6Model.UserDetails" Width="1.5" PointX="5.25" PointY="22.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb6Model.UserInCategory" Width="1.5" PointX="9.75" PointY="12.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb6Model.UserInGroup" Width="1.5" PointX="7.5" PointY="21.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb6Model.UserInTeam" Width="1.5" PointX="17.25" PointY="16.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb6Model.UserOnEvent" Width="1.5" PointX="15" PointY="17.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb6Model.UserVoting" Width="1.5" PointX="17.25" PointY="20.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamDb6Model.Voting" Width="1.5" PointX="12" PointY="23.125" IsExpanded="true" />
+      <Diagram DiagramId="df68ce0f86b14f39b8be3f16c57f5e55" Name="Diagram1">
+        <EntityTypeShape EntityType="TeamDb6Model.AspNetRoles" Width="1.5" PointX="0.75" PointY="14.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb6Model.AspNetUserClaims" Width="1.5" PointX="5.25" PointY="10.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb6Model.AspNetUserLogins" Width="1.5" PointX="5.25" PointY="12.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb6Model.AspNetUsers" Width="1.5" PointX="3" PointY="13.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb6Model.Category" Width="1.5" PointX="7.5" PointY="17.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb6Model.Criteria" Width="1.5" PointX="9.75" PointY="22.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb6Model.Event" Width="1.5" PointX="9.75" PointY="15.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb6Model.Generator" Width="1.5" PointX="12" PointY="15.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb6Model.Group" Width="1.5" PointX="5.25" PointY="17.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb6Model.Invitaton" Width="1.5" PointX="7.5" PointY="13.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb6Model.Position" Width="1.5" PointX="9.75" PointY="19.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb6Model.Team" Width="1.5" PointX="14.25" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb6Model.UserInCategory" Width="1.5" PointX="9.75" PointY="12.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb6Model.UserInGroup" Width="1.5" PointX="7.5" PointY="10.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb6Model.UserInTeam" Width="1.5" PointX="17.25" PointY="15.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb6Model.UserOnEvent" Width="1.5" PointX="15" PointY="17" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb6Model.UserVoting" Width="1.5" PointX="17.25" PointY="19.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="TeamDb6Model.Voting" Width="1.5" PointX="12" PointY="22.375" IsExpanded="true" />
         <AssociationConnector Association="TeamDb6Model.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
         <AssociationConnector Association="TeamDb6Model.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
         <AssociationConnector Association="TeamDb6Model.FK_Group_AspNetUsers" ManuallyRouted="false" />
-        <AssociationConnector Association="TeamDb6Model.FK_UserDetails_AspNetUsers" ManuallyRouted="false" />
         <AssociationConnector Association="TeamDb6Model.FK_UserInGroup_AspNetUsers" ManuallyRouted="false" />
         <AssociationConnector Association="TeamDb6Model.FK_UserInGroupInvitation_AspNetUsers" ManuallyRouted="false" />
         <AssociationConnector Association="TeamDb6Model.FK_Category_Group" ManuallyRouted="false" />

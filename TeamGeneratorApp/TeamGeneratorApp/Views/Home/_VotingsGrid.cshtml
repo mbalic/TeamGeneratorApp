@@ -9,16 +9,6 @@
 @Scripts.Render("~/bundles/modernizr")
 @Scripts.Render("~/bundles/kendo")
 
-<script type="text/javascript">
-    function viewDetails(e) {
-        e.preventDefault();
-        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        var votingId = dataItem.Id;
-
-        window.location.href = "@Url.Action("VotingDetails","Events")?id=" + votingId;
-
-    };
-</script>
 
 
 @(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.VotingIndexVM>()
@@ -33,7 +23,7 @@
         columns.Bound(p => p.VotesLeft);
         columns.Command(command => command.Custom("Details").Click("viewDetails"));
     })
-    //.Editable(editable => editable.Mode(GridEditMode.InLine))
+    .ColumnMenu()
     .Pageable()
     .Sortable()
     .Scrollable()
@@ -69,5 +59,14 @@
  };
  function sync_handler(e) {
      this.read();
+ };
+
+ function viewDetails(e) {
+     e.preventDefault();
+     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+     var votingId = dataItem.Id;
+
+     window.location.href = "@Url.Action("VotingDetails","Events")?id=" + votingId;
+
  };
 </script>

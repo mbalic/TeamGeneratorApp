@@ -86,8 +86,6 @@
           <ScalarProperty Name="EventId" ColumnName="EventId" />
           <ScalarProperty Name="CriteriaId" ColumnName="CriteriaId" />
           <ScalarProperty Name="NumberOfTeams" ColumnName="NumberOfTeams" />
-          <ScalarProperty Name="IsGenerated" ColumnName="IsGenerated" />
-          <ScalarProperty Name="IsLocked" ColumnName="IsLocked" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -129,17 +127,6 @@
           <ScalarProperty Name="GeneratorId" ColumnName="GeneratorId" />
           <ScalarProperty Name="Strength" ColumnName="Strength" />
           <ScalarProperty Name="SuccessPercentage" ColumnName="SuccessPercentage" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="UserDetails">
-      <EntityTypeMapping TypeName="TeamDb6Model.UserDetails">
-        <MappingFragment StoreEntitySet="UserDetails">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="UserId" ColumnName="UserId" />
-          <ScalarProperty Name="ImageUrl" ColumnName="ImageUrl" />
-          <ScalarProperty Name="Age" ColumnName="Age" />
-          <ScalarProperty Name="Sex" ColumnName="Sex" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

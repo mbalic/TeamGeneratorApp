@@ -1,12 +1,15 @@
-﻿@model TeamGeneratorApp.Models.Group
+﻿@model TeamGeneratorApp.Models.ViewModels.GroupListVM
 @{
     ViewBag.Title = "Details";
 }
 <br/>
-<p>
-    @Html.ActionLink("< Back to list", "Index", "Groups")
-</p>
-<h2>@ViewBag.GroupName</h2>
+@if (ViewBag.IsOwner)
+{
+    <p>
+        @Html.ActionLink("< Back to group list", "Index", "Groups")
+    </p>
+}
+<h2>@Html.DisplayFor(model => model.Name)</h2>
 <hr/>
 <h4>Group</h4>
 <br/>
@@ -28,9 +31,17 @@
         <dd>
             @Html.DisplayFor(model => model.Description)
         </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OwnerName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OwnerName)
+        </dd>
     </dl>
 </div>
-
+<br/>
 <div id="tabs">
     <ul class="nav nav-tabs">
         <li class="active">
@@ -39,21 +50,27 @@
         <li>
             <a href="#Users" data-toggle="tab">Users</a>
         </li>
-        <li>
-            <a href="#Invitations" data-toggle="tab">Invitations</a>
-        </li>
+@if (ViewBag.IsOwner)
+{
+    <li>
+        <a href="#Invitations" data-toggle="tab">Invitations</a>
+    </li>
+}
     </ul>
 
     <div class="tab-content">
         <div class="tab-pane active" id="Categories">
-            @Html.Action("CategoriesGrid", "Groups", new { groupId = Model.Id })
+            @Html.Action("CategoriesGrid", "Groups", new { groupId = Model.Id, isOwner = ViewBag.IsOwner })
         </div>
         <div class="tab-pane" id="Users">
-            @Html.Action("UsersInGroupGrid", "Groups", new { groupId = Model.Id })
+            @Html.Action("UsersInGroupGrid", "Groups", new {groupId = Model.Id, isOwner = ViewBag.IsOwner })
         </div>
-        <div class="tab-pane" id="Invitations">
-            @Html.Action("InvitationsGrid", "Groups", new { groupId = Model.Id })
-        </div>
+@if (ViewBag.IsOwner)
+{
+    <div class="tab-pane" id="Invitations">
+        @Html.Action("InvitationsGrid", "Groups", new {groupId = Model.Id})
+    </div>
+}
     </div>
 
 </div>

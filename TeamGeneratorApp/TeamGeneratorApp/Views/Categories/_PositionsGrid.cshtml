@@ -10,58 +10,81 @@
 @Scripts.Render("~/bundles/modernizr")
 @Scripts.Render("~/bundles/kendo")
 
-<script type="text/javascript">
-    function viewUser(e) {
-        e.preventDefault();
-        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        var userId = dataItem.Id;
 
-        @*window.location.href = "@Url.Action("Details","AdminUser")?id=" + eventId;*@
+@if (ViewBag.IsOwner)
+{
+    @(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.PositionVM>()
+          .Name("grid3")
+          .Columns(columns =>
+          {
+              columns.Bound(p => p.Name);
+              columns.Bound(p => p.Value);
+              columns.Command(command =>
+              {
+                  command.Edit();
+                  command.Destroy();
+              }).Width(200);
+          })
+          .ColumnMenu()
+          .ToolBar(toolbar => toolbar.Create())
+          .Editable(editable => editable.Mode(GridEditMode.InLine))
+          .Pageable()
+          .Sortable()
+          .Scrollable()
+          .Resizable(resize => resize.Columns(true))
+          .HtmlAttributes(new {style = "height:550px;"})
+          .DataSource(dataSource => dataSource
+              .Ajax()
+              .Batch(true)
+              .ServerOperation(false)
+              .PageSize(20)
+              .Events(events => events.Error("error_handler").Sync("sync_handler"))
+              .Model(model =>
+              {
+                  model.Id(p => p.Id);
+                  model.Field(p => p.CategoryId).DefaultValue(ViewBag.CategoryId);
 
-    };
+              })
+              .Create(update => update.Action("PositionsGrid_Create", "Categories"))
+              .Read(read => read.Action("PositionsGrid_Read", "Categories", new {categoryId = ViewBag.CategoryId}))
+              .Update(update => update.Action("PositionsGrid_Update", "Categories"))
+              .Destroy(update => update.Action("PositionsGrid_Destroy", "Categories"))
+          )
 
-    //function edit(e) {
-    //    if (e.model.isNew()) {
-    //        $("#UserId").attr("readonly", true);
-    //    }
-    //}
+          )
+}
+else
+{
+    @(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.PositionVM>()
+          .Name("grid3")
+          .Columns(columns =>
+          {
+              columns.Bound(p => p.Name);
+              columns.Bound(p => p.Value);
+          })
+          .ColumnMenu()
+          .Pageable()
+          .Sortable()
+          .Scrollable()
+          .Resizable(resize => resize.Columns(true))
+          .HtmlAttributes(new { style = "height:550px;" })
+          .DataSource(dataSource => dataSource
+              .Ajax()
+              .Batch(true)
+              .ServerOperation(false)
+              .PageSize(20)
+              .Events(events => events.Error("error_handler").Sync("sync_handler"))
+              .Model(model =>
+              {
+                  model.Id(p => p.Id);
+                  model.Field(p => p.CategoryId).DefaultValue(ViewBag.CategoryId);
 
-</script>
+              })
+              .Read(read => read.Action("PositionsGrid_Read", "Categories", new { categoryId = ViewBag.CategoryId }))
+          )
 
-
-@(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.PositionVM>()
-    .Name("grid3")
-    .Columns(columns =>
-    {
-        columns.Bound(p => p.Name);
-        columns.Bound(p => p.Value);
-        columns.Command(command => { command.Edit(); command.Destroy(); }).Width(200);
-    })
-    .ToolBar(toolbar => toolbar.Create())
-    .Editable(editable => editable.Mode(GridEditMode.InLine))
-    .Pageable()
-    .Sortable()
-    .Scrollable()
-    .HtmlAttributes(new { style = "height:550px;" })
-    .DataSource(dataSource => dataSource
-        .Ajax()
-        .Batch(true)
-        .ServerOperation(false)
-        .PageSize(20)
-        .Events(events => events.Error("error_handler").Sync("sync_handler"))
-        .Model(model =>
-        {
-            model.Id(p => p.Id);
-            model.Field(p => p.CategoryId).DefaultValue(ViewBag.CategoryId);
-
-        })
-        .Create(update => update.Action("PositionsGrid_Create", "Categories"))
-        .Read(read => read.Action("PositionsGrid_Read", "Categories", new { categoryId = ViewBag.CategoryId }))
-        .Update(update => update.Action("PositionsGrid_Update", "Categories"))
-        .Destroy(update => update.Action("PositionsGrid_Destroy", "Categories"))
     )
-
-)
+}
 <script type="text/javascript">
     function error_handler(e) {
         if (e.errors) {

@@ -89,8 +89,6 @@
     <Property Name="EventId" Type="int" Nullable="false" />
     <Property Name="CriteriaId" Type="int" Nullable="false" />
     <Property Name="NumberOfTeams" Type="int" Nullable="false" />
-    <Property Name="IsGenerated" Type="bit" Nullable="false" />
-    <Property Name="IsLocked" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Group">
     <Key>
@@ -128,16 +126,6 @@
     <Property Name="GeneratorId" Type="int" Nullable="false" />
     <Property Name="Strength" Type="int" Nullable="false" />
     <Property Name="SuccessPercentage" Type="float" />
-  </EntityType>
-  <EntityType Name="UserDetails">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="int" Nullable="false" />
-    <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
-    <Property Name="ImageUrl" Type="nvarchar" MaxLength="128" />
-    <Property Name="Age" Type="int" />
-    <Property Name="Sex" Type="nvarchar" MaxLength="10" />
   </EntityType>
   <EntityType Name="UserInCategory">
     <Key>
@@ -353,18 +341,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_UserDetails_AspNetUsers">
-    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
-    <End Role="UserDetails" Type="Self.UserDetails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUsers">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="UserDetails">
-        <PropertyRef Name="UserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_UserInCategory_UserInGroup">
     <End Role="UserInGroup" Type="Self.UserInGroup" Multiplicity="1" />
     <End Role="UserInCategory" Type="Self.UserInCategory" Multiplicity="*" />
@@ -543,7 +519,6 @@
     <EntitySet Name="Invitaton" EntityType="Self.Invitaton" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Position" EntityType="Self.Position" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Team" EntityType="Self.Team" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="UserDetails" EntityType="Self.UserDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserInCategory" EntityType="Self.UserInCategory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserInGroup" EntityType="Self.UserInGroup" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserInTeam" EntityType="Self.UserInTeam" Schema="dbo" store:Type="Tables" />
@@ -597,10 +572,6 @@
     <AssociationSet Name="FK_UserCategory_Category" Association="Self.FK_UserCategory_Category">
       <End Role="Category" EntitySet="Category" />
       <End Role="UserInCategory" EntitySet="UserInCategory" />
-    </AssociationSet>
-    <AssociationSet Name="FK_UserDetails_AspNetUsers" Association="Self.FK_UserDetails_AspNetUsers">
-      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-      <End Role="UserDetails" EntitySet="UserDetails" />
     </AssociationSet>
     <AssociationSet Name="FK_UserInCategory_UserInGroup" Association="Self.FK_UserInCategory_UserInGroup">
       <End Role="UserInGroup" EntitySet="UserInGroup" />

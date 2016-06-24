@@ -32,6 +32,7 @@ namespace TeamGeneratorApp.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         public ActionResult About()
         {
             return View();

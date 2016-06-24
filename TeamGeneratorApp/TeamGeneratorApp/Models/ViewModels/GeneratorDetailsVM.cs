@@ -23,7 +23,7 @@ namespace TeamGeneratorApp.Models.ViewModels
         public string CriteriaName { get; set; }
 
         public bool IsGenerated { get; set; }
-        public bool IsLocked { get; set; }
+        //public bool IsLocked { get; set; }
 
     }
 }

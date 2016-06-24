@@ -133,9 +133,32 @@ namespace TeamGeneratorApp.Controllers
             {
                 return HttpNotFound();
             }
-        
-            ViewBag.GroupName = group.Name;
-            return View(group);
+
+            string userId = User.Identity.GetUserId();
+
+            if (group.OwnerId == userId)
+                ViewBag.IsOwner = true;
+            else
+            {
+                if (unitOfWork.GroupRepository.GetByUserId(userId).Contains(group))
+                {
+                    ViewBag.IsOwner = false;
+                }
+                else
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                }
+            }
+            var groupVm = new GroupListVM
+            {
+                Id = group.Id,
+                OwnerId = group.OwnerId,
+                Description = group.Description,
+                Name = group.Name,
+                OwnerName = group.AspNetUsers.Name
+            };
+
+            return View(groupVm);
         }
 
       
@@ -150,9 +173,9 @@ namespace TeamGeneratorApp.Controllers
         }
 
 
-        public PartialViewResult CategoriesGrid(int groupId = 0)
+        public PartialViewResult CategoriesGrid(int groupId = 0, bool isOwner = false)
         {
-
+            ViewBag.IsOwner = isOwner;
             ViewBag.GroupId = groupId;
             return PartialView("_CategoriesGrid");
         }
@@ -278,9 +301,9 @@ namespace TeamGeneratorApp.Controllers
 
 
 
-        public PartialViewResult UsersInGroupGrid(int groupId = 0)
+        public PartialViewResult UsersInGroupGrid(int groupId = 0, bool isOwner = false)
         {
-
+            ViewBag.IsOwner = isOwner;
             ViewBag.GroupId = groupId;
             return PartialView("_UsersInGroupGrid");
         }
@@ -314,37 +337,7 @@ namespace TeamGeneratorApp.Controllers
         }
 
 
-        //[AcceptVerbs(HttpVerbs.Post)]
-        //public ActionResult UsersInGroupGrid_Create([DataSourceRequest] DataSourceRequest request,
-        //   [Bind(Prefix = "models")]IEnumerable<UserInGroupVM> list)
-        //{
-        //    var results = new List<UserInGroupVM>();
-        //    if (list != null && ModelState.IsValid)
-        //    {
-        //        foreach (var e in list)
-        //        {
-        //            var newUserInGroup = new UserInGroup
-        //            {
-        //                UserId = e.UserId,
-        //                GroupId = e.GroupId,
-        //                Active = e.Active
-        //            };
-        //            try
-        //            {
-        //                unitOfWork.UserInGroupRepository.Insert(newUserInGroup);
-        //                unitOfWork.Commit();
-        //            }
-        //            catch (Exception)
-        //            {
-        //                ViewBag.ConstraintError = "There was an error while adding rows in grid.";
-        //            }
-        //            results.Add(e);
-        //        }
-        //    }
-
-        //    return Json(results.ToDataSourceResult(request, ModelState));
-        //}
-
+     
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult UsersInGroupGrid_Update([DataSourceRequest] DataSourceRequest request,
            [Bind(Prefix = "models")]IEnumerable<UserInGroupVM> list)
@@ -354,13 +347,6 @@ namespace TeamGeneratorApp.Controllers
             {
                 foreach (var e in list)
                 {
-                    //var newUserInGroup = new UserInGroup
-                    //{
-                    //    Id = e.Id,
-                    //    UserId = e.UserId,
-                    //    GroupId = e.GroupId,
-                    //    Active = e.Active
-                    //};
                     var newUserInGroup = unitOfWork.UserInGroupRepository.GetByID(e.Id);
                     newUserInGroup.Active = e.Active;
                     try
@@ -379,36 +365,6 @@ namespace TeamGeneratorApp.Controllers
             return Json(results.ToDataSourceResult(request, ModelState));
         }
 
-        //[AcceptVerbs(HttpVerbs.Post)]
-        //public ActionResult UsersInGroupGrid_Destroy([DataSourceRequest] DataSourceRequest request,
-        // [Bind(Prefix = "models")]IEnumerable<UserInGroupVM> list)
-        //{
-        //    var results = new List<UserInGroupVM>();
-        //    if (list != null && ModelState.IsValid)
-        //    {
-        //        foreach (var e in list)
-        //        {
-        //            var newUserInGroup = new UserInGroup
-        //            {
-        //                Id = e.Id,
-        //                UserId = e.UserId,
-        //                GroupId = e.GroupId,
-        //                Active = e.Active
-        //            };
-        //            try
-        //            {
-        //                unitOfWork.UserInGroupRepository.Delete(newUserInGroup);
-        //                unitOfWork.Commit();
-        //            }
-        //            catch (Exception)
-        //            {
-        //                ViewBag.ConstraintError = "There was an error while deleting rows in grid.";
-        //            }
-        //        }
-        //    }
-
-        //    return Json(results.ToDataSourceResult(request, ModelState));
-        //}
 
         #endregion
 
@@ -454,13 +410,6 @@ namespace TeamGeneratorApp.Controllers
             {
                 foreach (var e in list)
                 {
-                    //var newInvitation = new Invitaton
-                    //{
-                    //    Id = e.Id,
-                    //    UserId = e.UserId,
-                    //    GroupId = e.GroupId,
-                    //    DateCreated = e.DateCreated
-                    //};
                     try
                     {
                         unitOfWork.InvitationRepository.Delete(e.Id);
@@ -526,7 +475,7 @@ namespace TeamGeneratorApp.Controllers
         }
 
 
-        public KeyValuePair<int, double?> CountSuccessPercentageForUser(UserInGroup user)
+        private KeyValuePair<int, double?> CountSuccessPercentageForUser(UserInGroup user)
         {
             double? succesPercentage = 0;
             var teamCounter = 0;
@@ -552,7 +501,24 @@ namespace TeamGeneratorApp.Controllers
 
         public ActionResult Cooperation(int userInGroupId)
         {
+            string userId = User.Identity.GetUserId();
             var user = unitOfWork.UserInGroupRepository.GetByID(userInGroupId);
+            var group = user.Group;
+
+            if (group.OwnerId == userId)
+                ViewBag.IsOwner = true;
+            else
+            {
+                if (unitOfWork.GroupRepository.GetByUserId(userId).Contains(group))
+                {
+                    ViewBag.IsOwner = false;
+                }
+                else
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                }
+            }
+
             var userInGroupVm = new UserInGroupVM();
 
             userInGroupVm.Id = userInGroupId;

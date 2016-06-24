@@ -5,7 +5,7 @@ using System.Web;
 
 namespace TeamGeneratorApp.Models.ViewModels
 {
-    public class AdminUserCreateVM
+    public class UserCreateVM
     {
         public string Id { get; set; }
         public string Email { get; set; }

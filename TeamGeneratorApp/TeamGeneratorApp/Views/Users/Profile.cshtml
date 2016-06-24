@@ -77,21 +77,15 @@
             <li>
                 <a href="#GroupsOwner" data-toggle="tab">Owner</a>
             </li>
-                @*<li>
-                    <a href="#Positions" data-toggle="tab">Positions</a>
-                </li>*@
         </ul>
 
         <div class="tab-content">
             <div class="tab-pane active" id="GroupsMember">
-                @Html.Action("GroupsMemberGrid", "Users")
+                @Html.Action("GroupsMemberGrid", "Users", new {userId = Model.Id})
             </div>
             <div class="tab-pane" id="GroupsOwner">
-                @Html.Action("GroupsOwnerGrid", "Users")
+                @Html.Action("GroupsOwnerGrid", "Users", new { userId = Model.Id })
             </div>
-                @*<div class="tab-pane active" id="Positions">
-                    @Html.Action("PositionsGrid", "Categories", new { categoryId = Model.Id })
-                </div>*@
         </div>
 
     </div>

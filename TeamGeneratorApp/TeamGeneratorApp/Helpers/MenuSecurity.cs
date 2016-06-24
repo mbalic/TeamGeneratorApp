@@ -9,15 +9,6 @@ namespace TeamGeneratorApp.Helpers
 {
     public static class MenuSecurity
     {
-        public static bool AdminTabVisible
-        {
-            get
-            {
-                return
-                    HttpContext.Current.User != null &&
-                    HttpContext.Current.User.IsInRole("Admin");
-            }
-        }
 
         public static bool UserTabVisible
         {

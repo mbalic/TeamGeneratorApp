@@ -21,11 +21,12 @@
         columns.Bound(p => p.Wins);
         columns.Bound(p => p.Draws);
         columns.Bound(p => p.Loses);
-        //columns.Command(command => command.Custom("Details").Click("viewCategory"));
     })
+    .ColumnMenu()
     .Pageable()
     .Sortable()
     .Scrollable()
+    .Resizable(resize => resize.Columns(true))
     .HtmlAttributes(new { style = "height:550px;" })
     .DataSource(dataSource => dataSource
         .Ajax()
@@ -37,10 +38,7 @@
          {
              model.Id(p => p.Id);
          })
-        //.Create(update => update.Action("UsersInGroupGrid_Create", "AdminGroups"))
         .Read(read => read.Action("UserVOtingsGrid_Read", "Events", new { votingId = ViewBag.VotingId }))
-    //.Update(update => update.Action("UsersInGroupGrid_Update", "Groups"))
-    //.Destroy(update => update.Action("UsersInGroupGrid_Destroy", "AdminGroups"))
     )
 
 )

@@ -16,12 +16,20 @@
     .Columns(columns =>
     {
         columns.Bound(p => p.UserPersonalName);
-        columns.Bound(p => p.SuccessPercentage).Title("Success % with this user (in this category)");
-        columns.Bound(p => p.Appereances).Title("Appereances together (in this category)");
+        columns.Group(group => group
+                 .Title("In category")
+                 .Columns(info =>
+                 {
+                     info.Bound(x => x.SuccessPercentage).Title("Success % with this user");
+                     info.Bound(x => x.Appereances).Title("Appereances together");
+                 })
+             );
     })
+    .ColumnMenu()
     .Pageable()
     .Sortable()
     .Scrollable()
+    .Resizable(resize => resize.Columns(true))
     .HtmlAttributes(new { style = "height:550px;" })
     .DataSource(dataSource => dataSource
         .Ajax()
@@ -35,7 +43,7 @@
         })
         .Read(read => read.Action("CooperationGrid_Read", "Categories", new { userInCategoryId = ViewBag.UserInCategoryId }))
         .Sort(sort =>
-        { 
+        {
             sort.Add("SuccessPercentage").Descending();
             sort.Add("Appereances").Descending();
         })

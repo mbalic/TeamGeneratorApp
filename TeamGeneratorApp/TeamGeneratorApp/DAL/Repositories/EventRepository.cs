@@ -20,13 +20,17 @@ namespace TeamGeneratorApp.DAL.Repositories
             return context.Event.Where(c => c.CategoryId == categoryId);
         }
 
-        public bool IsOwner(string userId, int eventid)
+
+        public IEnumerable<Event> GetByUserId(string id)
         {
-            var res = context.Event.Where(p => p.Id == eventid && p.Category.Group.OwnerId == userId);
-            if (res.Any())
-                return true;
-            else
-                return false;
+            var q = from e in context.Event
+                    join c in context.Category on e.CategoryId equals c.Id
+                    join g in context.Group on c.GroupId equals g.Id
+                    join uig in context.UserInGroup on g.Id equals uig.GroupId
+                    where uig.UserId == id
+                    select e;
+
+            return q;
         }
 
 

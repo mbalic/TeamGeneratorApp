@@ -1,11 +1,11 @@
-﻿@model TeamGeneratorApp.Models.Category
+﻿@model TeamGeneratorApp.Models.ViewModels.CategoryVM
 
 @{
     ViewBag.Title = "Details";
 }
 <br />
 <p>
-    @Html.ActionLink("< Back to group", "Details", "Groups", new {id = ViewBag.GroupId}, null)
+    @Html.ActionLink("< Back to group", "Details", "Groups", new {id = Model.GroupId}, null)
 </p>
 <h2>@Html.DisplayFor(model => model.Name)</h2>
 <hr />
@@ -13,20 +13,6 @@
 <br />
 <div>
     <dl class="dl-horizontal">
-        @*<dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>*@
-        <dt>
-            Group
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Group.Name)
-        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Description)
         </dt>
@@ -34,6 +20,14 @@
         <dd>
             @Html.DisplayFor(model => model.Description)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.GroupName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GroupName)
+        </dd>
+
 
 
 
@@ -54,13 +48,13 @@
 
     <div class="tab-content">
         <div class="tab-pane active" id="Events">
-            @Html.Action("EventsGrid", "Categories", new { categoryId = Model.Id })
+            @Html.Action("EventsGrid", "Categories", new { categoryId = Model.Id, isOwner = ViewBag.IsOwner })
         </div>
         <div class="tab-pane" id="Users">
-            @Html.Action("UsersGrid", "Categories", new {categoryId = Model.Id})
+            @Html.Action("UsersGrid", "Categories", new {categoryId = Model.Id, isOwner = ViewBag.IsOwner })
         </div>
         <div class="tab-pane" id="Positions">
-            @Html.Action("PositionsGrid", "Categories", new { categoryId = Model.Id })
+            @Html.Action("PositionsGrid", "Categories", new { categoryId = Model.Id, isOwner = ViewBag.IsOwner })
         </div>
     </div>
 

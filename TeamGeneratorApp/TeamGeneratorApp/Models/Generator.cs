@@ -25,8 +25,6 @@ namespace TeamGeneratorApp.Models
         public int EventId { get; set; }
         public int CriteriaId { get; set; }
         public int NumberOfTeams { get; set; }
-        public bool IsGenerated { get; set; }
-        public bool IsLocked { get; set; }
     
         public virtual Criteria Criteria { get; set; }
         public virtual Event Event { get; set; }

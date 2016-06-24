@@ -5,7 +5,7 @@
 }
 <br />
 <p>
-    @Html.ActionLink("< Back to category", "Details", "Categories", new { id = ViewBag.CategoryId }, null)
+    @Html.ActionLink("< Back to category", "Details", "Categories", new { id = Model.CategoryId }, null)
 </p>
 <h2>@Html.DisplayFor(model => model.Name)</h2>
 <hr />
@@ -38,16 +38,6 @@
             @Html.DisplayFor(model => model.Finish)
         </dd>
 
-        <dt>
-
-        </dt>
-        <dd>
-            @*@if (ViewBag.CanGenerate)
-            {
-                <button>@Html.ActionLink("Generate teams", "GenerateTeams", new { eventId = Model.Id })</button>
-            }*@
-        </dd>
-
     </dl>
 </div>
 <div id="tabs">
@@ -65,13 +55,13 @@
 
     <div class="tab-content">
         <div class="tab-pane active" id="Users">
-            @Html.Action("UsersGrid", "Events", new { eventId = Model.Id })
+            @Html.Action("UsersGrid", "Events", new { eventId = Model.Id, isOwner = ViewBag.IsOwner })
         </div>
         <div class="tab-pane" id="Votings">
-            @Html.Action("VotingsGrid", "Events", new { eventId = Model.Id })
+            @Html.Action("VotingsGrid", "Events", new { eventId = Model.Id, isOwner = ViewBag.IsOwner })
         </div>
         <div class="tab-pane" id="Generators">
-            @Html.Action("GeneratorsGrid", "Events", new { eventId = Model.Id })
+            @Html.Action("GeneratorsGrid", "Events", new { eventId = Model.Id, isOwner = ViewBag.IsOwner })
         </div>
     </div>
 

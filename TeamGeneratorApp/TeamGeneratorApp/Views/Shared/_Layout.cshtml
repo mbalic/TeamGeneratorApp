@@ -23,16 +23,13 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("TeamGenerator", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("TeamGenerator", "Index", "Home", new { area = "" }, new { @class = "navbar-brand", @style = "color: white" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    @*<li>@Html.ActionLink("About", "About", "Home")</li>*@
-                    @if (MenuSecurity.AdminTabVisible){<li id="AdminTab">@Html.ActionLink("Admin panel", "Index", "Admin")</li>}
                     @if (MenuSecurity.UserTabVisible){<li class="UserTab">@Html.ActionLink("My groups", "Index", "Groups")</li>}
                     @if (MenuSecurity.UserTabVisible){<li class="UserTab">@Html.ActionLink("My profile", "Profile", "Users", new {id = User.Identity.GetUserId()}, null)</li>}
                     <li class="UserTab">@Html.ActionLink("About", "About", "Home")</li>}
-                    @*@if (MenuSecurity.UserTabVisible){<li class="UserTab">@Html.ActionLink("My profile", "Index", "User")</li>}*@
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

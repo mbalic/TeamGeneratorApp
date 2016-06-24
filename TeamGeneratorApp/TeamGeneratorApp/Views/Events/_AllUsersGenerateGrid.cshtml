@@ -22,8 +22,8 @@
 
 
 
-@*@if (!ViewBag.IsLocked)
-{*@
+@if(ViewBag.IsOwner)
+{ 
     @(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.UserOnEventVM>()
           .Name("grid1")
           .Columns(columns =>
@@ -37,11 +37,13 @@
                   command.Edit();
               });
           })
+          .ColumnMenu()
           .Events(e => e.DataBound("onSave"))
           .Editable(editable => editable.Mode(GridEditMode.InLine))
           .Pageable()
           .Sortable()
           .Scrollable()
+          .Resizable(resize => resize.Columns(true))
           .HtmlAttributes(new {style = "height:550px;"})
           .DataSource(dataSource => dataSource
               .Ajax()
@@ -58,25 +60,24 @@
                   model.Field(p => p.Rating).Editable(false);
 
               })
-              //.Create(update => update.Action("AllUsersGenerateGrid_Create", "Events"))
               .Read(read => read.Action("AllUsersGenerateGrid_Read", "Events", new {eventId = ViewBag.EventId, generatorId = ViewBag.GeneratorId}))
               .Update(update => update.Action("AllUsersGenerateGrid_Update", "Events", new { generatorId = ViewBag.GeneratorId }))
-          //.Destroy(update => update.Action("AllUsersGenerateGrid_Destroy", "Events"))
           )
 
           )
-@*}
+}
 else
 {
     @(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.UserOnEventVM>()
-          .Name("grid2")
+          .Name("grid1")
           .Columns(columns =>
           {
               columns.Bound(p => p.UserPersonalName).Title("User");
               columns.Bound(p => p.PositionName);
-              columns.Bound(p => p.Rating);
+              //columns.Bound(p => p.Rating);
               columns.ForeignKey(p => p.TeamId, (System.Collections.IEnumerable)ViewData["teams"], "Id", "Name").Title("Team").Width(200);
           })
+          .ColumnMenu()
           .Pageable()
           .Sortable()
           .Scrollable()
@@ -90,20 +91,13 @@ else
               .Model(model =>
               {
                   model.Id(p => p.Id);
-                  //model.Field(p => p.EventId).DefaultValue(ViewBag.EventId);
-                  //model.Field(p => p.UserPersonalName).Editable(false);
-                  //model.Field(p => p.PositionName).Editable(false);
-                  //model.Field(p => p.Rating).Editable(false);
 
               })
-              //.Create(update => update.Action("UsersGrid_Create", "Events"))
               .Read(read => read.Action("AllUsersGenerateGrid_Read", "Events", new { eventId = ViewBag.EventId, generatorId = ViewBag.GeneratorId }))
-          //.Update(update => update.Action("AllUsersGenerateGrid_Update", "Events"))
-          //.Destroy(update => update.Action("UsersGrid_Destroy", "Events"))
           )
 
     )
-}*@
+}
 
 <script type="text/javascript">
     function error_handler(e) {
@@ -122,5 +116,10 @@ else
 
     function sync_handler(e) {
         this.read();
+    };
+
+    function onSave(e) {
+        $('#teamsGrid').data('kendoGrid').dataSource.read();
+        $('#teamsGrid').data('kendoGrid').refresh();
     };
 </script>

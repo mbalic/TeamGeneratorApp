@@ -9,32 +9,6 @@
 @Scripts.Render("~/bundles/modernizr")
 @Scripts.Render("~/bundles/kendo")
 
-<script type="text/javascript">
-    function acceptInvitation(e) {
-        e.preventDefault();
-        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        var itemId = dataItem.Id;
-
-        $.ajax({
-            url: '@Url.Action("AcceptInvitation", "Home")',
-            type: 'POST',
-            data: { id: itemId },
-            success: function (result) {
-                if (result.status == "OK") {
-                    $('#invitationsGrid').data('kendoGrid').dataSource.read();
-                    $('#invitationsGrid').data('kendoGrid').refresh();
-                }
-                else {
-                    alert(result.status);
-                }
-            },
-            error: function () {
-                alert(error);
-            }
-        });
-
-    };
-</script>
 
 
 @(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.InvitationRequestVM>()
@@ -49,7 +23,7 @@
         columns.Command(command => command.Custom("Accept").Click("acceptInvitation"));
         columns.Command(command => command.Destroy().Text("Decline"));
     })
-    //.Editable(editable => editable.Mode(GridEditMode.InLine))
+    .ColumnMenu()
     .Pageable()
     .Sortable()
     .Scrollable()
@@ -64,9 +38,7 @@
          {
              model.Id(p => p.Id);
          })
-        //.Create(update => update.Action("UsersInGroupGrid_Create", "AdminGroups"))
         .Read(read => read.Action("InvitationsGrid_Read", "Home", new { userId = ViewBag.UserId }))
-        //.Update(update => update.Action("UsersInGroupGrid_Update", "AdminGroups"))
         .Destroy(update => update.Action("InvitationsGrid_Destroy", "Home"))
     )
 
@@ -88,5 +60,30 @@
  };
  function sync_handler(e) {
      this.read();
+ };
+
+ function acceptInvitation(e) {
+     e.preventDefault();
+     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+     var itemId = dataItem.Id;
+
+     $.ajax({
+         url: '@Url.Action("AcceptInvitation", "Home")',
+         type: 'POST',
+         data: { id: itemId },
+         success: function (result) {
+             if (result.status == "OK") {
+                 $('#invitationsGrid').data('kendoGrid').dataSource.read();
+                 $('#invitationsGrid').data('kendoGrid').refresh();
+             }
+             else {
+                 alert(result.status);
+             }
+         },
+         error: function () {
+             alert(error);
+         }
+     });
+
  };
 </script>

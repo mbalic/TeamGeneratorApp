@@ -37,7 +37,6 @@ namespace TeamGeneratorApp.Models
         public virtual DbSet<Invitaton> Invitaton { get; set; }
         public virtual DbSet<Position> Position { get; set; }
         public virtual DbSet<Team> Team { get; set; }
-        public virtual DbSet<UserDetails> UserDetails { get; set; }
         public virtual DbSet<UserInCategory> UserInCategory { get; set; }
         public virtual DbSet<UserInGroup> UserInGroup { get; set; }
         public virtual DbSet<UserInTeam> UserInTeam { get; set; }

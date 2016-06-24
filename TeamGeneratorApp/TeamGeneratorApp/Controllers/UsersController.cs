@@ -43,11 +43,6 @@ namespace TeamGeneratorApp.Controllers
             result.Email = user.Email;
             result.ImageUrl = user.ImageUrl;
 
-            //if (user.AspNetRoles.Count > 0)
-            //    result.IsAdmin = true;
-            //else
-            //    result.IsAdmin = false;
-
             ViewBag.ImageUrl = result.ImageUrl;
 
             if (id == User.Identity.GetUserId())
@@ -81,11 +76,6 @@ namespace TeamGeneratorApp.Controllers
             result.Email = user.Email;
             result.ImageUrl = user.ImageUrl;
 
-            //if (user.AspNetRoles.Count > 0)
-            //    result.IsAdmin = true;
-            //else
-            //    result.IsAdmin = false;
-
             ViewBag.StatusMessage = message;
             ViewBag.ImageUrl = result.ImageUrl;
             return View(result);
@@ -96,8 +86,7 @@ namespace TeamGeneratorApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditProfile([Bind(Include = "Id,Email,Username, Name")] UserEditVM userVm, HttpPostedFileBase file)
         {
-            //try
-            //{
+
             if (ModelState.IsValid)
             {
                 var serverPath = "";
@@ -127,14 +116,9 @@ namespace TeamGeneratorApp.Controllers
                 if (serverPath != "")
                     file.SaveAs(serverPath);
 
-                //ViewBag.Message = "Done";
                 return RedirectToAction("Profile");
             }
-            //}
-            //catch (Exception)
-            //{
-            //    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-            //}
+           
 
             ViewBag.Message = "Error";
             return View(userVm);
@@ -144,9 +128,9 @@ namespace TeamGeneratorApp.Controllers
 
 
 
-        public ActionResult GroupsMemberGrid()
+        public ActionResult GroupsMemberGrid(string userId)
         {
-            ViewBag.UserId = User.Identity.GetUserId();
+            ViewBag.UserId = userId;
             return PartialView("_GroupsMemberGrid");
         }
 
@@ -172,9 +156,9 @@ namespace TeamGeneratorApp.Controllers
         }
 
 
-        public ActionResult GroupsOwnerGrid()
+        public ActionResult GroupsOwnerGrid(string userId)
         {
-            ViewBag.UserId = User.Identity.GetUserId();
+            ViewBag.UserId = userId;
             return PartialView("_GroupsOwnerGrid");
         }
 
@@ -197,122 +181,6 @@ namespace TeamGeneratorApp.Controllers
 
             return Json(list.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
         }
-
-
-
-
-
-
-
-
-
-
-
-
-        //// GET: Users/Edit/5
-        //public ActionResult Edit(string id, string message)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    var user = unitOfWork.UserRepository.GetByID(id);
-
-        //    if (user == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-
-        //    var result = new UserEditVM();
-        //    result.Id = user.Id;
-        //    result.Name = user.Name;
-        //    result.UserName = user.UserName;
-        //    result.Email = user.Email;
-        //    result.ImageUrl = user.ImageUrl;
-
-        //    if (user.AspNetRoles.Count > 0)
-        //        result.IsAdmin = true;
-        //    else
-        //        result.IsAdmin = false;
-
-        //    ViewBag.ImageUrl = result.ImageUrl;
-        //    ViewBag.StatusMessage = message;
-        //    return View(result);
-        //}
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Edit([Bind(Include = "Id,Email,UserName,IsAdmin,Name")] UserEditVM userVm, HttpPostedFileBase file)
-        //{
-        //    //try
-        //    //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var serverPath = "";
-        //        userVm.ImageUrl = ViewBag.ImageUrl;
-
-        //        var user = unitOfWork.UserRepository.GetByID(userVm.Id);
-        //        user.Email = userVm.Email;
-        //        user.UserName = userVm.UserName;
-        //        user.Name = userVm.Name;
-
-        //        if (file != null && file.ContentLength > 0)
-        //        {
-        //            var allowedExtensions = new[] { ".Jpg", ".png", ".jpg", "jpeg" };
-        //            var ext = Path.GetExtension(file.FileName);
-        //            if (allowedExtensions.Contains(ext)) //check what type of extension  
-        //            {
-        //                var fileName = Guid.NewGuid() + ext;
-        //                serverPath = Path.Combine(Server.MapPath("~/Img/"), fileName);
-        //                user.ImageUrl = "http://localhost:2422" + "/Img/" + fileName;
-        //            }
-        //        }
-
-        //        if (userVm.IsAdmin)
-        //        {
-        //            if (user.AspNetRoles.Count == 0)
-        //            {
-        //                var role = unitOfWork.RoleRepository.FindByName("Admin");
-        //                user.AspNetRoles.Add(role);
-        //            }
-        //        }
-        //        else
-        //        {
-        //            user.AspNetRoles.Clear();
-        //        }
-
-        //        unitOfWork.UserRepository.Update(user);
-        //        unitOfWork.Commit();
-
-        //        if (serverPath != "")
-        //            file.SaveAs(serverPath);
-
-        //        ViewBag.Message = "Done";
-        //        return View(userVm);
-        //    }
-        //    //}
-        //    //catch (Exception)
-        //    //{
-        //    //    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-        //    //}
-
-        //    ViewBag.Message = "Error";
-        //    return View(userVm);
-        //}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         protected override void Dispose(bool disposing)

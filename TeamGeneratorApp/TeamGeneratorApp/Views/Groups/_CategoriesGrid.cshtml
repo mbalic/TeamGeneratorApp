@@ -10,51 +10,81 @@
 @Scripts.Render("~/bundles/modernizr")
 @Scripts.Render("~/bundles/kendo")
 
-<script type="text/javascript">
-    function viewCategory(e) {
-        e.preventDefault();
-        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        var categoryId = dataItem.Id;
 
-        window.location.href = "@Url.Action("Details","Categories")?id=" + categoryId;
+@if (ViewBag.IsOwner)
+{
+    @(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.CategoryVM>()
+          .Name("categoriesGrid")
+          .Columns(columns =>
+          {
+              columns.Bound(p => p.Name);
+              columns.Bound(p => p.Description);
+              columns.Command(command =>
+              {
+                  command.Edit();
+                  command.Destroy();
+              }).Width(200);
+              columns.Command(command => command.Custom("Details").Click("viewCategory"));
+          })
+          .ColumnMenu()
+          .ToolBar(toolbar => toolbar.Create())
+          .Editable(editable => editable.Mode(GridEditMode.InLine))
+          .Pageable()
+          .Sortable()
+          .Scrollable()
+          .Resizable(resize => resize.Columns(true))
+          .HtmlAttributes(new {style = "height:550px;"})
+          .DataSource(dataSource => dataSource
+              .Ajax()
+              .Batch(true)
+              .ServerOperation(false)
+              .PageSize(20)
+              .Events(events => events.Error("error_handler").Sync("sync_handler"))
+              .Model(model =>
+              {
+                  model.Id(p => p.Id);
+                  model.Field(p => p.GroupId).DefaultValue(ViewBag.GroupId);
+              })
+              .Create(update => update.Action("CategoriesGrid_Create", "Groups"))
+              .Read(read => read.Action("CategoriesGrid_Read", "Groups", new {groupId = ViewBag.GroupId}))
+              .Update(update => update.Action("CategoriesGrid_Update", "Groups"))
+              .Destroy(update => update.Action("CategoriesGrid_Destroy", "Groups"))
+          )
 
-    }    
-</script>
+          )
+}
+else
+{
+    @(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.CategoryVM>()
+          .Name("categoriesGrid")
+          .Columns(columns =>
+          {
+              columns.Bound(p => p.Name);
+              columns.Bound(p => p.Description);
+              columns.Command(command => command.Custom("Details").Click("viewCategory"));
+          })
+          .ColumnMenu()
+          .Pageable()
+          .Sortable()
+          .Scrollable()
+          .Resizable(resize => resize.Columns(true))
+          .HtmlAttributes(new { style = "height:550px;" })
+          .DataSource(dataSource => dataSource
+              .Ajax()
+              .Batch(true)
+              .ServerOperation(false)
+              .PageSize(20)
+              .Events(events => events.Error("error_handler").Sync("sync_handler"))
+              .Model(model =>
+              {
+                  model.Id(p => p.Id);
+                  model.Field(p => p.GroupId).DefaultValue(ViewBag.GroupId);
+              })
+              .Read(read => read.Action("CategoriesGrid_Read", "Groups", new { groupId = ViewBag.GroupId }))
+          )
 
-
-@(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.CategoryVM>()
-    .Name("categoriesGrid")
-    .Columns(columns =>
-    {
-        columns.Bound(p => p.Name);
-        columns.Bound(p => p.Description);
-        columns.Command(command => { command.Edit(); command.Destroy(); }).Width(200);
-        columns.Command(command => command.Custom("Details").Click("viewCategory"));
-    })
-    .ToolBar(toolbar => toolbar.Create())
-    .Editable(editable => editable.Mode(GridEditMode.InLine))
-    .Pageable()
-    .Sortable()
-    .Scrollable()
-    .HtmlAttributes(new { style = "height:550px;" })
-    .DataSource(dataSource => dataSource
-        .Ajax()
-        .Batch(true)
-        .ServerOperation(false)
-        .PageSize(20)
-        .Events(events => events.Error("error_handler").Sync("sync_handler"))
-        .Model(model =>
-         {
-             model.Id(p => p.Id);
-             model.Field(p => p.GroupId).DefaultValue(ViewBag.GroupId);
-         })
-        .Create(update => update.Action("CategoriesGrid_Create", "Groups"))
-        .Read(read => read.Action("CategoriesGrid_Read", "Groups", new { groupId = ViewBag.GroupId }))
-        .Update(update => update.Action("CategoriesGrid_Update", "Groups"))
-        .Destroy(update => update.Action("CategoriesGrid_Destroy", "AdminGroups"))
     )
-
-)
+}
 <script type="text/javascript">
     function error_handler(e) {
         if (e.errors) {
@@ -72,5 +102,15 @@
     function sync_handler(e) {
         this.read();
     };
+
+    function viewCategory(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var categoryId = dataItem.Id;
+
+        window.location.href = "@Url.Action("Details","Categories")?id=" + categoryId;
+
+    }
+
 </script>
 

@@ -32,18 +32,27 @@ namespace TeamGeneratorApp.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            //check access rights
-            if (!unitOfWork.EventRepository.IsOwner(User.Identity.GetUserId(), (int)id))
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
-            }
-
-
-            Event @event = unitOfWork.EventRepository.GetByID(id);
+            var @event = unitOfWork.EventRepository.GetByID(id);
 
             if (@event == null)
             {
                 return HttpNotFound();
+            }
+
+            string userId = User.Identity.GetUserId();
+
+            if (@event.Category.Group.OwnerId == userId)
+                ViewBag.IsOwner = true;
+            else
+            {
+                if (unitOfWork.EventRepository.GetByUserId(userId).Contains(@event))
+                {
+                    ViewBag.IsOwner = false;
+                }
+                else
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                }
             }
 
             var eventVm = new EventVM
@@ -56,16 +65,7 @@ namespace TeamGeneratorApp.Controllers
                 Finish = @event.Finish,
                 Name = @event.Name
             };
-
-            foreach (var voting in @event.Voting)
-            {
-                if (voting.Active)
-                    ViewBag.CanGenerate = false;
-                else
-                    ViewBag.CanGenerate = true;
-            }
-
-            ViewBag.CategoryId = @event.CategoryId;
+            
             return View(eventVm);
         }
 
@@ -79,26 +79,9 @@ namespace TeamGeneratorApp.Controllers
             base.Dispose(disposing);
         }
 
-        public PartialViewResult UsersGrid(int eventId = 0)
+        public PartialViewResult UsersGrid(int eventId = 0, bool isOwner = false) 
         {
             var @event = unitOfWork.EventRepository.GetByID(eventId);
-            
-            //var votings = @event.Voting;
-
-            //if (votings.Count == 0)
-            //{
-            //    ViewBag.VotingStarted = false;
-            //}
-            //else
-            //{
-            //    foreach (var voting in @event.Voting)
-            //    {
-            //        if (voting.StartVoting < DateTime.Now || voting.Active)
-            //            ViewBag.VotingStarted = true;
-            //        else
-            //            ViewBag.VotingStarted = false;
-            //    }
-            //}
 
             ViewData["users"] = unitOfWork.UserInCategoryRepository.GetByCategoryIdAndActivity(@event.CategoryId, true).AsQueryable()
                   .Select(e => new UserddlVM
@@ -116,6 +99,7 @@ namespace TeamGeneratorApp.Controllers
                    })
                    .OrderBy(e => e.Name);
 
+            ViewBag.IsOwner = isOwner;
             ViewBag.EventId = eventId;
             return PartialView("_UsersGrid");
         }
@@ -260,9 +244,9 @@ namespace TeamGeneratorApp.Controllers
 
 
 
-        public PartialViewResult VotingsGrid(int eventId = 0)
-        {          
-
+        public PartialViewResult VotingsGrid(int eventId = 0, bool isOwner = false)
+        {
+            ViewBag.IsOwner = isOwner;
             ViewBag.EventId = eventId;
             return PartialView("_VotingsGrid");
         }
@@ -643,7 +627,7 @@ namespace TeamGeneratorApp.Controllers
         }
 
 
-        public ActionResult GeneratorsGrid(int eventId = 0)
+        public ActionResult GeneratorsGrid(int eventId = 0, bool isOwner = false)
         {
             ViewData["criterias"] = unitOfWork.GeneratorRepository.GetCriterias().AsQueryable()
                   .Select(e => new CriteriaddlVM()
@@ -653,6 +637,7 @@ namespace TeamGeneratorApp.Controllers
                   })
                   .OrderBy(e => e.Name);
 
+            ViewBag.IsOwner = isOwner;
             ViewBag.EventId = eventId;
             return PartialView("_GeneratorsGrid");
         }
@@ -674,8 +659,7 @@ namespace TeamGeneratorApp.Controllers
                     EventId = e.EventId,
                     CriteriaId = e.CriteriaId,
                     NumberOfTeams = e.NumberOfTeams,
-                    IsGenerated = e.IsGenerated,
-                    IsLocked = e.IsLocked
+                    IsGenerated = e.Team.Count != 0? true : false,
                 };
                 list.Add(newItem);
             }
@@ -699,8 +683,6 @@ namespace TeamGeneratorApp.Controllers
                         EventId = e.EventId,
                         CriteriaId = e.CriteriaId,
                         NumberOfTeams = e.NumberOfTeams,
-                        IsGenerated = e.IsGenerated,
-                        IsLocked = e.IsLocked
                     };
                  
 
@@ -799,13 +781,7 @@ namespace TeamGeneratorApp.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-
-            //check access rights
-            if (!unitOfWork.GeneratorRepository.IsOwner(User.Identity.GetUserId(), id))
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
-            }
-
+        
 
             var generator = unitOfWork.GeneratorRepository.GetByID(id);
 
@@ -814,17 +790,35 @@ namespace TeamGeneratorApp.Controllers
                 return HttpNotFound();
             }
 
-            var generatorVm = new GeneratorDetailsVM
+            ////check access rights
+
+            string userId = User.Identity.GetUserId();
+
+            if (generator.Event.Category.Group.OwnerId == userId)
+                ViewBag.IsOwner = true;
+            else
             {
-                Id = generator.Id,
-                Name = generator.Name,
-                EventId = generator.EventId,
-                EventName = generator.Event.Name,
-                NumberOfTeams = generator.NumberOfTeams,
-                CriteriaName = generator.Criteria.Name, 
-                IsGenerated = generator.IsGenerated,
-                IsLocked = generator.IsLocked
-            };
+                if (unitOfWork.GeneratorRepository.GetByUserId(userId).Contains(generator))
+                {
+                    ViewBag.IsOwner = false;
+                }
+                else
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                }
+            }
+            
+
+            var generatorVm = new GeneratorDetailsVM();
+
+            generatorVm.Id = generator.Id;
+            generatorVm.Name = generator.Name;
+            generatorVm.EventId = generator.EventId;
+            generatorVm.EventName = generator.Event.Name;
+            generatorVm.NumberOfTeams = generator.NumberOfTeams;
+            generatorVm.CriteriaName = generator.Criteria.Name;
+            generatorVm.IsGenerated = generator.Team.Count != 0? true : false;         
+            
 
             var allUsers = unitOfWork.UserOnEventRepository.GetByEventId(generator.EventId).ToList();
             if (allUsers.Any())
@@ -843,7 +837,7 @@ namespace TeamGeneratorApp.Controllers
 
 
         #region AllUsersGenerateGrid
-        public PartialViewResult AllUsersGenerateGrid(int generatorId = 0)
+        public PartialViewResult AllUsersGenerateGrid(int generatorId = 0, bool isOwner = false)
         {
             var generator = unitOfWork.GeneratorRepository.GetByID(generatorId);
             var teams = unitOfWork.TeamRepository.GetByGeneratorId(generator.Id).ToList();
@@ -856,12 +850,12 @@ namespace TeamGeneratorApp.Controllers
                        Name = e.Name
                    })
                    .OrderBy(e => e.Name);
-            
 
-            ViewBag.IsGenerated = generator.IsGenerated;
+
+            ViewBag.IsOwner = isOwner;
+            ViewBag.IsGenerated = generator.Team.Count != 0 ? true: false;
             ViewBag.EventId = generator.EventId;
             ViewBag.GeneratorId = generator.Id;
-            ViewBag.IsLocked = generator.IsLocked;
             return PartialView("_AllUsersGenerateGrid");
         }
 
@@ -1006,6 +1000,15 @@ namespace TeamGeneratorApp.Controllers
             }
 
 
+            //deactivate votings on this event
+            var votings = unitOfWork.VotingRepository.GetByEventId(generator.EventId);
+            foreach (var voting in votings)
+            {
+                voting.Active = false;
+                unitOfWork.VotingRepository.Update(voting);
+            }
+
+
             //get all users on event 
             var allUsersOnEventList = unitOfWork.UserOnEventRepository.GetByEventId(generator.EventId);
             
@@ -1124,8 +1127,8 @@ namespace TeamGeneratorApp.Controllers
                         unitOfWork.UserInTeamRepository.Insert(userInTeam);
                 }             
             }
-            generator.IsGenerated = true;
             unitOfWork.GeneratorRepository.Update(generator);
+            
 
             unitOfWork.Commit();
             
@@ -1138,41 +1141,42 @@ namespace TeamGeneratorApp.Controllers
         }
 
 
-        public ActionResult LockGenerator(int generatorId)
-        {
-            if (generatorId == 0)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+        //public ActionResult LockGenerator(int generatorId)
+        //{
+        //    if (generatorId == 0)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
 
-            //check access rights
-            if (!unitOfWork.GeneratorRepository.IsOwner(User.Identity.GetUserId(), generatorId))
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
-            }
+        //    //check access rights
+        //    if (!unitOfWork.GeneratorRepository.IsOwner(User.Identity.GetUserId(), generatorId))
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+        //    }
 
-            var generator = unitOfWork.GeneratorRepository.GetByID(generatorId);
+        //    var generator = unitOfWork.GeneratorRepository.GetByID(generatorId);
 
-            if (generator == null)
-            {
-                return HttpNotFound();
-            }
+        //    if (generator == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
 
-            generator.IsLocked = true;
-            unitOfWork.GeneratorRepository.Update(generator);
-            unitOfWork.Commit();
+        //    generator.IsLocked = true;
+        //    unitOfWork.GeneratorRepository.Update(generator);
+        //    unitOfWork.Commit();
 
-            return RedirectToAction("GeneratorDetails", new {id = generatorId});
-        }
+        //    return RedirectToAction("GeneratorDetails", new {id = generatorId});
+        //}
 
 
         #region TeamsGrid
 
 
-        public PartialViewResult TeamsGrid(int generatorId = 0)
+        public PartialViewResult TeamsGrid(int generatorId = 0, bool isOwner = false)
         {
             var generator = unitOfWork.GeneratorRepository.GetByID(generatorId);
 
+            ViewBag.IsOwner = isOwner;
             ViewBag.GeneratorId = generatorId;
             return PartialView("_TeamsGrid");
         }

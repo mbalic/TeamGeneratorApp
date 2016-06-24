@@ -50,7 +50,6 @@
     <NavigationProperty Name="AspNetUserClaims" Relationship="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserClaims" />
     <NavigationProperty Name="AspNetUserLogins" Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserLogins" />
     <NavigationProperty Name="Group" Relationship="Self.FK_Group_AspNetUsers" FromRole="AspNetUsers" ToRole="Group" />
-    <NavigationProperty Name="UserDetails" Relationship="Self.FK_UserDetails_AspNetUsers" FromRole="AspNetUsers" ToRole="UserDetails" />
     <NavigationProperty Name="UserInGroup" Relationship="Self.FK_UserInGroup_AspNetUsers" FromRole="AspNetUsers" ToRole="UserInGroup" />
     <NavigationProperty Name="Invitaton" Relationship="Self.FK_UserInGroupInvitation_AspNetUsers" FromRole="AspNetUsers" ToRole="Invitaton" />
     <NavigationProperty Name="AspNetRoles" Relationship="Self.AspNetUserRoles" FromRole="AspNetUsers" ToRole="AspNetRoles" />
@@ -100,8 +99,6 @@
     <Property Name="EventId" Type="Int32" Nullable="false" />
     <Property Name="CriteriaId" Type="Int32" Nullable="false" />
     <Property Name="NumberOfTeams" Type="Int32" Nullable="false" />
-    <Property Name="IsGenerated" Type="Boolean" Nullable="false" />
-    <Property Name="IsLocked" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="Criteria" Relationship="Self.FK_Generator_Criteria" FromRole="Generator" ToRole="Criteria" />
     <NavigationProperty Name="Event" Relationship="Self.FK_Generator_Event" FromRole="Generator" ToRole="Event" />
     <NavigationProperty Name="Team" Relationship="Self.FK_Team_Generator" FromRole="Generator" ToRole="Team" />
@@ -152,17 +149,6 @@
     <Property Name="SuccessPercentage" Type="Double" />
     <NavigationProperty Name="Generator" Relationship="Self.FK_Team_Generator" FromRole="Team" ToRole="Generator" />
     <NavigationProperty Name="UserInTeam" Relationship="Self.FK_UserInTeam_Team" FromRole="Team" ToRole="UserInTeam" />
-  </EntityType>
-  <EntityType Name="UserDetails">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" />
-    <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="ImageUrl" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-    <Property Name="Age" Type="Int32" />
-    <Property Name="Sex" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_UserDetails_AspNetUsers" FromRole="UserDetails" ToRole="AspNetUsers" />
   </EntityType>
   <EntityType Name="UserInCategory">
     <Key>
@@ -278,18 +264,6 @@
       </Principal>
       <Dependent Role="Group">
         <PropertyRef Name="OwnerId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_UserDetails_AspNetUsers">
-    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
-    <End Role="UserDetails" Type="Self.UserDetails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUsers">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="UserDetails">
-        <PropertyRef Name="UserId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -560,7 +534,6 @@
     <EntitySet Name="Invitaton" EntityType="Self.Invitaton" />
     <EntitySet Name="Position" EntityType="Self.Position" />
     <EntitySet Name="Team" EntityType="Self.Team" />
-    <EntitySet Name="UserDetails" EntityType="Self.UserDetails" />
     <EntitySet Name="UserInCategory" EntityType="Self.UserInCategory" />
     <EntitySet Name="UserInGroup" EntityType="Self.UserInGroup" />
     <EntitySet Name="UserInTeam" EntityType="Self.UserInTeam" />
@@ -578,10 +551,6 @@
     <AssociationSet Name="FK_Group_AspNetUsers" Association="Self.FK_Group_AspNetUsers">
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
       <End Role="Group" EntitySet="Group" />
-    </AssociationSet>
-    <AssociationSet Name="FK_UserDetails_AspNetUsers" Association="Self.FK_UserDetails_AspNetUsers">
-      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-      <End Role="UserDetails" EntitySet="UserDetails" />
     </AssociationSet>
     <AssociationSet Name="FK_UserInGroup_AspNetUsers" Association="Self.FK_UserInGroup_AspNetUsers">
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />

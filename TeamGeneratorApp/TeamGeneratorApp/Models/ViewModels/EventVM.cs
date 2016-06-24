@@ -22,11 +22,7 @@ namespace TeamGeneratorApp.Models.ViewModels
         public string Description { get; set; }
         public Nullable<System.DateTime> Start { get; set; }
         public Nullable<System.DateTime> Finish { get; set; }
-
-        //[Required]
-        //[Display(Name = "Number of teams")]
-        //[Range(0, 100, ErrorMessage = "Number of teams must be positive number")]
-        //public int NumberOfTeams { get; set; }
+        
          
     }
 }

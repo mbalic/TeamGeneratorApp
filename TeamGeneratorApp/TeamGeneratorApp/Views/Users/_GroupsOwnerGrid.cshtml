@@ -10,17 +10,7 @@
 @Scripts.Render("~/bundles/modernizr")
 @Scripts.Render("~/bundles/kendo")
 
-<script type="text/javascript">
-    function viewDetails(e) {
-        e.preventDefault();
-        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        var votingId = dataItem.Id;
 
-        window.location.href = "@Url.Action("Details", "Groups")?id=" + votingId;
-
-    }
-
-</script>
 
 
 @(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.GroupListVM>()
@@ -29,10 +19,8 @@
     {
         columns.Bound(p => p.Name);
         columns.Bound(p => p.Description);
-        //columns.Command(command => { command.Edit(); command.Destroy(); }).Width(200);
         columns.Command(command => command.Custom("Details").Click("viewDetails"));
     })
-    //.Editable(editable => editable.Mode(GridEditMode.InLine))
     .Pageable()
     .Sortable()
     .Scrollable()
@@ -49,8 +37,7 @@
              model.Field(p => p.OwnerId).DefaultValue(ViewBag.UserId);
          })
         .Read(read => read.Action("GroupsOwnerGrid_Read", "Users", new { userId = ViewBag.UserId }))
-    //.Update(update => update.Action("GroupsGrid_Update", "Groups"))
-    //.Destroy(update => update.Action("GroupsGrid_Destroy", "Groups"))
+
     )
 
 )
@@ -71,5 +58,16 @@
     function sync_handler(e) {
         this.read();
     };
+
+   function viewDetails(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var votingId = dataItem.Id;
+
+        window.location.href = "@Url.Action("Details", "Groups")?id=" + votingId;
+
+    }
+
+
 </script>
 

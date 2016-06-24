@@ -11,21 +11,14 @@
 <hr />
 <h4>Generator</h4>
 
-@if (!ViewBag.AllUsersEmpty)
+@if (!ViewBag.AllUsersEmpty && ViewBag.IsOwner)
 {
-    @*if (!Model.IsLocked)
-    {*@
-        <br />
+    <br/>
 
         if (!Model.IsGenerated)
         {
             <button>@Html.ActionLink("Generate teams!", "GenerateTeams", new { generatorId = Model.Id })</button>
         }
-        @*else
-        {
-            <button>@Html.ActionLink("Lock generator", "LockGenerator", new { generatorId = Model.Id })</button>
-        }*@
-    //}
 
 }
 <div>
@@ -62,7 +55,7 @@
         </dt>
 
         <dd>
-            @Html.Action("AllUsersGenerateGrid", "Events", new {generatorId = Model.Id})
+            @Html.Action("AllUsersGenerateGrid", "Events", new {generatorId = Model.Id, isOwner = ViewBag.IsOwner})
         </dd>
 
         <br/>
@@ -74,7 +67,7 @@
             </dt>
 
             <dd>
-                @Html.Action("TeamsGrid", "Events", new { generatorId = Model.Id })
+                @Html.Action("TeamsGrid", "Events", new { generatorId = Model.Id, isOwner = ViewBag.IsOwner })
             </dd>
         }
 

@@ -10,69 +10,109 @@
 @Scripts.Render("~/bundles/modernizr")
 @Scripts.Render("~/bundles/kendo")
 
-<script type="text/javascript">
-    function viewItem(e) {
-        e.preventDefault();
-        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        var userId = dataItem.UserId;
 
-        window.location.href = "@Url.Action("Profile","Users")?id=" + userId;
-    };
+@if (ViewBag.IsOwner)
+{
+    @(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.UserCategoryVM>()
+          .Name("usersGrid")
+          .Columns(columns =>
+          {
+              columns.ForeignKey(p => p.UserInGroupId, (System.Collections.IEnumerable) ViewData["users"], "Id", "Name").Title("User").Width(200);
+              columns.Bound(p => p.Rating);
+              columns.Group(group => group
+                 .Title("In category")
+                 .Columns(info =>
+                 {
+                     info.Bound(x => x.SuccessPercentage).Title("Success %").Width(100);
+                     info.Bound(x => x.Appereances).Width(100); ;
+                 })
+             );
+              columns.Bound(p => p.Active)
+                  .ClientTemplate("<input type='checkbox' #= Active ? checked='checked': '' # class='chkbx' />")
+                  .HtmlAttributes(new {style = "text-align: center"});
+              columns.Command(command =>
+              {
+                  command.Edit();
+                  command.Destroy();
+              }).Width(200);
+              columns.Command(command =>
+              {
+                  command.Custom("Profile").Click("viewItem");
+                  command.Custom("Cooperation").Click("viewCooperation");
+              }).Width(200);
+          })
+          .ColumnMenu()
+          .ToolBar(toolbar => toolbar.Create())
+          .Editable(editable => editable.Mode(GridEditMode.InLine))
+          .Pageable()
+          .Sortable()
+          .Scrollable()
+          .Resizable(resize => resize.Columns(true))
+          .HtmlAttributes(new {style = "height:550px;"})
+          .DataSource(dataSource => dataSource
+              .Ajax()
+              .Batch(true)
+              .ServerOperation(false)
+              .PageSize(20)
+              .Events(events => events.Error("error_handler").Sync("sync_handler"))
+              .Model(model =>
+              {
+                  model.Id(p => p.Id);
+                  model.Field(p => p.CategoryId).DefaultValue(ViewBag.CategoryId);
+                  model.Field(p => p.Rating).DefaultValue(1500);
 
-    function viewCooperation(e) {
-        e.preventDefault();
-        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        var userInCategory = dataItem.Id;
+              })
+              .Create(update => update.Action("UsersGrid_Create", "Categories"))
+              .Read(read => read.Action("UsersGrid_Read", "Categories", new {categoryId = ViewBag.CategoryId}))
+              .Update(update => update.Action("UsersGrid_Update", "Categories"))
+              .Destroy(update => update.Action("UsersGrid_Destroy", "Categories"))
+          )
 
-        window.location.href = "@Url.Action("Cooperation","Categories")?userInCategoryId=" + userInCategory;
-    };
+          )
+}
+else
+{
+    @(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.UserCategoryVM>()
+          .Name("usersGrid")
+          .Columns(columns =>
+          {
+              columns.ForeignKey(p => p.UserInGroupId, (System.Collections.IEnumerable)ViewData["users"], "Id", "Name").Title("User").Width(200);
+              //columns.Bound(p => p.Rating);
+              columns.Bound(p => p.SuccessPercentage).Title("Success % in category").Width(200);
+              columns.Bound(p => p.Appereances);
+              columns.Bound(p => p.Active);
+              columns.Command(command =>
+              {
+                  command.Custom("Profile").Click("viewItem");
+                  command.Custom("Cooperation").Click("viewCooperation");
+              }).Width(200);
+          })
+          .ColumnMenu()
+          .Pageable()
+          .Sortable()
+          .Scrollable()
+          .Resizable(resize => resize.Columns(true))
+          .HtmlAttributes(new { style = "height:550px;" })
+          .DataSource(dataSource => dataSource
+              .Ajax()
+              .Batch(true)
+              .ServerOperation(false)
+              .PageSize(20)
+              .Events(events => events.Error("error_handler").Sync("sync_handler"))
+              .Model(model =>
+              {
+                  model.Id(p => p.Id);
+                  model.Field(p => p.CategoryId).DefaultValue(ViewBag.CategoryId);
+                  model.Field(p => p.Rating).DefaultValue(1500);
 
+              })
+              .Read(read => read.Action("UsersGrid_Read", "Categories", new { categoryId = ViewBag.CategoryId }))
+          )
 
-</script>
-
-
-@(Html.Kendo().Grid<TeamGeneratorApp.Models.ViewModels.UserCategoryVM>()
-    .Name("usersGrid")
-    .Columns(columns =>
-    {
-        columns.ForeignKey(p => p.UserInGroupId, (System.Collections.IEnumerable) ViewData["users"], "Id", "Name").Title("User").Width(200);
-        columns.Bound(p => p.Rating);
-        columns.Bound(p => p.SuccessPercentage).Title("Success % in category").Width(200);
-        columns.Bound(p => p.Appereances);
-        columns.Bound(p => p.Active)
-            .ClientTemplate("<input type='checkbox' #= Active ? checked='checked': '' # class='chkbx' />")
-            .HtmlAttributes(new { style = "text-align: center" });
-        columns.Command(command => { command.Edit(); command.Destroy(); }).Width(200);
-        columns.Command(command => command.Custom("Profile").Click("viewItem"));
-        columns.Command(command => command.Custom("Cooperation").Click("viewCooperation"));
-    })
-    //.Events(e => e.DataBound("db"))
-    .ToolBar(toolbar => toolbar.Create())
-    .Editable(editable => editable.Mode(GridEditMode.InLine))
-    .Pageable()
-    .Sortable()
-    .Scrollable()
-    .HtmlAttributes(new { style = "height:550px;" })
-    .DataSource(dataSource => dataSource
-        .Ajax()
-        .Batch(true)
-        .ServerOperation(false)
-        .PageSize(20)
-        .Events(events => events.Error("error_handler").Sync("sync_handler"))
-        .Model(model =>
-        {
-            model.Id(p => p.Id);
-            model.Field(p => p.CategoryId).DefaultValue(ViewBag.CategoryId);
-            model.Field(p => p.Rating).DefaultValue(1500);
-
-        })
-        .Create(update => update.Action("UsersGrid_Create", "Categories"))
-        .Read(read => read.Action("UsersGrid_Read", "Categories", new { categoryId = ViewBag.CategoryId }))
-        .Update(update => update.Action("UsersGrid_Update", "Categories"))
-        .Destroy(update => update.Action("UsersGrid_Destroy", "Categories"))
     )
+}
 
-)
+
 <script type="text/javascript">
     function error_handler(e) {
         if (e.errors) {
@@ -98,5 +138,22 @@
     function sync_handler(e) {
         this.read();
     };
+
+    function viewItem(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var userId = dataItem.UserId;
+
+        window.location.href = "@Url.Action("Profile","Users")?id=" + userId;
+    };
+
+    function viewCooperation(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var userInCategory = dataItem.Id;
+
+        window.location.href = "@Url.Action("Cooperation","Categories")?userInCategoryId=" + userInCategory;
+    };
+
 </script>
 
